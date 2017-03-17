@@ -1,4 +1,4 @@
-package dao;
+package bean;
 
 public class Acknowledgement {
 private String matchedCount,modifiedCount,upsertedId;

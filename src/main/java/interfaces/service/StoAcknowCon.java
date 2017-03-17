@@ -1,6 +1,6 @@
 package interfaces.service;
 
-import dao.Acknowledgement;
+import bean.Acknowledgement;
 
 public interface StoAcknowCon {
 	public Acknowledgement convertStoAcknow(String acknow);

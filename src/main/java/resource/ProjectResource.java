@@ -10,7 +10,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import dao.Acknowledgement;
+import bean.Acknowledgement;
 import dao.ProjectInsert;
 import bean.Project;
 @Path("/project")

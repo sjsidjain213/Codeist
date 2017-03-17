@@ -1,7 +1,7 @@
 package service;
 import java.util.*;
 
-import dao.Acknowledgement;
+import bean.Acknowledgement;
 import interfaces.service.AtoSCon;
 import interfaces.service.StoACon;
 import interfaces.service.StoAcknowCon;
