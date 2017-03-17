@@ -1,7 +1,11 @@
 package dao;
 
 import org.bson.Document;
+
+import bean.Acknowledgement;
 import bean.User;
+import service.GeneralServices;
+
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.FindIterable;
@@ -9,42 +13,75 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import static com.mongodb.client.model.Filters.*;
 
+import java.util.ArrayList;
+
 public class UserDao {
 	  MongoClientURI uri  = new MongoClientURI("mongodb://sjsidjain:sjsidjain@ds145359.mlab.com:45359/testhack"); 
       MongoClient client = new MongoClient(uri);
       MongoDatabase db = client.getDatabase(uri.getDatabase());
-      MongoCollection <Document> tc = db.getCollection("testcol");
-      public User getUserDetails(String username)
+      // collection userdata is not for testing, for testing purpose chnage collection name to testcol
+      MongoCollection <Document> tc = db.getCollection("userdata");
+      @SuppressWarnings("unchecked")
+	public User getUserDetails(String username)
       {   User user = new User();
     	  FindIterable <Document> fi = tc.find(eq("username",username));
     	  for(Document d : fi)
     	  {
-              user.setBio(d.getString("Bio"));
-              user.setName(d.getString("Name"));
+              user.setBio(d.getString("bio"));
+              user.setName(d.getString("name"));
               user.setUsername(d.getString("username"));
-              
-              //nested document access
-              Document innerdoc = (Document) d.get("Contact_Information");
-              user.setCity(innerdoc.getString("City"));
-              user.setCountry(innerdoc.getString("Country"));
-    	      user.setState(innerdoc.getString("State"));
-    	      user.setEmailid(innerdoc.getString("Email id"));
-    	      user.setPhoneno(innerdoc.getString("Phone no"));
-    	      user.setZipcode(String.valueOf(innerdoc.get("Zipcode")));
-    	  } 
+    	      user.setContributing((ArrayList<String>)d.get("contributing"));
+    	      user.setFollowers((ArrayList<String>)d.get("followers"));
+    	      user.setFollowing((ArrayList<String>)d.get("following"));
+    	      user.setFavourite_tags((ArrayList<String>)d.get("favourite_tags"));
+              Document innerdoc = (Document) d.get("contact_information");
+              user.setCity(innerdoc.getString("city"));
+              user.setCountry(innerdoc.getString("country"));
+    	      user.setState(innerdoc.getString("state"));
+    	      user.setEmail_id(innerdoc.getString("email_id"));
+    	      user.setPhone_no(innerdoc.getString("phone_no"));
+    	      user.setZipcode(String.valueOf(innerdoc.get("zipcode")));
+    	      user.setLinkedin_id(innerdoc.getString("linkedin_id"));
+    	      user.setGithub_id(innerdoc.getString("github_id"));
+           } 
     	  return user;
       }
       
-      public void updateUserDetails(User user)
-      {  Document outdoc = new Document("Name",user.getName())
-    			  .append("Bio",user.getBio());
-        String result = tc.updateOne(eq("username", user.getUsername()),new Document("$set",outdoc)).toString();   	
-          Document doc=new Document("Phone no",user.getPhoneno());
-    	  doc.append("Email id",user.getEmailid());
-    	  doc.append("Country",user.getCountry());
-    	  doc.append("City",user.getCity());
-    	  doc.append("State",user.getState());
-    	 String result1= tc.updateOne(eq("username",user.getUsername()),new Document("$set",new Document("Contact_Information",doc))).toString();
-         //Desing a function to convert string into json using either beans or jsonparser and jsonobject
+      public ArrayList<Acknowledgement> updateUserDetails(User user)
+      { // this collection is for testing purpose uncomment this for doing test
+        // MongoCollection <Document> tc = db.getCollection("testcol");
+    	  Acknowledgement ac2 = new Acknowledgement();
+          ArrayList<Acknowledgement> alacknow = new ArrayList<Acknowledgement>();
+    	  
+    	  Document outdoc = new Document("name",user.getName())
+        		  .append("followers",user.getFollowers())
+        		  .append("following",user.getFollowing())
+        		  .append("favourite_tags",user.getFavourite_tags())
+        		  .append("contributing",user.getContributing())
+        		  .append("bio",user.getBio());
+          String acknow1 = tc.updateOne(eq("username", user.getUsername()),new Document("$set",outdoc)).toString();   	
+          Document doc=new Document("phone_no",user.getPhone_no())
+        		  .append("email_id",user.getEmail_id())
+    	          .append("country",user.getCountry())
+    	          .append("city",user.getCity())
+    	          .append("linkedin_id", user.getLinkedin_id())
+    	          .append("github_id",user.getGithub_id())
+    	          .append("zipcode",user.getZipcode())
+    	          .append("state",user.getState());
+    	 String acknow2= tc.updateOne(eq("username",user.getUsername()),new Document("$set",new Document("contact_information",doc))).toString();
+    	 
+    	 Acknowledgement acknowledge1 = new GeneralServices().stoacknowmethod(s ->{
+             String sa [] = s.substring(s.indexOf("{")+1,s.indexOf("}")).split(",");
+                ac2.setMatchedCount(sa[0]);ac2.setModifiedCount(sa[1]);ac2.setUpsertedId(sa[2]);
+             return ac2;}, acknow1);
+
+    	 Acknowledgement acknowledge2 = new GeneralServices().stoacknowmethod(s ->{
+             String sa [] = s.substring(s.indexOf("{")+1,s.indexOf("}")).split(",");
+                ac2.setMatchedCount(sa[0]);ac2.setModifiedCount(sa[1]);ac2.setUpsertedId(sa[2]);
+             return ac2;}, acknow2);
+        alacknow.add(acknowledge1);alacknow.add(acknowledge2);
+        
+    	 client.close();
+         return alacknow;
       }
 }
