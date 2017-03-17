@@ -9,18 +9,20 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
+import dao.Acknowledgement;
 import dao.ProjectInsert;
 import bean.Project;
 @Path("/project")
 public class ProjectResource {
 
 @POST
-@Path("/insert")
+@Path("/insert/{username}")
 @Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.TEXT_PLAIN)
-public String insertProject(Project project)
+@Produces(MediaType.APPLICATION_JSON)
+public Acknowledgement insertProject(Project project,@PathParam("username")String username)
 {
-return new ProjectInsert().insertProject(project, "sid");
+return new ProjectInsert().insertProject(project, username);
 }
 
 @GET

@@ -10,11 +10,15 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.result.UpdateResult;
 
 import bean.Project;
+import exception.UserNotFoundException;
+
 import static com.mongodb.client.model.Filters.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import interfaces.service.AtoSCon;
+import interfaces.service.StoACon;
 import service.GeneralServices;
 public class ProjectInsert
 {
@@ -23,7 +27,7 @@ public class ProjectInsert
      private MongoDatabase db = client.getDatabase(uri.getDatabase());
      private MongoCollection <Document> tc = db.getCollection("testcol");
 
-public String insertProject(Project project,String username)
+public Acknowledgement insertProject(Project project,String username)
 { 
 	Document doc = new Document()
 	    	  .append("title",project.getTitle())		  
@@ -37,8 +41,17 @@ public String insertProject(Project project,String username)
 	    	  .append("private", project.getAccess())
 	    	  .append("zip_file",project.getZipfile())
 	    	  .append("images",project.getImages());
-UpdateResult ur =  tc.updateOne(eq("username","sjsidjain"),new Document("$addToSet",new Document("Projects",doc)));	
-return ur.toString();
+         String acknow =  tc.updateOne(eq("username",username),new Document("$addToSet",new Document("Projects",doc))).toString();	
+
+            Acknowledgement acknowledge = new GeneralServices().stoacknowmethod(s ->{
+	                     Acknowledgement ac2 = new Acknowledgement();
+	                     String sa [] = s.substring(s.indexOf("{")+1,s.indexOf("}")).split(",");
+   	                     ac2.setMatchedCount(sa[0]);
+   	                     ac2.setModifiedCount(sa[1]);
+   	                     ac2.setUpsertedId(sa[2]);
+	                     return ac2;}, acknow);
+client.close();
+return acknowledge;
 }
 
 public List<Project> getProjectBrief(String username)
@@ -48,7 +61,8 @@ Project pro=null;
   FindIterable <Document> fi = tc.find(eq("username",username));
   for(Document d: fi)
   {
-	  ArrayList<Document> arrayproject = (ArrayList<Document>) d.get("Projects");
+	  @SuppressWarnings("unchecked")
+	ArrayList<Document> arrayproject = (ArrayList<Document>) d.get("Projects");
        for(Document innerd:arrayproject)
        { pro= new Project();
     	 pro.setTitle(innerd.getString("title"));   
@@ -59,6 +73,7 @@ Project pro=null;
 return project;
 }
 
+// for retrieving selected project
 @SuppressWarnings("unchecked")
 public Project getSelectedProject(String username,String title)
 {
@@ -66,39 +81,20 @@ Project project=new Project();
 FindIterable <Document> fi = tc.find(eq("username",username));
 Document doc = fi.first();
 ArrayList<Document> docarray = (ArrayList<Document>) doc.get("Projects");
-System.out.println(docarray);
 for(Document d:docarray)
 {
-	System.out.println(d.get("title"));
 if(d.getString("title")!=null&&d.getString("title").equals(title))
 {
-	System.out.println(d.getString("title")+"this is title");
-	project.setTitle(d.getString("title"));
-	//project.setComment(d.get(key));
-	System.out.println(d.get("tags"));
-	System.out.println(new GeneralServices().atosmethod(als -> {
+	   project.setTitle(d.getString("title"));
+	   //project.setComment(d.get(key));
+	    project.setTags(new GeneralServices().atosmethod(als -> {
     	String s = "";
     	for(String sin : als)
-    	{
-    		s = s+sin;
-    	}
-    	return s;
-    	},(ArrayList<String>)d.get("tags")));
-	ArrayList<String> als2 = (ArrayList<String>)d.get("tags");
-	for(String sin:als2)
-		System.out.println(sin+":inside inset");
-    project.setTags(new GeneralServices().atosmethod(als -> {
-    	String s = null;
-    	for(String sin : als)
-    	{
-    		s = s+sin;
-    	}
+    		s+=sin;
     	return s;
     	},(ArrayList<String>)d.get("tags"))); 
 }
 }
-System.out.println("EXIT");
-project.setContibutor("sid");
 return project;
 }
 }
