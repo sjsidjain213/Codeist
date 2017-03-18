@@ -5,33 +5,47 @@ import java.util.ArrayList;
 public class Project {
 	
 
-	private String title,description,access,readme,licence,keywords,project_url,tags,comment;
-    private int like,index;
+	private String title,description,readme,licence,keywords,project_url,comment,_private;
+    private int index;
+    private double like;
     private ArrayList<String> images = new ArrayList<String>();
+    private ArrayList<String> videourl = new ArrayList<String>();
     private ArrayList<String> zipfile = new ArrayList<String>();
     private ArrayList<String> contributors = new ArrayList<String>();
+    private ArrayList<String> tags = new ArrayList<String>();
+    
 	public Project() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public Project(String title, String description, String access, String readme, String licence, String keywords,
-			String project_url, String tags, String comment, int like, int index, ArrayList<String> images,
-			ArrayList<String> zipfile, ArrayList<String> contributors) {
+	public Project(String title, String description, String readme, String licence, String keywords, String project_url,
+			String comment, String _private, int index, double like, ArrayList<String> images,
+			ArrayList<String> videourl, ArrayList<String> zipfile, ArrayList<String> contributors,
+			ArrayList<String> tags) {
 		super();
 		this.title = title;
 		this.description = description;
-		this.access = access;
 		this.readme = readme;
 		this.licence = licence;
 		this.keywords = keywords;
 		this.project_url = project_url;
-		this.tags = tags;
 		this.comment = comment;
-		this.like = like;
+		this._private = _private;
 		this.index = index;
+		this.like = like;
 		this.images = images;
+		this.videourl = videourl;
 		this.zipfile = zipfile;
 		this.contributors = contributors;
+		this.tags = tags;
+	}
+	@Override
+	public String toString() {
+		return "Project [title=" + title + ", description=" + description + ", readme=" + readme + ", licence="
+				+ licence + ", keywords=" + keywords + ", project_url=" + project_url + ", comment=" + comment
+				+ ", _private=" + _private + ", index=" + index + ", like=" + like + ", images=" + images
+				+ ", videourl=" + videourl + ", zipfile=" + zipfile + ", contributors=" + contributors + ", tags="
+				+ tags + "]";
 	}
 	public String getTitle() {
 		return title;
@@ -44,12 +58,6 @@ public class Project {
 	}
 	public void setDescription(String description) {
 		this.description = description;
-	}
-	public String getAccess() {
-		return access;
-	}
-	public void setAccess(String access) {
-		this.access = access;
 	}
 	public String getReadme() {
 		return readme;
@@ -75,23 +83,17 @@ public class Project {
 	public void setProject_url(String project_url) {
 		this.project_url = project_url;
 	}
-	public String getTags() {
-		return tags;
-	}
-	public void setTags(String tags) {
-		this.tags = tags;
-	}
 	public String getComment() {
 		return comment;
 	}
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
-	public int getLike() {
-		return like;
+	public String get_private() {
+		return _private;
 	}
-	public void setLike(int like) {
-		this.like = like;
+	public void set_private(String _private) {
+		this._private = _private;
 	}
 	public int getIndex() {
 		return index;
@@ -99,11 +101,23 @@ public class Project {
 	public void setIndex(int index) {
 		this.index = index;
 	}
+	public double getLike() {
+		return like;
+	}
+	public void setLike(double like) {
+		this.like = like;
+	}
 	public ArrayList<String> getImages() {
 		return images;
 	}
 	public void setImages(ArrayList<String> images) {
 		this.images = images;
+	}
+	public ArrayList<String> getVideourl() {
+		return videourl;
+	}
+	public void setVideourl(ArrayList<String> videourl) {
+		this.videourl = videourl;
 	}
 	public ArrayList<String> getZipfile() {
 		return zipfile;
@@ -117,13 +131,12 @@ public class Project {
 	public void setContributors(ArrayList<String> contributors) {
 		this.contributors = contributors;
 	}
-	@Override
-	public String toString() {
-		return "Project [title=" + title + ", description=" + description + ", access=" + access + ", readme=" + readme
-				+ ", licence=" + licence + ", keywords=" + keywords + ", project_url=" + project_url + ", tags=" + tags
-				+ ", comment=" + comment + ", like=" + like + ", index=" + index + ", images=" + images + ", zipfile="
-				+ zipfile + ", contributors=" + contributors + "]";
+	public ArrayList<String> getTags() {
+		return tags;
+	}
+	public void setTags(ArrayList<String> tags) {
+		this.tags = tags;
 	}
     
-    
+	
 }
