@@ -1,6 +1,7 @@
 package dao;
 
 import org.bson.Document;
+import org.eclipse.persistence.exceptions.IntegrityException;
 
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
@@ -63,6 +64,7 @@ return acknowledge;
 
 public List<Project> getProjectBrief(String username)
 {
+	System.out.println("inside project");
   List<Project> project = new ArrayList<Project>();
   Project pro=null;
   FindIterable <Document> fi = tc.find(eq("username",username));
@@ -110,7 +112,21 @@ public Acknowledgement insertComment(Comment comment,String username,String proj
 Document doc = new Document("username",comment.getUsername())
                   .append("comment", comment.getComment())
                   .append("EPOCH_TIME",new Date());
-String acknow= tc.updateOne(eq("username","pjain"),new Document("$push",new Document("projects.0.comments",doc))).toString();
+
+Document doc2 = tc.find(eq("username",username)).first();
+int index =0;
+int index2=0;
+ArrayList<Document> alpro = (ArrayList<Document>) doc2.get("projects");
+for(Document din : alpro)
+{	
+	if(din.getString("title").equals(projectname))
+	{
+     index2=index;
+	}
+	index++;
+}
+
+String acknow= tc.updateOne(eq("username",username),new Document("$push",new Document("projects."+index2+".comments",doc))).toString();
 
 Acknowledgement acknowledge = new GeneralServices().stoacknowmethod(s ->{
     Acknowledgement ac2 = new Acknowledgement();
@@ -124,8 +140,7 @@ return acknowledge;
 }
 
 public ArrayList<Comment> getAllComments(String username,String projectname)
-{   System.out.println("hello");
-	Document document = tc.find(eq("username",username)).first();
+{   Document document = tc.find(eq("username",username)).first();
 	ArrayList<Document> alproject = (ArrayList<Document>) document.get("projects");
 	Comment comment = new Comment();
 	ArrayList<Comment> alcomment = new ArrayList<Comment>();
@@ -143,8 +158,7 @@ public ArrayList<Comment> getAllComments(String username,String projectname)
 	            alcomment.add(comment);
 		    }		
 		}
-	}
-    
+	}    
 return alcomment;
 }
 }
