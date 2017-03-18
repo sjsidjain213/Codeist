@@ -1,5 +1,6 @@
 package resource;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -11,6 +12,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import bean.Acknowledgement;
+import bean.Comment;
 import dao.ProjectInsert;
 import bean.Project;
 @Path("/project")
@@ -37,9 +39,26 @@ return new ProjectInsert().getProjectBrief(username);
 @Produces(MediaType.APPLICATION_JSON)
 public Project getSelectedProject(@PathParam("username")String username,@PathParam("title")String title)
 {
-	System.out.println(username+":"+title);
 return new ProjectInsert().getSelectedProject(username, title);
 //return new Project();
+}
+
+@POST
+@Path("/insertcomment/{username}/{projectname}")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
+public Acknowledgement insertComment(Comment comment,@PathParam("projectname")String projectname,@PathParam("username")String username)
+{
+return new ProjectInsert().insertComment(comment,username,projectname);
+}
+
+@GET
+@Path("/retrievecomments/{username}/{projectname}")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
+public ArrayList<Comment> getComment(@PathParam("projectname")String projectname,@PathParam("username")String username)
+{
+	return 	new ProjectInsert().getAllComments(username, projectname);
 }
 
 }

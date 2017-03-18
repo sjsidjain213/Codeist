@@ -10,12 +10,14 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.result.UpdateResult;
 
 import bean.Acknowledgement;
+import bean.Comment;
 import bean.Project;
 import exception.UserNotFoundException;
 
 import static com.mongodb.client.model.Filters.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import interfaces.service.AtoSCon;
@@ -26,23 +28,27 @@ public class ProjectInsert
 	 private MongoClientURI uri  = new MongoClientURI("mongodb://sjsidjain:sjsidjain@ds145359.mlab.com:45359/testhack"); 
      private MongoClient client = new MongoClient(uri);
      private MongoDatabase db = client.getDatabase(uri.getDatabase());
-     private MongoCollection <Document> tc = db.getCollection("testcol");
+     private MongoCollection <Document> tc = db.getCollection("userdata");
 
 public Acknowledgement insertProject(Project project,String username)
 { 
+	Document d = tc.find(eq("username",username)).first();
+	ArrayList<Document>  alproject = (ArrayList<Document>) d.get("projects");
+	int index = alproject.size()+1;
 	Document doc = new Document()
 	    	  .append("title",project.getTitle())		  
 	    	  .append("description",project.getDescription())
-	    	  .append("project_url",project.getURL())
+	    	  .append("project_url",project.getProject_url())
+	    	  .append("index",index)
 	    	  .append("tags",project.getTags())
 	    	  .append("likes",project.getLike())
-	    	  .append("Comments",project.getComment())
-	    	  .append("Contributors",project.getContibutor())
-	    	  .append("README", project.getReadme())
+	    	  .append("comments",project.getComment())
+	    	  .append("contributors",project.getContributors())
+	    	  .append("readme", project.getReadme())
 	    	  .append("private", project.getAccess())
 	    	  .append("zip_file",project.getZipfile())
 	    	  .append("images",project.getImages());
-         String acknow =  tc.updateOne(eq("username",username),new Document("$addToSet",new Document("Projects",doc))).toString();	
+         String acknow =  tc.updateOne(eq("username",username),new Document("$addToSet",new Document("projects",doc))).toString();	
 
             Acknowledgement acknowledge = new GeneralServices().stoacknowmethod(s ->{
 	                     Acknowledgement ac2 = new Acknowledgement();
@@ -57,13 +63,13 @@ return acknowledge;
 
 public List<Project> getProjectBrief(String username)
 {
-List<Project> project = new ArrayList<Project>();
-Project pro=null;
+  List<Project> project = new ArrayList<Project>();
+  Project pro=null;
   FindIterable <Document> fi = tc.find(eq("username",username));
   for(Document d: fi)
   {
 	  @SuppressWarnings("unchecked")
-	ArrayList<Document> arrayproject = (ArrayList<Document>) d.get("Projects");
+	   ArrayList<Document> arrayproject = (ArrayList<Document>) d.get("projects");
        for(Document innerd:arrayproject)
        { pro= new Project();
     	 pro.setTitle(innerd.getString("title"));   
@@ -87,15 +93,58 @@ for(Document d:docarray)
 if(d.getString("title")!=null&&d.getString("title").equals(title))
 {
 	   project.setTitle(d.getString("title"));
-	   //project.setComment(d.get(key));
-	    project.setTags(new GeneralServices().atosmethod(als -> {
+	   project.setDescription(d.getString("description"));
+	   project.setTags(new GeneralServices().atosmethod(als -> {
     	String s = "";
     	for(String sin : als)
-    		s+=sin;
+           		s+=sin;
     	return s;
     	},(ArrayList<String>)d.get("tags"))); 
 }
 }
 return project;
+}
+
+public Acknowledgement insertComment(Comment comment,String username,String projectname)
+{
+Document doc = new Document("username",comment.getUsername())
+                  .append("comment", comment.getComment())
+                  .append("EPOCH_TIME",new Date());
+String acknow= tc.updateOne(eq("username","pjain"),new Document("$push",new Document("projects.0.comments",doc))).toString();
+
+Acknowledgement acknowledge = new GeneralServices().stoacknowmethod(s ->{
+    Acknowledgement ac2 = new Acknowledgement();
+    String sa [] = s.substring(s.indexOf("{")+1,s.indexOf("}")).split(",");
+       ac2.setMatchedCount(sa[0]);
+       ac2.setModifiedCount(sa[1]);
+       ac2.setUpsertedId(sa[2]);
+    return ac2;}, acknow);
+
+return acknowledge;
+}
+
+public ArrayList<Comment> getAllComments(String username,String projectname)
+{   System.out.println("hello");
+	Document document = tc.find(eq("username",username)).first();
+	ArrayList<Document> alproject = (ArrayList<Document>) document.get("projects");
+	Comment comment = new Comment();
+	ArrayList<Comment> alcomment = new ArrayList<Comment>();
+    
+	for(Document d : alproject)
+	{
+		if(d.getString("title").equals(projectname))
+		{
+		    ArrayList<Document> al =  (ArrayList<Document>) d.get("comments");
+		    for(Document din : al)
+		    {
+		    	comment.setUsername(din.getString("username"));
+		    	comment.setComment(din.getString("comment"));
+		    	comment.setDate(din.getDate("EPOCH_TIME"));
+	            alcomment.add(comment);
+		    }		
+		}
+	}
+    
+return alcomment;
 }
 }
