@@ -4,6 +4,7 @@ import org.bson.Document;
 
 import bean.Acknowledgement;
 import bean.User;
+import service.DatabaseServices;
 import service.GeneralServices;
 
 import com.mongodb.MongoClient;
@@ -23,8 +24,14 @@ public class UserDao {
       MongoCollection <Document> tc = db.getCollection("userdata");
       @SuppressWarnings("unchecked")
 	public User getUserDetails(String username)
-      {   User user = new User();
+      { 
+    	// Given below connection is established with help of mongo pool connection 
+    	// send request to this method iteratively for 3 or 4 time and then comment it and again send request to this method   
+        // you will feel the difference between the amount of time taken you can also observe console for that
+    	  MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("userdata");
+    	  User user = new User();
     	  FindIterable <Document> fi = tc.find(eq("username",username));
+    	//System.out.println("enter");
     	  for(Document d : fi)
     	  {
               user.setBio(d.getString("bio"));
@@ -43,13 +50,14 @@ public class UserDao {
     	      user.setZipcode(String.valueOf(innerdoc.get("zipcode")));
     	      user.setLinkedin_id(innerdoc.getString("linkedin_id"));
     	      user.setGithub_id(innerdoc.getString("github_id"));
-           } 
+          //System.out.println(d);
+    	  } 
     	  return user;
       }
       
       public ArrayList<Acknowledgement> updateUserDetails(User user)
       { // this collection is for testing purpose uncomment this for doing test
-        // MongoCollection <Document> tc = db.getCollection("testcol");
+         MongoCollection <Document> tc = db.getCollection("testcol");
     	  Acknowledgement ac2 = new Acknowledgement();
           ArrayList<Acknowledgement> alacknow = new ArrayList<Acknowledgement>();
     	  

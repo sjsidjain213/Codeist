@@ -7,13 +7,21 @@ import javax.xml.bind.annotation.XmlRootElement;
     @XmlRootElement
 public class User {
 	@XmlElement
-private String username,name,bio,phone_no,email_id,linkedin_id,github_id,country,state,city,zipcode;
+private String username,name,bio,phone_no,email_id,linkedin_id,github_id,country,state,city,zipcode,message="Log in First";
 	private ArrayList<String> favourite_tags,following,followers,contributing;
+
 	public String getUsername() {
 		return username;
 	}
+	public String getMessage() {
+		return message;
+	}
+	public void setMessage(String message) {
+		this.message = message;
+	}
 	public void setUsername(String username) {
 		this.username = username;
+	    this.message="logged in";
 	}
 	public String getName() {
 		return name;

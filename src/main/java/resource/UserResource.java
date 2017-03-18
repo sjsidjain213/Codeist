@@ -13,17 +13,19 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import bean.*;
 import dao.*;
+import service.DatabaseServices;
 import service.SessionService;
 @Path("/user")
 public class UserResource {
 	
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
-	@Path("/sessioncreation/{username}")
+	@Path("/sessioncreate/{username}")
 	public String login(@Context HttpServletRequest req,@PathParam("username") String username)
 	{
 		new SessionService().sessionCreate(req,username);
-	    return "Session Created";
+	    new DatabaseServices();
+		return "Session Created";
 	}
 	
 	@GET
@@ -40,9 +42,9 @@ public class UserResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/profile/{username}")
-	public Object getUserDetails(@PathParam("username")String username,@Context HttpServletRequest req)
+	public User getUserDetails(@PathParam("username")String username,@Context HttpServletRequest req)
 	{
-	return new SessionService().sessionVerifier(req)?new UserDao().getUserDetails(username):"X";
+	return (new SessionService().sessionVerifier(req))?new UserDao().getUserDetails(username):new User();
 	}
 	
 	@PUT
