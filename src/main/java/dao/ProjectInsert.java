@@ -1,7 +1,6 @@
 package dao;
 
 import org.bson.Document;
-import org.eclipse.persistence.exceptions.IntegrityException;
 
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
@@ -46,7 +45,7 @@ public Acknowledgement insertProject(Project project,String username)
 	    	  .append("comments",project.getComment())
 	    	  .append("contributors",project.getContributors())
 	    	  .append("readme", project.getReadme())
-	    	  .append("private", project.getAccess())
+	    	  .append("private", project.get_private())
 	    	  .append("zip_file",project.getZipfile())
 	    	  .append("images",project.getImages());
          String acknow =  tc.updateOne(eq("username",username),new Document("$addToSet",new Document("projects",doc))).toString();	
@@ -64,7 +63,6 @@ return acknowledge;
 
 public List<Project> getProjectBrief(String username)
 {
-	System.out.println("inside project");
   List<Project> project = new ArrayList<Project>();
   Project pro=null;
   FindIterable <Document> fi = tc.find(eq("username",username));
@@ -89,19 +87,23 @@ public Project getSelectedProject(String username,String title)
 Project project=new Project();
 FindIterable <Document> fi = tc.find(eq("username",username));
 Document doc = fi.first();
-ArrayList<Document> docarray = (ArrayList<Document>) doc.get("Projects");
+ArrayList<Document> docarray = (ArrayList<Document>) doc.get("projects");
 for(Document d:docarray)
 {
 if(d.getString("title")!=null&&d.getString("title").equals(title))
 {
 	   project.setTitle(d.getString("title"));
 	   project.setDescription(d.getString("description"));
-	   project.setTags(new GeneralServices().atosmethod(als -> {
-    	String s = "";
-    	for(String sin : als)
-           		s+=sin;
-    	return s;
-    	},(ArrayList<String>)d.get("tags"))); 
+	   project.setTags((ArrayList<String>)d.get("tags")); 
+	   project.setLicence(d.getString("license"));
+	   project.setLike(Double.parseDouble(d.get("likes").toString()));
+	   project.setProject_url(d.getString("project_url"));
+	   project.setContributors((ArrayList<String>)d.get("contributors"));
+	   project.setReadme(d.getString("readme"));
+	   project.set_private(d.getString("private"));
+	   project.setVideourl((ArrayList<String>)d.get("video_url"));
+	   project.setZipfile((ArrayList<String>)d.get("zip_file"));
+	   project.setImages((ArrayList<String>)d.get("images"));
 }
 }
 return project;
@@ -112,21 +114,7 @@ public Acknowledgement insertComment(Comment comment,String username,String proj
 Document doc = new Document("username",comment.getUsername())
                   .append("comment", comment.getComment())
                   .append("EPOCH_TIME",new Date());
-
-Document doc2 = tc.find(eq("username",username)).first();
-int index =0;
-int index2=0;
-ArrayList<Document> alpro = (ArrayList<Document>) doc2.get("projects");
-for(Document din : alpro)
-{	
-	if(din.getString("title").equals(projectname))
-	{
-     index2=index;
-	}
-	index++;
-}
-
-String acknow= tc.updateOne(eq("username",username),new Document("$push",new Document("projects."+index2+".comments",doc))).toString();
+String acknow= tc.updateOne(eq("username","pjain"),new Document("$push",new Document("projects.0.comments",doc))).toString();
 
 Acknowledgement acknowledge = new GeneralServices().stoacknowmethod(s ->{
     Acknowledgement ac2 = new Acknowledgement();
@@ -140,7 +128,8 @@ return acknowledge;
 }
 
 public ArrayList<Comment> getAllComments(String username,String projectname)
-{   Document document = tc.find(eq("username",username)).first();
+{   System.out.println("hello");
+	Document document = tc.find(eq("username",username)).first();
 	ArrayList<Document> alproject = (ArrayList<Document>) document.get("projects");
 	Comment comment = new Comment();
 	ArrayList<Comment> alcomment = new ArrayList<Comment>();
@@ -158,7 +147,8 @@ public ArrayList<Comment> getAllComments(String username,String projectname)
 	            alcomment.add(comment);
 		    }		
 		}
-	}    
+	}
+    
 return alcomment;
 }
 }
