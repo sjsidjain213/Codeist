@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -54,6 +55,13 @@ public class UserResource {
 	public ArrayList<Acknowledgement> upsertUserDetails(User user)
 	{
 		return new UserDao().updateUserDetails(user);
+	}
+	@POST
+	@Path("/updatefavtags/{username}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Acknowledgement updateFavTags(@PathParam("username")String username,Tag favTags){
+		return new UserDao().updateFavTags(username, favTags);
 	}
 
 }

@@ -3,6 +3,7 @@ package dao;
 import org.bson.Document;
 
 import bean.Acknowledgement;
+import bean.Tag;
 import bean.User;
 import service.DatabaseServices;
 import service.GeneralServices;
@@ -92,5 +93,16 @@ public class UserDao {
         
     	 //client.close();
          return alacknow;
+      }
+      
+      public Acknowledgement updateFavTags(String username,Tag favTags){
+    	  MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("userdata");
+    	  Acknowledgement ac2 = new Acknowledgement();
+    	  String acknow= tc.updateOne(eq("username",username),new Document("$set", new Document("favourite_tags",favTags.getTags()))).toString();
+    	  Acknowledgement acknowledge1 = new GeneralServices().stoacknowmethod(s ->{
+              String sa [] = s.substring(s.indexOf("{")+1,s.indexOf("}")).split(",");
+                 ac2.setMatchedCount(sa[0]);ac2.setModifiedCount(sa[1]);ac2.setUpsertedId(sa[2]);
+              return ac2;}, acknow);
+    	  return acknowledge1;
       }
 }
