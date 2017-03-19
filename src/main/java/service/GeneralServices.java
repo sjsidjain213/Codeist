@@ -7,6 +7,7 @@ import com.mongodb.Block;
 import com.mongodb.client.FindIterable;
 
 import bean.Acknowledgement;
+import bean.Tag;
 import bean.Tile;
 import interfaces.service.AtoSCon;
 import interfaces.service.StoACon;
@@ -24,10 +25,19 @@ public Acknowledgement stoacknowmethod(StoAcknowCon stacknow,String acknow)
 return stacknow.convertStoAcknow(acknow);
 }
 
-public void search(String data)
+@SuppressWarnings("unchecked")
+public boolean match(Tag tags,ArrayList<String> tag)
 {
-// Write logic here for using search bar change signature of method according to requirments
-	
+	try{
+	for (String temp: tags.getTags()){
+        if(tag.contains(temp)){
+        	return true;
+        }
+	}}
+	catch(Exception e){
+		e.printStackTrace();
+	}
+	return false;
 }
 
 public void getHistory(HashMap<Object,Tile> hm,ArrayList<Tile> al,FindIterable<Document> fi)

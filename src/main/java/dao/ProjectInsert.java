@@ -12,6 +12,7 @@ import com.mongodb.client.result.UpdateResult;
 import bean.Acknowledgement;
 import bean.Comment;
 import bean.Project;
+import bean.Tag;
 import exception.UserNotFoundException;
 
 import static com.mongodb.client.model.Filters.*;
@@ -150,5 +151,27 @@ public ArrayList<Comment> getAllComments(String username,String projectname)
 	}
     
 return alcomment;
+}
+@SuppressWarnings("unchecked")
+public List<Project> searchProject(Tag tags)
+{
+  List<Project> project = new ArrayList<Project>();
+  Project pro=null;
+  FindIterable <Document> fi = tc.find();
+  for(Document d: fi)
+  {
+	 //@SuppressWarnings("unchecked")
+	   ArrayList<Document> arrayproject = (ArrayList<Document>) d.get("projects");
+       for(Document innerd:arrayproject)
+       { 
+    	 if(new GeneralServices().match(tags,(ArrayList<String>)innerd.get("tags"))){  
+	    	 pro= new Project();
+	    	 pro.setTitle(innerd.getString("title"));   
+	         pro.setDescription(innerd.getString("description"));
+	         project.add(pro);
+    	 }
+       }
+  }
+return project;
 }
 }
