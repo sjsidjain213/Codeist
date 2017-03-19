@@ -26,11 +26,12 @@ import interfaces.service.StoACon;
 import service.GeneralServices;
 public class ProjectInsert
 {
-	 private MongoClientURI uri  = new MongoClientURI("mongodb://sjsidjain:sjsidjain@ds145359.mlab.com:45359/testhack"); 
-     private MongoClient client = new MongoClient(uri);
-     private MongoDatabase db = client.getDatabase(uri.getDatabase());
-     private MongoCollection <Document> tc = db.getCollection("userdata");
-
+	// private MongoClientURI uri  = new MongoClientURI("mongodb://sjsidjain:sjsidjain@ds145359.mlab.com:45359/testhack"); 
+     //private MongoClient client = new MongoClient(uri);
+     //private MongoDatabase db = client.getDatabase(uri.getDatabase());
+     //private MongoCollection <Document> tc = db.getCollection("userdata");
+	MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("userdata");
+	
 public Acknowledgement insertProject(Project project,String username)
 { 
 	Document d = tc.find(eq("username",username)).first();
@@ -58,7 +59,7 @@ public Acknowledgement insertProject(Project project,String username)
    	                     ac2.setModifiedCount(sa[1]);
    	                     ac2.setUpsertedId(sa[2]);
 	                     return ac2;}, acknow);
-client.close();
+//client.close();
 return acknowledge;
 }
 
