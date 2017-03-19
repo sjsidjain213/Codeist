@@ -17,11 +17,11 @@ import static com.mongodb.client.model.Filters.*;
 import java.util.ArrayList;
 
 public class UserDao {
-	  MongoClientURI uri  = new MongoClientURI("mongodb://sjsidjain:sjsidjain@ds145359.mlab.com:45359/testhack"); 
-      MongoClient client = new MongoClient(uri);
-      MongoDatabase db = client.getDatabase(uri.getDatabase());
+	 // MongoClientURI uri  = new MongoClientURI("mongodb://sjsidjain:sjsidjain@ds145359.mlab.com:45359/testhack"); 
+      //MongoClient client = new MongoClient(uri);
+      //MongoDatabase db = client.getDatabase(uri.getDatabase());
       // collection userdata is not for testing, for testing purpose chnage collection name to testcol
-      MongoCollection <Document> tc = db.getCollection("userdata");
+      //MongoCollection <Document> tc = db.getCollection("userdata");
       @SuppressWarnings("unchecked")
 	public User getUserDetails(String username)
       { 
@@ -57,7 +57,8 @@ public class UserDao {
       
       public ArrayList<Acknowledgement> updateUserDetails(User user)
       { // this collection is for testing purpose uncomment this for doing test
-         MongoCollection <Document> tc = db.getCollection("testcol");
+         //MongoCollection <Document> tc = db.getCollection("testcol");
+	  MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("testcol");
     	  Acknowledgement ac2 = new Acknowledgement();
           ArrayList<Acknowledgement> alacknow = new ArrayList<Acknowledgement>();
     	  
@@ -89,7 +90,7 @@ public class UserDao {
              return ac2;}, acknow2);
         alacknow.add(acknowledge1);alacknow.add(acknowledge2);
         
-    	 client.close();
+    	 //client.close();
          return alacknow;
       }
 }
