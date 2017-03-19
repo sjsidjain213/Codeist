@@ -6,14 +6,11 @@ public class Signup
 {
   
 	
-	private String username,emailaddress, profileurl,  location  ;
+	private String username,emailaddress, profileurl,location;
 	private ArrayList<String> following,followers;
 	  //--profile image
 	 
 	 private int age;
-	
-	  
-	  
 	
 	public String getEmailaddress() {
 		return emailaddress;
