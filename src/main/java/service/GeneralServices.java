@@ -1,7 +1,10 @@
 package service;
 import java.util.*;
 
+
+
 import bean.Acknowledgement;
+import bean.Tag;
 import interfaces.service.AtoSCon;
 import interfaces.service.StoACon;
 import interfaces.service.StoAcknowCon;
@@ -18,9 +21,19 @@ public Acknowledgement stoacknowmethod(StoAcknowCon stacknow,String acknow)
 return stacknow.convertStoAcknow(acknow);
 }
 
-public void search(String data)
+@SuppressWarnings("unchecked")
+public boolean match(Tag tags,Object obj)
 {
-// Write logic here for using search bar change signature of method according to requirments
-	
+	try{
+	ArrayList<String> tag= (ArrayList<String>)obj;
+	for (String temp: tags.getTags()){
+        if(tag.contains(temp) ? true : false){
+        	return true;
+        }
+	}}
+	catch(Exception e){
+		e.printStackTrace();
+	}
+	return false;
 }
 }
