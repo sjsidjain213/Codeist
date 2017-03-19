@@ -158,19 +158,16 @@ public List<Project> searchProject(Tag tags)
 {
   List<Project> project = new ArrayList<Project>();
   Project pro=null;
-  boolean flag;
   FindIterable <Document> fi = tc.find();
-  System.out.println(tags.getTags());
   for(Document d: fi)
   {
 	 //@SuppressWarnings("unchecked")
 	   ArrayList<Document> arrayproject = (ArrayList<Document>) d.get("projects");
        for(Document innerd:arrayproject)
-       { flag=false;
-    	  System.out.println(innerd.get("tags"));
+       { 
     	   
-    	 flag=new GeneralServices().match(tags,innerd.get("tags"));
-    	 if(flag==true){  
+    	 
+    	 if(new GeneralServices().match(tags,innerd.get("tags"))){  
 	    	 pro= new Project();
 	    	 pro.setTitle(innerd.getString("title"));   
 	         pro.setDescription(innerd.getString("description"));
