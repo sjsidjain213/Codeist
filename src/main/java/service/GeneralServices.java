@@ -22,10 +22,9 @@ return stacknow.convertStoAcknow(acknow);
 }
 
 @SuppressWarnings("unchecked")
-public boolean match(Tag tags,Object obj)
+public boolean match(Tag tags,ArrayList<String> tag)
 {
 	try{
-	ArrayList<String> tag= (ArrayList<String>)obj;
 	for (String temp: tags.getTags()){
         if(tag.contains(temp) ? true : false){
         	return true;

@@ -165,9 +165,7 @@ public List<Project> searchProject(Tag tags)
 	   ArrayList<Document> arrayproject = (ArrayList<Document>) d.get("projects");
        for(Document innerd:arrayproject)
        { 
-    	   
-    	 
-    	 if(new GeneralServices().match(tags,innerd.get("tags"))){  
+    	 if(new GeneralServices().match(tags,(ArrayList<String>)innerd.get("tags"))){  
 	    	 pro= new Project();
 	    	 pro.setTitle(innerd.getString("title"));   
 	         pro.setDescription(innerd.getString("description"));
