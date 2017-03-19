@@ -26,7 +26,7 @@ public boolean match(Tag tags,ArrayList<String> tag)
 {
 	try{
 	for (String temp: tags.getTags()){
-        if(tag.contains(temp) ? true : false){
+        if(tag.contains(temp)){
         	return true;
         }
 	}}
