@@ -2,27 +2,19 @@ package dao;
 
 import org.bson.Document;
 
-import com.mongodb.MongoClient;
-import com.mongodb.MongoClientURI;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.result.UpdateResult;
-
 import bean.Acknowledgement;
 import bean.Comment;
 import bean.Project;
 import bean.Tag;
-import exception.UserNotFoundException;
 
 import static com.mongodb.client.model.Filters.*;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import interfaces.service.AtoSCon;
-import interfaces.service.StoACon;
+import service.DatabaseServices;
 import service.GeneralServices;
 public class ProjectInsert
 {
@@ -32,6 +24,7 @@ public class ProjectInsert
      //private MongoCollection <Document> tc = db.getCollection("userdata");
 	MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("userdata");
 	
+@SuppressWarnings("unchecked")
 public Acknowledgement insertProject(Project project,String username)
 { 
 	Document d = tc.find(eq("username",username)).first();
@@ -89,6 +82,7 @@ public Project getSelectedProject(String username,String title)
 Project project=new Project();
 FindIterable <Document> fi = tc.find(eq("username",username));
 Document doc = fi.first();
+System.out.println(doc);
 ArrayList<Document> docarray = (ArrayList<Document>) doc.get("projects");
 for(Document d:docarray)
 {
@@ -129,6 +123,7 @@ Acknowledgement acknowledge = new GeneralServices().stoacknowmethod(s ->{
 return acknowledge;
 }
 
+@SuppressWarnings("unchecked")
 public ArrayList<Comment> getAllComments(String username,String projectname)
 {   System.out.println("hello");
 	Document document = tc.find(eq("username",username)).first();

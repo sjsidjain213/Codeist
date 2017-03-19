@@ -2,7 +2,7 @@ package bean;
 
 import java.util.ArrayList;
 
-public class Project {
+public class Project extends SearchBean{
 	
 
 	private String title,description,readme,licence,keywords,project_url,comment,_private;

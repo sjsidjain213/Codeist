@@ -2,7 +2,7 @@ package bean;
 
 import java.util.ArrayList;
 
-public class Tile {
+public class Tile extends SearchBean{
 private String username,title,description;
 private int upvotes,downvotes,viewcount,positioncount;
 private Object _id;
