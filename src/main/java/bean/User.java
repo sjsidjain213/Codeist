@@ -9,6 +9,7 @@ public class User extends SearchBean {
 	@XmlElement
 private String username,name,bio,phone_no,email_id,linkedin_id,github_id,country,state,city,zipcode,message="Log in First";
 	private ArrayList<String> favourite_tags,following,followers,contributing;
+	private long reward_points;
 
 	public String getUsername() {
 		return username;
@@ -107,6 +108,13 @@ private String username,name,bio,phone_no,email_id,linkedin_id,github_id,country
 	public void setContributing(ArrayList<String> contributing) {
 		this.contributing = contributing;
 	}
+	public long getReward_points(){
+		return reward_points;
+	}
+	public void setReward_points(long points){
+		this.reward_points = points;
+	}
+	
 	@Override
 	public String toString() {
 		return "User [username=" + username + ", name=" + name + ", bio=" + bio + ", phone_no=" + phone_no
