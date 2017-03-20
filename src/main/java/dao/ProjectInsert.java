@@ -22,38 +22,34 @@ public class ProjectInsert
      //private MongoClient client = new MongoClient(uri);
      //private MongoDatabase db = client.getDatabase(uri.getDatabase());
      //private MongoCollection <Document> tc = db.getCollection("userdata");
-	MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("userdata");
 	
-@SuppressWarnings("unchecked")
-public Acknowledgement insertProject(Project project,String username)
+	//we have established connection with mongoDB in DatabaseService so here we are directly accessing the collection
+	MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("project");
+	
+//inserting a new project to database
+public String insertProject(Project project,String username)
 { 
-	Document d = tc.find(eq("username",username)).first();
-	ArrayList<Document>  alproject = (ArrayList<Document>) d.get("projects");
-	int index = alproject.size()+1;
-	Document doc = new Document()
-	    	  .append("title",project.getTitle())		  
-	    	  .append("description",project.getDescription())
-	    	  .append("project_url",project.getProject_url())
-	    	  .append("index",index)
-	    	  .append("tags",project.getTags())
-	    	  .append("likes",project.getLike())
-	    	  .append("comments",project.getComment())
-	    	  .append("contributors",project.getContributors())
-	    	  .append("readme", project.getReadme())
-	    	  .append("private", project.get_private())
-	    	  .append("zip_file",project.getZipfile())
-	    	  .append("images",project.getImages());
-         String acknow =  tc.updateOne(eq("username",username),new Document("$addToSet",new Document("projects",doc))).toString();	
-
-            Acknowledgement acknowledge = new GeneralServices().stoacknowmethod(s ->{
-	                     Acknowledgement ac2 = new Acknowledgement();
-	                     String sa [] = s.substring(s.indexOf("{")+1,s.indexOf("}")).split(",");
-   	                     ac2.setMatchedCount(sa[0]);
-   	                     ac2.setModifiedCount(sa[1]);
-   	                     ac2.setUpsertedId(sa[2]);
-	                     return ac2;}, acknow);
-//client.close();
-return acknowledge;
+	    Document doc = new Document()
+	    		 .append("username", project.getUsername())
+	    		 .append("title",project.getTitle())		  
+	    		 .append("description",project.getDescription())
+	    		 .append("project_url",project.getProject_url())
+	    		 .append("tags",(List<String>)project.getTags())
+	    		 .append("comments",(List<String>)project.getComments())
+	    		 .append("contributors",(List<String>)project.getContributors())
+	    		 .append("readme", project.getReadme())
+	    		 .append("license", project.getLicense())
+	    		 .append("_private", project.get_private())
+	    		 .append("video_url",project.getVideo_url())
+	    		 .append("zip_file",project.getZip_file())
+	    		 .append("images",(List<String>)project.getImages())
+	    		 .append("info", new Document("upvotes",project.getUpvotes())
+	    				 	.append("downvotes",project.getDownvotes())
+	    				 	.append("viewcount",project.getViewcount()));
+		          tc.insertOne(doc);
+	    	 //System.out.println(project.getUpvotes()+"::"+project.getDownvotes());
+		       
+	    	 return "Inserted";
 }
 
 public List<Project> getProjectBrief(String username)
@@ -79,30 +75,30 @@ return project;
 @SuppressWarnings("unchecked")
 public Project getSelectedProject(String username,String title)
 {
-Project project=new Project();
-FindIterable <Document> fi = tc.find(eq("username",username));
-Document doc = fi.first();
-System.out.println(doc);
-ArrayList<Document> docarray = (ArrayList<Document>) doc.get("projects");
-for(Document d:docarray)
-{
-if(d.getString("title")!=null&&d.getString("title").equals(title))
-{
-	   project.setTitle(d.getString("title"));
-	   project.setDescription(d.getString("description"));
-	   project.setTags((ArrayList<String>)d.get("tags")); 
-	   project.setLicence(d.getString("license"));
-	   project.setLike(Double.parseDouble(d.get("likes").toString()));
-	   project.setProject_url(d.getString("project_url"));
-	   project.setContributors((ArrayList<String>)d.get("contributors"));
-	   project.setReadme(d.getString("readme"));
-	   project.set_private(d.getString("private"));
-	   project.setVideourl((ArrayList<String>)d.get("video_url"));
-	   project.setZipfile((ArrayList<String>)d.get("zip_file"));
-	   project.setImages((ArrayList<String>)d.get("images"));
-}
-}
-return project;
+	Project project=new Project();
+	FindIterable <Document> fi = tc.find(eq("username",username));
+	for(Document d:fi)
+	{
+		if(d.getString("title").equalsIgnoreCase(title))
+		{
+	   		project.setTitle(d.getString("title"));
+	   		project.setDescription(d.getString("description"));
+	   		project.setTags((ArrayList<String>)d.get("tags")); 
+	   		project.setLicense(d.getString("license"));
+	   		project.setProject_url(d.getString("project_url"));
+	   		project.setContributors((ArrayList<String>)d.get("contributors"));
+	   		project.setReadme(d.getString("readme"));
+	   		project.set_private(d.getString("_private"));
+	   		project.setVideo_url((ArrayList<String>)d.get("video_url"));
+	   		project.setZip_file((ArrayList<String>)d.get("zip_file"));
+	   		project.setImages((ArrayList<String>)d.get("images"));
+	   		Document innerdoc = (Document)d.get("info");
+	   		project.setUpvotes(innerdoc.getLong("upvotes"));
+	   		project.setDownvotes(innerdoc.getLong("downvotes"));
+	   		project.setViewcount(innerdoc.getLong("viewcount"));
+		}
+	}
+	return project;
 }
 
 public Acknowledgement insertComment(Comment comment,String username,String projectname)
