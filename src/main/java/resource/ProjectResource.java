@@ -22,7 +22,7 @@ public class ProjectResource {
 @Path("/insert/{username}")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public Acknowledgement insertProject(Project project,@PathParam("username")String username)
+public String insertProject(Project project,@PathParam("username")String username)
 {
 return new ProjectInsert().insertProject(project, username);
 }

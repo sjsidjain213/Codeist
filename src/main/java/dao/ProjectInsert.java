@@ -93,9 +93,9 @@ public Project getSelectedProject(String username,String title)
 	   		project.setZip_file((ArrayList<String>)d.get("zip_file"));
 	   		project.setImages((ArrayList<String>)d.get("images"));
 	   		Document innerdoc = (Document)d.get("info");
-	   		project.setUpvotes(innerdoc.getLong("upvotes"));
-	   		project.setDownvotes(innerdoc.getLong("downvotes"));
-	   		project.setViewcount(innerdoc.getLong("viewcount"));
+	   		project.setUpvotes(innerdoc.getDouble("upvotes").intValue());
+	   		project.setDownvotes(innerdoc.getDouble("downvotes").intValue());
+	   		project.setViewcount(innerdoc.getDouble("viewcount").intValue());
 		}
 	}
 	return project;

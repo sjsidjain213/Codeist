@@ -2,8 +2,19 @@ package bean;
 
 import java.util.ArrayList;
 
-public class Tile extends SearchBean{
+public class Tile{
 private String username,title,description;
+private ArrayList<String> source = new ArrayList<String>();
+
+
+public ArrayList<String> getSource() {
+	return source;
+}
+
+public void setSource(ArrayList<String> source) {
+	this.source = source;
+}
+
 private int upvotes,downvotes,viewcount,positioncount;
 private Object _id;
 public Object get_id() {

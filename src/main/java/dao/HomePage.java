@@ -2,6 +2,7 @@ package dao;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import org.bson.Document;
 import static com.mongodb.client.model.Filters.*;
@@ -15,8 +16,8 @@ import service.DatabaseServices;
 import service.GeneralServices;
 
 public class HomePage {
-	  static HashMap<Object,Tile> hm = new HashMap<Object,Tile>();
-	    
+    HashMap<Object,Tile> hm = new HashMap<Object,Tile>();
+ 	    
 	@SuppressWarnings("unchecked")
 	public ArrayList<Tile> getHistory(String username)
 	{
@@ -29,19 +30,38 @@ public class HomePage {
        ArrayList<String> alvieweduser = (ArrayList<String>) doc.get("user_viewed");
        ArrayList<String> alviewedproject = (ArrayList<String>) doc.get("project_viewed");
 
-        tc =new DatabaseServices().getDb().getCollection("project");
+       tc =new DatabaseServices().getDb().getCollection("project");
        FindIterable <Document> docfavtags =  tc.find(in("tags",alfavtags));
        FindIterable <Document> docviewedtags =  tc.find(in("tags",alviewedtags));
        FindIterable <Document> docvieweduser =  tc.find(in("username",alvieweduser));
        FindIterable <Document> docviewedproject =  tc.find(in("title",alviewedproject));
        
-       ArrayList<Tile> altl = new ArrayList<Tile>();
-       GeneralServices gs = new GeneralServices();
-       gs.getHistory(hm, altl, docfavtags);
-       gs.getHistory(hm, altl, docviewedtags);
-       gs.getHistory(hm, altl, docvieweduser);
-       gs.getHistory(hm, altl,docviewedproject);
+      ArrayList<Tile> altl = new ArrayList<Tile>();
+      HashSet<Object> hs = new HashSet<Object>(); 
+      getHistory(altl,docfavtags,"favtags");
+      getHistory(altl,docviewedtags,"viewed tags");
+      getHistory(altl,docvieweduser,"vieweduser");
+      getHistory(altl,docviewedproject,"viewedproject");
        return altl;   
-	}
+	}	
 	
+	public void getHistory(ArrayList<Tile> altl, FindIterable<Document> fi,String source)
+	{
+		for(Document d:fi)
+	      {	if(!hm.containsKey(d.get("_id")))
+		      	{   Tile tl = new GeneralServices().returnTile(d,source);
+		      	    hm.put(d.get("_id"),tl);
+		      		altl.add(tl);
+		      	}
+		      	else{
+	        	 Tile tl =    hm.get(d.get("_id"));
+	        	 int i = tl.getPositioncount()+1;
+	        	 ArrayList <String> al = tl.getSource();
+	        	 al.add(source);
+	        	 tl.setSource(al);
+	 	      	tl.setPositioncount(i);
+	 	      	hm.put(d.get("_id"),tl);
+	         	}
+	      }
+	}
 }
