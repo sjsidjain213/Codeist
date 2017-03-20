@@ -62,6 +62,21 @@ public class SearchBar {
                  hmproject.put(doc.get("_id"),project);
         	     }
         });
+       
+        fi = tc.find(or(eq("description",Pattern.compile("(?i:.*"+s+".*)"))));	
+        fi.forEach((Block<Document>) doc -> { 
+        	     if(!hmproject.containsKey(doc.get("_id"))){
+        	     SearchBean project = new SearchBean();
+                 project.setSource("description");
+  	             project.setTitle(doc.getString("title"));
+  	             project.setDescription(doc.getString("description"));
+  	             project.setTags((ArrayList<String>)doc.get("tags"));
+  	             boolean bool =(doc.getString("title").matches("(?i:"+s+")"))?project.setPriority("low"):project.setPriority("lowest");    
+        	     alsearch.add(project);
+                 hmproject.put(doc.get("_id"),project);
+        	     }
+        });
+       
         
         fi = tc.find();
         Pattern pattern = Pattern.compile("(?i:.*"+s+".*)");
