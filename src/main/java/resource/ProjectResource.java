@@ -19,12 +19,12 @@ import bean.Project;
 public class ProjectResource {
 
 @POST
-@Path("/insert/{username}")
+@Path("/insert")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public String insertProject(Project project,@PathParam("username")String username)
+public String insertProject(Project project)
 {
-return new ProjectInsert().insertProject(project, username);
+return new ProjectInsert().insertProject(project);
 }
 
 @GET

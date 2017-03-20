@@ -1,18 +1,18 @@
 package bean;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Project extends SearchBean{
 	private String username,title,description,readme,license,project_url,_private;
-    	private long downvotes, viewcount;
-	private long upvotes;
-   	private ArrayList<String> images = new ArrayList<String>();
-    	private ArrayList<String> video_url = new ArrayList<String>();
+    private long downvotes, viewcount,upvotes;
+   	private ArrayList<String> images,video_url,zip_file,contributors,tags,comments;
+    /*	private ArrayList<String> video_url = new ArrayList<String>();
     	private ArrayList<String> zip_file = new ArrayList<String>();
     	private ArrayList<String> contributors = new ArrayList<String>();
     	private ArrayList<String> tags = new ArrayList<String>();
     	private ArrayList<String> comments = new ArrayList<String>();
-    
+   */ private Date date = new Date();
     
 	public Project() {
 		super();
@@ -42,6 +42,12 @@ public class Project extends SearchBean{
 		this.contributors = contributors;
 		this.tags = tags;
 		
+	}
+	public Date getDate() {
+		return date;
+	}
+	public void setDate(Date date) {
+		this.date = date;
 	}
 	@Override
 	public String toString() {
