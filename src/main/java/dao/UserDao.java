@@ -50,7 +50,12 @@ public class UserDao {
     	      user.setZipcode(String.valueOf(innerdoc.get("zipcode")));
     	      user.setLinkedin_id(innerdoc.getString("linkedin_id"));
     	      user.setGithub_id(innerdoc.getString("github_id"));
-          //System.out.println(d);
+              innerdoc = (Document) d.get("history");
+              user.setTags_viewed((ArrayList<String>)innerdoc.get("tags_viewed"));
+              user.setProblem_category_viewed((ArrayList<String>)innerdoc.get("problem_category_viewed"));
+              user.setUser_viewed((ArrayList<String>)innerdoc.get("user_viewed"));
+              user.setProject_viewed((ArrayList<String>)innerdoc.get("project_viewed"));
+              //System.out.println(d);
     	  } 
     	  return user;
       }
@@ -78,6 +83,14 @@ public class UserDao {
     	          .append("zipcode",user.getZipcode())
     	          .append("state",user.getState());
     	 String acknow2= tc.updateOne(eq("username",user.getUsername()),new Document("$set",new Document("contact_information",doc))).toString();
+   
+           doc=new Document("tags_viewed",user.getTags_viewed())
+       		  .append("user_viewed",user.getUser_viewed())
+   	          .append("problem_category_viewed",user.getProblem_category_viewed())
+   	          .append("project_viewed",user.getProject_viewed());
+           
+   	 String acknow3= tc.updateOne(eq("username",user.getUsername()),new Document("$set",new Document("history",doc))).toString();
+  
     	 
     	 Acknowledgement acknowledge1 = new GeneralServices().stoacknowmethod(s ->{
              String sa [] = s.substring(s.indexOf("{")+1,s.indexOf("}")).split(",");

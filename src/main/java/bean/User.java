@@ -23,7 +23,7 @@ private String username,name,bio,phone_no,email_id,linkedin_id,github_id,country
 	}
 	public void setUsername(String username) {
 		this.username = username;
-	    this.message="logged in";
+	    this.message="either you are not logged in or searched user do not exsist";
 	}
 	public String getName() {
 		return name;
