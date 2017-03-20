@@ -9,6 +9,7 @@ public class User extends SearchBean {
 	@XmlElement
 private String username,name,bio,phone_no,email_id,linkedin_id,github_id,country,state,city,zipcode,message="Log in First";
 	private ArrayList<String> favourite_tags,following,followers,contributing;
+	private ArrayList<String> tags_viewed, user_viewed, problem_category_viewed, project_viewed;
 	private long reward_points;
 
 	public String getUsername() {
@@ -113,6 +114,30 @@ private String username,name,bio,phone_no,email_id,linkedin_id,github_id,country
 	}
 	public void setReward_points(long points){
 		this.reward_points = points;
+	}
+	public ArrayList<String> getTags_viewed() {
+		return tags_viewed;
+	}
+	public void setTags_viewed(ArrayList<String> tags_viewed) {
+		this.tags_viewed = tags_viewed;
+	}
+	public ArrayList<String> getUser_viewed() {
+		return user_viewed;
+	}
+	public void setUser_viewed(ArrayList<String> user_viewed) {
+		this.user_viewed = user_viewed;
+	}
+	public ArrayList<String> getProblem_category_viewed() {
+		return problem_category_viewed;
+	}
+	public void setProblem_category_viewed(ArrayList<String> problem_category_viewed) {
+		this.problem_category_viewed = problem_category_viewed;
+	}
+	public ArrayList<String> getProject_viewed() {
+		return project_viewed;
+	}
+	public void setProject_viewed(ArrayList<String> project_viewed) {
+		this.project_viewed = project_viewed;
 	}
 	
 	@Override
