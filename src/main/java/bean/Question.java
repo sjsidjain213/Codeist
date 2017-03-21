@@ -9,6 +9,13 @@ public class Question {
 	private Date date = new Date();
 	private ArrayList<String> tags;
 	private long upvotes,downvotes,featured_points;
+	private ArrayList<Answer> answer = new ArrayList<Answer>();
+	public ArrayList<Answer> getAnswer() {
+		return answer;
+	}
+	public void setAnswer(ArrayList<Answer> answer) {
+		this.answer = answer;
+	}
 	public Question() {
 		super();
 		// TODO Auto-generated constructor stub
