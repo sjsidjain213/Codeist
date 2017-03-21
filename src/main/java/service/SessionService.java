@@ -2,12 +2,27 @@ package service;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class SessionService {
+import org.bson.Document;
 
-	public void sessionCreate(HttpServletRequest req,String username)
+import com.mongodb.client.MongoCollection;
+
+import bean.NotificationBean;
+
+import static com.mongodb.client.model.Filters.*;
+
+import java.util.ArrayList;
+public class SessionService {
+MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("userdata");
+	public ArrayList<NotificationBean> sessionCreate(HttpServletRequest req,String username)
 	{
-	req.getSession().setAttribute("username",username);
-    }
+		Document doc = tc.find(eq("username",username)).first();
+	if(doc!=null)
+	{	req.getSession().setAttribute("username",username);
+	return new NotificationService().getAllNotifications(username);
+	}
+	else 
+		return null;
+	}
 	
 	public boolean sessionVerifier(HttpServletRequest req)
 	{

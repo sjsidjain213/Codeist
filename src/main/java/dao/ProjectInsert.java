@@ -6,6 +6,7 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import bean.Acknowledgement;
 import bean.Comment;
+import bean.Notifications;
 import bean.Project;
 import bean.Tag;
 
@@ -16,6 +17,7 @@ import java.util.Date;
 import java.util.List;
 import service.DatabaseServices;
 import service.GeneralServices;
+import service.NotificationService;
 public class ProjectInsert
 {
 	MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("project");
@@ -96,7 +98,6 @@ Document doc = new Document("username",comment.getUsername())
                   .append("comment", comment.getComment())
                   .append("date",new Date());
 String acknow= tc.updateOne(and(eq("username",username),eq("title",projectname)),new Document("$push",new Document("comments",doc))).toString();
-
 Acknowledgement acknowledge = new GeneralServices().stoacknowmethod(s ->{
     Acknowledgement ac2 = new Acknowledgement();
     String sa [] = s.substring(s.indexOf("{")+1,s.indexOf("}")).split(",");
@@ -104,7 +105,7 @@ Acknowledgement acknowledge = new GeneralServices().stoacknowmethod(s ->{
        ac2.setModifiedCount(sa[1]);
        ac2.setUpsertedId(sa[2]);
     return ac2;}, acknow);
-
+new NotificationService().commentNotification(username,projectname,comment.getUsername(),comment.getComment(),Notifications.COMMENT);
 return acknowledge;
 }
 

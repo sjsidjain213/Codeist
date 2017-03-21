@@ -11,6 +11,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+
+import org.bson.Document;
+
 import bean.*;
 import dao.*;
 import service.DatabaseServices;
@@ -19,13 +22,12 @@ import service.SessionService;
 public class UserResource {
 	
 	@GET
-	@Produces(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/sessioncreate/{username}")
-	public String login(@Context HttpServletRequest req,@PathParam("username") String username)
+	public ArrayList<NotificationBean> login(@Context HttpServletRequest req,@PathParam("username") String username)
 	{
-		new SessionService().sessionCreate(req,username);
-	    new DatabaseServices();
-		return "Session Created";
+		new DatabaseServices();
+		return new SessionService().sessionCreate(req,username);
 	}
 	
 	@GET
@@ -55,5 +57,14 @@ public class UserResource {
 	{
 		return new UserDao().updateUserDetails(user,username);
 	}
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/retrievealluser")
+	public ArrayList<User> getAllUser()
+	{
+		return new UserDao().getAllUsers();
+	}
+	
 
 }

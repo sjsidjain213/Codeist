@@ -6,17 +6,18 @@ import com.mongodb.client.MongoCollection;
 
 import bean.Acknowledgement;
 import bean.Answer;
+import bean.Notifications;
 import bean.Question;
 import service.DatabaseServices;
 import service.GeneralServices;
+import service.NotificationService;
 
 import static com.mongodb.client.model.Filters.*;
 
 import java.util.ArrayList;
 public class QADao {
 	MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("qa");
-    
-	public Acknowledgement insertQuestion(Question question)
+    public Acknowledgement insertQuestion(Question question)
 	{ 
 		Document doc2 = tc.find(eq("question",question.getQuestion())).first();
 		if(doc2==null)
@@ -39,6 +40,7 @@ public class QADao {
 	    	return acknow;
 	    }
 		}
+	
 	public Question getQuestion(String question)
 	{
 	Document doc = tc.find(eq("question",question)).first();	
@@ -65,21 +67,22 @@ public class QADao {
 	return quest;
 	}
 	
-	public Acknowledgement insertAnswer(Answer question,String quest)
+	public Acknowledgement insertAnswer(Answer answer,String question,String username)
 	{ 
-		Document doc = new Document("username",question.getUsername())
-	    		.append("answer",question.getAnswer())
-	    		.append("date",question.getDate())
-	    		.append("upvotes",question.getUpvotes())
-	    		.append("downvotes", question.getDownvotes())
-	    		.append("featured_points", question.getFeatured_points());
-String acknow =tc.updateOne(eq("question", quest),new Document("$push",new Document("answers",doc))).toString();
+		Document doc = new Document("username",answer.getUsername())
+	    		.append("answer",answer.getAnswer())
+	    		.append("date",answer.getDate())
+	    		.append("upvotes",answer.getUpvotes())
+	    		.append("downvotes", answer.getDownvotes())
+	    		.append("featured_points", answer.getFeatured_points());
+String acknow =tc.updateOne(eq("question",question),new Document("$push",new Document("answers",doc))).toString();
     Acknowledgement acknowledge = new GeneralServices().stoacknowmethod(s ->{
 	Acknowledgement ac2 = new Acknowledgement();
     String sa [] = s.substring(s.indexOf("{")+1,s.indexOf("}")).split(",");
     ac2.setMatchedCount(sa[0]);ac2.setModifiedCount(sa[1]);ac2.setUpsertedId(sa[2]);
     return ac2;}, acknow);
-return acknowledge;
+    new NotificationService().answerNotification(username,question,answer.getUsername(),answer.getAnswer(),Notifications.QUESTIONSOLVED);
+    return acknowledge;
 	}
 	
 }

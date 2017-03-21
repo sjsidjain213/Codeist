@@ -26,12 +26,12 @@ public class QuestionResource {
 	}
 	
 	@POST
-	@Path("/insertanswer/{quest}")
+	@Path("/insertanswer/{username}/{question}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Acknowledgement insertAnswer(Answer answer,@PathParam("quest")String quest)
+	public Acknowledgement insertAnswer(Answer answer,@PathParam("question")String question,@PathParam("username") String username)
 	{
-		return new QADao().insertAnswer(answer, quest);
+		return new QADao().insertAnswer(answer, question,username);
 	}
 
 	@GET

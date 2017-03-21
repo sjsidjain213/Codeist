@@ -7,6 +7,7 @@ import bean.User;
 import service.DatabaseServices;
 import service.GeneralServices;
 
+import com.mongodb.Block;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.FindIterable;
@@ -83,5 +84,21 @@ public class UserDao {
              return ac2;}, acknow2);
         alacknow.add(acknowledge1);alacknow.add(acknowledge2);
         return alacknow;
+      }
+      
+      public ArrayList<User> getAllUsers()
+      {
+    	  ArrayList<User> aluser = new ArrayList<User>();
+    	  
+    	  tc.find().forEach((Block<Document>)doc -> {
+    		  User user = new User();
+    		  user.setName(doc.getString("name"));
+    		  user.setUsername(doc.getString("username"));
+    		  user.setFavourite_tags((ArrayList<String>)doc.get("favourite_tags"));
+    		  user.setBio(doc.getString("bio"));
+    		  user.setContributing((ArrayList<String>)doc.get("contributing"));
+    	  aluser.add(user);
+    	  });
+    	  return aluser;
       }
 }
