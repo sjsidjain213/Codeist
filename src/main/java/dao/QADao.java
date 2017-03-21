@@ -25,7 +25,7 @@ public class QADao {
 	    		.append("date",question.getDate())
 	    		.append("upvotes",question.getUpvotes())
 	    		.append("downvotes", question.getDownvotes())
-	    		.append("featured _point", question.getFeatured_points());
+	    		.append("featured_points", question.getFeatured_points());
 	    tc.insertOne(doc);
 		Acknowledgement acknow = new Acknowledgement();
 	     acknow.setModifiedCount("1");
@@ -72,9 +72,8 @@ public class QADao {
 	    		.append("date",question.getDate())
 	    		.append("upvotes",question.getUpvotes())
 	    		.append("downvotes", question.getDownvotes())
-	    		.append("featured _point", question.getFeatured_points());
-String acknow =tc.updateOne(eq("question", quest),new Document("$push",new Document("answer",doc))).toString();
-
+	    		.append("featured_points", question.getFeatured_points());
+String acknow =tc.updateOne(eq("question", quest),new Document("$push",new Document("answers",doc))).toString();
     Acknowledgement acknowledge = new GeneralServices().stoacknowmethod(s ->{
 	Acknowledgement ac2 = new Acknowledgement();
     String sa [] = s.substring(s.indexOf("{")+1,s.indexOf("}")).split(",");
