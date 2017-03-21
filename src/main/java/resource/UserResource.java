@@ -50,10 +50,10 @@ public class UserResource {
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/updateuser")
-	public ArrayList<Acknowledgement> upsertUserDetails(User user)
+	@Path("/updateuser/{username}")
+	public ArrayList<Acknowledgement> upsertUserDetails(User user,@PathParam("username") String username)
 	{
-		return new UserDao().updateUserDetails(user);
+		return new UserDao().updateUserDetails(user,username);
 	}
 
 }

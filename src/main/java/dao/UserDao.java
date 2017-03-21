@@ -17,21 +17,13 @@ import static com.mongodb.client.model.Filters.*;
 import java.util.ArrayList;
 
 public class UserDao {
-	 // MongoClientURI uri  = new MongoClientURI("mongodb://sjsidjain:sjsidjain@ds145359.mlab.com:45359/testhack"); 
-      //MongoClient client = new MongoClient(uri);
-      //MongoDatabase db = client.getDatabase(uri.getDatabase());
-      // collection userdata is not for testing, for testing purpose chnage collection name to testcol
-      //MongoCollection <Document> tc = db.getCollection("userdata");
-      @SuppressWarnings("unchecked")
+	  MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("userdata");
+  	
+	@SuppressWarnings("unchecked")
 	public User getUserDetails(String username)
       { 
-    	// Given below connection is established with help of mongo pool connection 
-    	// send request to this method iteratively for 3 or 4 time and then comment it and again send request to this method   
-        // you will feel the difference between the amount of time taken you can also observe console for that
-    	  MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("userdata");
     	  User user = new User();
     	  FindIterable <Document> fi = tc.find(eq("username",username));
-    	//System.out.println("enter");
     	  for(Document d : fi)
     	  {
               user.setBio(d.getString("bio"));
@@ -60,11 +52,8 @@ public class UserDao {
     	  return user;
       }
       
-      public ArrayList<Acknowledgement> updateUserDetails(User user)
-      { // this collection is for testing purpose uncomment this for doing test
-         //MongoCollection <Document> tc = db.getCollection("testcol");
-	  MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("testcol");
-    	  Acknowledgement ac2 = new Acknowledgement();
+      public ArrayList<Acknowledgement> updateUserDetails(User user,String username)
+      {   Acknowledgement ac2 = new Acknowledgement();
           ArrayList<Acknowledgement> alacknow = new ArrayList<Acknowledgement>();
     	  
     	  Document outdoc = new Document("name",user.getName())
@@ -82,16 +71,7 @@ public class UserDao {
     	          .append("github_id",user.getGithub_id())
     	          .append("zipcode",user.getZipcode())
     	          .append("state",user.getState());
-    	 String acknow2= tc.updateOne(eq("username",user.getUsername()),new Document("$set",new Document("contact_information",doc))).toString();
-   
-           doc=new Document("tags_viewed",user.getTags_viewed())
-       		  .append("user_viewed",user.getUser_viewed())
-   	          .append("problem_category_viewed",user.getProblem_category_viewed())
-   	          .append("project_viewed",user.getProject_viewed());
-           
-   	 String acknow3= tc.updateOne(eq("username",user.getUsername()),new Document("$set",new Document("history",doc))).toString();
-  
-    	 
+        String acknow2= tc.updateOne(eq("username",user.getUsername()),new Document("$set",new Document("contact_information",doc))).toString();
     	 Acknowledgement acknowledge1 = new GeneralServices().stoacknowmethod(s ->{
              String sa [] = s.substring(s.indexOf("{")+1,s.indexOf("}")).split(",");
                 ac2.setMatchedCount(sa[0]);ac2.setModifiedCount(sa[1]);ac2.setUpsertedId(sa[2]);
@@ -102,8 +82,6 @@ public class UserDao {
                 ac2.setMatchedCount(sa[0]);ac2.setModifiedCount(sa[1]);ac2.setUpsertedId(sa[2]);
              return ac2;}, acknow2);
         alacknow.add(acknowledge1);alacknow.add(acknowledge2);
-        
-    	 //client.close();
-         return alacknow;
+        return alacknow;
       }
 }
