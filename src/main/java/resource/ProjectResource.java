@@ -61,4 +61,58 @@ public ArrayList<Comment> getComment(@PathParam("projectname")String projectname
 	return 	new ProjectInsert().getAllComments(username, projectname);
 }
 
+	
+@GET
+@Path("/projectupvotes/{username}/{title}")
+@Produces(MediaType.APPLICATION_JSON)
+public Project fetchProjectUpvotes(@PathParam("username")String username, @PathParam("title")String title)
+{
+return new ProjectInsert().getProjectUpvotes(username, title);
+}
+
+@GET
+@Path("/projectdownvotes/{username}/{title}")
+@Produces(MediaType.APPLICATION_JSON)
+public Project fetchProjectDownvotes(@PathParam("username")String username, @PathParam("title")String title)
+{
+return new ProjectInsert().getProjectDownvotes(username, title);
+}
+
+@GET
+@Path("/projectviewcount/{username}/{title}")
+@Produces(MediaType.APPLICATION_JSON)
+public Project fetchProjectViewcount(@PathParam("username")String username, @PathParam("title")String title)
+{
+return new ProjectInsert().getProjectViewcount(username, title);
+}
+
+@POST
+@Path("/insertupvotes/{username}/{title}")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
+public Acknowledgement insertProjectUpvotes(Project project,@PathParam("username")String username, @PathParam("title")String title)
+{
+return new ProjectInsert().setProjectUpvotes(project, username, title);
+}
+
+@POST
+@Path("/insertdownvotes/{username}/{title}")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
+public Acknowledgement insertProjectDownvotes(Project project,@PathParam("username")String username, @PathParam("title")String title)
+{
+return new ProjectInsert().setProjectDownvotes(project, username, title);
+}
+
+@POST
+@Path("/insertviewcount/{username}/{title}")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
+public Acknowledgement insertProjectViewcount(Project project,@PathParam("username")String username, @PathParam("title")String title)
+{
+return new ProjectInsert().setProjectViewcount(project, username, title);
+}
+
+
+	
 }
