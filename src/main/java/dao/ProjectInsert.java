@@ -147,4 +147,114 @@ public List<Project> searchProject(Tag tags)
   }
 return project;
 }
+	
+public Project getProjectUpvotes(String username, String title)
+{
+	  Project project = new Project();
+	  FindIterable <Document> fi = tc.find(eq("username",username));
+	  for(Document d : fi){
+		  if(d.getString("title").equalsIgnoreCase(title)){
+			    Document innerdoc = (Document)d.get("info");
+		   		project.setUpvotes(innerdoc.getLong("upvotes"));
+		  }
+	  }
+	  return project;
+}
+
+public Project getProjectDownvotes(String username, String title)
+{
+	  Project project = new Project();
+	  FindIterable <Document> fi = tc.find(eq("username",username));
+	  for(Document d : fi){
+		  if(d.getString("title").equalsIgnoreCase(title)){
+			    Document innerdoc = (Document)d.get("info");
+		   		project.setDownvotes(innerdoc.getLong("downvotes"));
+		  }
+	  }
+	  return project;
+}
+
+public Project getProjectViewcount(String username, String title)
+{
+	  Project project = new Project();
+	  FindIterable <Document> fi = tc.find(eq("username",username));
+	  for(Document d : fi){
+		  if(d.getString("title").equalsIgnoreCase(title)){
+			    Document innerdoc = (Document)d.get("info");
+		   		project.setViewcount(innerdoc.getLong("viewcount"));
+		  }
+	  }
+	  return project;
+}
+
+public Acknowledgement setProjectUpvotes(Project project, String username, String title)
+{
+	  Acknowledgement ac2 = new Acknowledgement();
+	  FindIterable <Document> fi = tc.find(eq("username",username));
+	  for(Document d : fi){
+		  if(d.getString("title").equalsIgnoreCase(title)){
+			  Document innerdoc = (Document)d.get("info");
+			  project.setDownvotes(innerdoc.getLong("downvotes"));
+			  project.setViewcount(innerdoc.getLong("viewcount"));
+		  }
+	  }
+	  Document doc = new Document()
+			  		.append("upvotes",project.getUpvotes())
+	  				.append("downvotes",project.getDownvotes())
+	  				.append("viewcount",project.getViewcount());
+	  String acknow1 = tc.updateOne(and(eq("username", project.getUsername()),eq("title",project.getTitle())),new Document("$set",new Document("info",doc))).toString();
+	  Acknowledgement acknowledge1 = new GeneralServices().stoacknowmethod(s ->{
+        String sa [] = s.substring(s.indexOf("{")+1,s.indexOf("}")).split(",");
+           ac2.setMatchedCount(sa[0]);ac2.setModifiedCount(sa[1]);ac2.setUpsertedId(sa[2]);
+        return ac2;}, acknow1);
+	  return acknowledge1;
+}
+
+public Acknowledgement setProjectDownvotes(Project project, String username, String title)
+{
+	  Acknowledgement ac2 = new Acknowledgement();
+	  FindIterable <Document> fi = tc.find(eq("username",username));
+	  for(Document d : fi){
+		  if(d.getString("title").equalsIgnoreCase(title)){
+			  Document innerdoc = (Document)d.get("info");
+			  project.setUpvotes(innerdoc.getLong("upvotes"));
+			  project.setViewcount(innerdoc.getLong("viewcount"));
+		  }
+	  }
+	  Document doc = new Document()
+		  		.append("upvotes",project.getUpvotes())
+				.append("downvotes",project.getDownvotes())
+				.append("viewcount",project.getViewcount());
+	  String acknow1 = tc.updateOne(and(eq("username", project.getUsername()),eq("title",project.getTitle())),new Document("$set",new Document("info",doc))).toString();
+	  Acknowledgement acknowledge1 = new GeneralServices().stoacknowmethod(s ->{
+        String sa [] = s.substring(s.indexOf("{")+1,s.indexOf("}")).split(",");
+           ac2.setMatchedCount(sa[0]);ac2.setModifiedCount(sa[1]);ac2.setUpsertedId(sa[2]);
+        return ac2;}, acknow1);
+	  return acknowledge1;
+}
+
+public Acknowledgement setProjectViewcount(Project project, String username, String title)
+{
+	  Acknowledgement ac2 = new Acknowledgement();
+	  FindIterable <Document> fi = tc.find(eq("username",username));
+	  for(Document d : fi){
+		  if(d.getString("title").equalsIgnoreCase(title)){
+			  Document innerdoc = (Document)d.get("info");
+			  project.setUpvotes(innerdoc.getLong("upvotes"));
+			  project.setDownvotes(innerdoc.getLong("downvotes"));
+		  }
+	  }
+	  Document doc = new Document()
+		  		.append("upvotes",project.getUpvotes())
+				.append("downvotes",project.getDownvotes())
+				.append("viewcount",project.getViewcount());
+	  String acknow1 = tc.updateOne(and(eq("username", project.getUsername()),eq("title",project.getTitle())),new Document("$set",new Document("info",doc))).toString();
+	  Acknowledgement acknowledge1 = new GeneralServices().stoacknowmethod(s ->{
+        String sa [] = s.substring(s.indexOf("{")+1,s.indexOf("}")).split(",");
+           ac2.setMatchedCount(sa[0]);ac2.setModifiedCount(sa[1]);ac2.setUpsertedId(sa[2]);
+        return ac2;}, acknow1);
+	  return acknowledge1;
+}
+	
+	
 }
