@@ -10,7 +10,7 @@ public class User extends SearchBean {
 private String username,name,bio,phone_no,email_id,linkedin_id,github_id,country,state,city,zipcode,message="Log in First";
 	private ArrayList<String> favourite_tags,following,followers,contributing;
 	private ArrayList<String> tags_viewed, user_viewed, problem_category_viewed, project_viewed;
-	private long reward_points;
+	private long rating;
 
 	public String getUsername() {
 		return username;
@@ -109,11 +109,12 @@ private String username,name,bio,phone_no,email_id,linkedin_id,github_id,country
 	public void setContributing(ArrayList<String> contributing) {
 		this.contributing = contributing;
 	}
-	public long getReward_points(){
-		return reward_points;
+	
+	public long getRating() {
+		return rating;
 	}
-	public void setReward_points(long points){
-		this.reward_points = points;
+	public void setRating(long rating) {
+		this.rating = rating;
 	}
 	public ArrayList<String> getTags_viewed() {
 		return tags_viewed;
