@@ -1,17 +1,25 @@
 package bean;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
     @XmlRootElement
 public class User extends SearchBean {
 	@XmlElement
-private String username,name,bio,phone_no,email_id,linkedin_id,github_id,country,state,city,zipcode,message="Log in First";
+private String username,name,bio,phone_no,email_id,linkedin_id,github_id,country,state,city,message="Log in First";
 	private ArrayList<String> favourite_tags,following,followers,contributing;
 	private ArrayList<String> tags_viewed, user_viewed, problem_category_viewed, project_viewed;
-	private long rating;
+	private long rating,zipcode;
+	private Date date = new Date();
 
+	public Date getDate() {
+		return date;
+	}
+	public void setDate(Date date) {
+		this.date = date;
+	}
 	public String getUsername() {
 		return username;
 	}
@@ -79,10 +87,11 @@ private String username,name,bio,phone_no,email_id,linkedin_id,github_id,country
 	public void setCity(String city) {
 		this.city = city;
 	}
-	public String getZipcode() {
+	
+	public long getZipcode() {
 		return zipcode;
 	}
-	public void setZipcode(String zipcode) {
+	public void setZipcode(long zipcode) {
 		this.zipcode = zipcode;
 	}
 	public ArrayList<String> getFavourite_tags() {
@@ -154,7 +163,7 @@ private String username,name,bio,phone_no,email_id,linkedin_id,github_id,country
 		// TODO Auto-generated constructor stub
 	}
 	public User(String username, String name, String bio, String phone_no, String email_id, String linkedin_id,
-			String github_id, String country, String state, String city, String zipcode,
+			String github_id, String country, String state, String city, long zipcode,
 			ArrayList<String> favourite_tags, ArrayList<String> following, ArrayList<String> followers,
 			ArrayList<String> contributing) {
 		super();

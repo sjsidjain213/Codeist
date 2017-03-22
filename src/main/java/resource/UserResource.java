@@ -40,6 +40,15 @@ public class UserResource {
 	    return "Session Destroyed";
 	}
 	
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/insert")
+	public Acknowledgement insertUser(User users)
+	{
+	return new UserDao().insertUser(users);
+	}
+	
 	// For Demo Purpose : : User here can access his/her profile ONLY after login 
 	// for login user session is required to create session use method login for session creation
 	@GET

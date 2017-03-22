@@ -16,8 +16,38 @@ import static com.mongodb.client.model.Filters.*;
 import java.util.ArrayList;
 
 public class UserDao {
-	  MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("userdata");
+	  MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("testuserdata");
   	
+	  
+	  public Acknowledgement insertUser(User user)
+	  { Document test = tc.find(eq("username",user.getUsername())).first();
+	  System.out.println(user.getBio());
+		  if(test==null)
+		  { 
+			  System.out.println(user.getGithub_id());
+		  Document contact_information = new Document("phone_no",user.getPhone_no())
+				  .append("email_id",user.getEmail_id())
+				  .append("linkedin_id",user.getLinkedin_id())
+				  .append("github_id",user.getGithub_id())
+				//  .append("country", user.getCountry().toLowerCase())
+				  .append("state",user.getState().toLowerCase())
+				  .append("city",user.getCity())
+				  .append("zipcode", user.getZipcode());
+		  Document doc = new Document("username",user.getUsername())
+				  .append("password","KSHBDI$MAJ#")
+				  .append("name",user.getName())
+				  .append("bio",user.getBio())
+				  .append("date",user.getDate())
+				  .append("rating",user.getRating())
+				  .append("contact_information",contact_information)
+				  .append("favourite_tags",user.getFavourite_tags()); 
+		  tc.insertOne(doc);
+		  return new GeneralServices().response("insert");
+		  }
+		  else{
+			  return new GeneralServices().response(null);
+		  }
+	  }
 	@SuppressWarnings("unchecked")
 	public User getUserDetails(String username)
       { 
@@ -38,7 +68,7 @@ public class UserDao {
     	      user.setState(innerdoc.getString("state"));
     	      user.setEmail_id(innerdoc.getString("email_id"));
     	      user.setPhone_no(innerdoc.getString("phone_no"));
-    	      user.setZipcode(String.valueOf(innerdoc.get("zipcode")));
+    	      user.setZipcode(innerdoc.getLong("zipcode"));
     	      user.setLinkedin_id(innerdoc.getString("linkedin_id"));
     	      user.setGithub_id(innerdoc.getString("github_id"));
               innerdoc = (Document) d.get("history");
@@ -54,7 +84,7 @@ public class UserDao {
       public ArrayList<Acknowledgement> updateUserDetails(User user,String username)
       {   Acknowledgement ac2 = new Acknowledgement();
           ArrayList<Acknowledgement> alacknow = new ArrayList<Acknowledgement>();
-    	  
+    	  System.out.println(user.getBio()+"this is bip");
     	  Document outdoc = new Document("name",user.getName())
         		  .append("followers",user.getFollowers())
         		  .append("following",user.getFollowing())

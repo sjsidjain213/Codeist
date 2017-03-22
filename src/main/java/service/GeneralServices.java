@@ -61,7 +61,16 @@ public Tile returnTile(Document d,String source)
 
 public Acknowledgement response(String s)
 {
-	if(s!=null)
+	if(s!=null&&s.equals("insert"))
+	{
+		Acknowledgement ac2 = new Acknowledgement();
+	       ac2.setMatchedCount("1");
+	       ac2.setModifiedCount("1");
+	       ac2.setUpsertedId("0");
+	    return ac2;
+			
+	}
+	else if(s!=null)
 	{ Acknowledgement ac2 = new Acknowledgement();
     String sa [] = s.substring(s.indexOf("{")+1,s.indexOf("}")).split(",");
        ac2.setMatchedCount(sa[0]);
@@ -69,7 +78,7 @@ public Acknowledgement response(String s)
        ac2.setUpsertedId(sa[2]);
     return ac2;
 	}
-	else{
+	else {
 		Acknowledgement ac2 = new Acknowledgement();
 		ac2.setMatchedCount("0");
 		ac2.setModifiedCount("0");
