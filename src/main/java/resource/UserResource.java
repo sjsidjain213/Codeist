@@ -66,5 +66,21 @@ public class UserResource {
 		return new UserDao().getAllUsers();
 	}
 	
-
+	@GET
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/userrating/{username}")
+	public User getUserRating(@PathParam("username") String username)
+	{
+		return new UserDao().getUserRating(username);
+	}
+	
+	@POST
+	@Path("/insertrating/{username}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Acknowledgement insertUserRating(User user, @PathParam("username") String username)
+	{
+	return new UserDao().setUserRating(user, username);
+	}
 }
