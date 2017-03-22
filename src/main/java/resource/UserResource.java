@@ -84,4 +84,20 @@ public class UserResource {
 	{
 	return new UserDao().setUserRating(user, username);
 	}
+	
+	@POST
+	@Path("/updatefavtags/{username}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Acknowledgement updateFavTags(@PathParam("username")String username,Tag favTags){
+		return new UserDao().updateFavTags(username, favTags);
+	}
+	
+	@POST
+	@Path("/updatetagsviewed/{username}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Acknowledgement updateTagsViewed(@PathParam("username")String username,Tag favTags){
+		return new UserDao().updateTagsViewed(username, favTags);
+	}
 }
