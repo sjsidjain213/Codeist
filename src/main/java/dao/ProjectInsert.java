@@ -15,6 +15,10 @@ import static com.mongodb.client.model.Filters.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Context;
+
 import service.DatabaseServices;
 import service.GeneralServices;
 import service.NotificationService;
@@ -98,15 +102,8 @@ Document doc = new Document("username",comment.getUsername())
                   .append("comment", comment.getComment())
                   .append("date",new Date());
 String acknow= tc.updateOne(and(eq("username",username),eq("title",projectname)),new Document("$push",new Document("comments",doc))).toString();
-Acknowledgement acknowledge = new GeneralServices().stoacknowmethod(s ->{
-    Acknowledgement ac2 = new Acknowledgement();
-    String sa [] = s.substring(s.indexOf("{")+1,s.indexOf("}")).split(",");
-       ac2.setMatchedCount(sa[0]);
-       ac2.setModifiedCount(sa[1]);
-       ac2.setUpsertedId(sa[2]);
-    return ac2;}, acknow);
 new NotificationService().commentNotification(username,projectname,comment.getUsername(),comment.getComment(),Notifications.COMMENT);
-return acknowledge;
+return new GeneralServices().response(acknow);
 }
 
 @SuppressWarnings("unchecked")
@@ -147,7 +144,44 @@ public List<Project> searchProject(Tag tags)
   }
 return project;
 }
-	
+
+public Acknowledgement changeUpvotes(String action,String projecttitle,HttpServletRequest req)
+{
+String user=	(String) req.getSession().getAttribute("username");
+if(!(user==null))
+{Document d = tc.find(and(eq("username",user),eq("title",projecttitle))).first();
+Document info=  (Document) d.get("info");
+long upvotes = info.getLong("upvotes");
+if(action.equals("inc")){upvotes++;}else{upvotes--;}
+String acknow = tc.updateOne(and(eq("username",user),eq("title",projecttitle)),new Document("$set",new Document("info.upvotes",upvotes))).toString();
+new NotificationService().voteNotification("akshaykumar",projecttitle,Notifications.UPVOTESQUESTION);
+return new GeneralServices().response(acknow);
+}
+else{
+return new GeneralServices().response(null);	
+}
+
+}
+
+public Acknowledgement changeDownvotes(String action,String projecttitle,HttpServletRequest req)
+{
+String user=	(String) req.getSession().getAttribute("username");
+System.out.println(user);
+if(!(user==null))
+{Document d = tc.find(and(eq("username",user),eq("title",projecttitle))).first();
+Document info=  (Document) d.get("info");
+long upvotes = info.getLong("downvotes");
+if(action.equals("inc")){upvotes++;}else{upvotes--;}
+String s =tc.updateOne(and(eq("username",user),eq("title",projecttitle)),new Document("$set",new Document("info.downvotes",upvotes))).toString();
+return new GeneralServices().response(s);
+}
+else{return new GeneralServices().response(null);
+}
+}
+
+
+
+// getter and setter for Database
 public Project getProjectUpvotes(String username, String title)
 {
 	  Project project = new Project();
@@ -255,6 +289,5 @@ public Acknowledgement setProjectViewcount(Project project, String username, Str
         return ac2;}, acknow1);
 	  return acknowledge1;
 }
-	
-	
+
 }

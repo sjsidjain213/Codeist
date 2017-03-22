@@ -13,7 +13,7 @@ import bean.Notifications;
 //details2 -> commitermsg 
 public class NotificationService {
     String prefixurl= "http://localhost:8080/Codeist";
-    MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("testuserdata");
+    MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("userdata");
 	public void commentNotification(String username,String projectname,String commitername,String commitermsg,Notifications notify)
 	{
         String suffixurl= "/project/retrieveselect/"+username+"/"+projectname;
@@ -34,7 +34,17 @@ public class NotificationService {
  		       .append("url",prefixurl+suffixurl);
 	     tc.updateOne(eq("username",username),new Document("$addToSet",new Document("notifications",doc)));
 	}
-	
+	public void voteNotification(String username,String projectitle,Notifications notify)
+	{
+		String suffixurl="/retrieveselect/"+username+"/"+projectitle;
+		Document doc = new Document("date",new Date())
+ 		       .append("message",notify.getMsg())
+ 		       .append("generator",username)
+ 		       .append("message","vote increased")
+ 		       .append("url",prefixurl+suffixurl);
+	     tc.updateOne(eq("username",username),new Document("$addToSet",new Document("notifications",doc)));
+		
+	}
 	public ArrayList<NotificationBean> getAllNotifications(String username)
 	{
 		Document doc = tc.find(eq("username",username)).first();

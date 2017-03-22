@@ -16,8 +16,10 @@ MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("use
 	public ArrayList<NotificationBean> sessionCreate(HttpServletRequest req,String username)
 	{
 		Document doc = tc.find(eq("username",username)).first();
-	if(doc!=null)
+		if(doc!=null)
 	{	req.getSession().setAttribute("username",username);
+	System.out.println(username);
+	
 	return new NotificationService().getAllNotifications(username);
 	}
 	else 

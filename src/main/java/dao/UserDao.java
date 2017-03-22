@@ -9,11 +9,8 @@ import service.DatabaseServices;
 import service.GeneralServices;
 
 import com.mongodb.Block;
-import com.mongodb.MongoClient;
-import com.mongodb.MongoClientURI;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
 import static com.mongodb.client.model.Filters.*;
 
 import java.util.ArrayList;
@@ -87,7 +84,8 @@ public class UserDao {
         return alacknow;
       }
       
-      public ArrayList<User> getAllUsers()
+      @SuppressWarnings("unchecked")
+	public ArrayList<User> getAllUsers()
       {
     	  ArrayList<User> aluser = new ArrayList<User>();
     	  
@@ -103,6 +101,8 @@ public class UserDao {
     	  return aluser;
       }
 	
+      
+     // Database Getter and Setter 
       public User getUserRating(String username)
       {
     	  User user = new User();

@@ -3,12 +3,15 @@ package resource;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import bean.Acknowledgement;
@@ -61,7 +64,28 @@ public ArrayList<Comment> getComment(@PathParam("projectname")String projectname
 	return 	new ProjectInsert().getAllComments(username, projectname);
 }
 
-	
+@PUT
+@Path("/upvote/{action}/{projecttitle}")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
+public Acknowledgement changeUpvotes(@PathParam("action")String action,@PathParam("projecttitle")String projecttitle,@Context HttpServletRequest req)
+{
+return new ProjectInsert().changeUpvotes(action,projecttitle,req);
+}
+
+@PUT
+@Path("/downvote/{action}/{projecttitle}")
+@Consumes(MediaType.APPLICATION_JSON)
+public Acknowledgement changeDownvotes(@PathParam("action")String action,@PathParam("projecttitle")String projecttitle,@Context HttpServletRequest req)
+{
+ return	new ProjectInsert().changeDownvotes(action,projecttitle,req);
+}
+
+
+
+
+
+/**/
 @GET
 @Path("/projectupvotes/{username}/{title}")
 @Produces(MediaType.APPLICATION_JSON)
