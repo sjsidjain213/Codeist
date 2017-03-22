@@ -101,4 +101,28 @@ public class UserDao {
     	  });
     	  return aluser;
       }
+	
+      public User getUserRating(String username)
+      {
+    	  User user = new User();
+    	  FindIterable <Document> fi = tc.find(eq("username",username));
+    	  for(Document d : fi){
+    		  user.setRating(d.getLong("rating"));
+    	  }
+    	  return user;
+      }
+      
+      public Acknowledgement setUserRating(User user, String username)
+      {
+    	  Acknowledgement ac2 = new Acknowledgement();
+    	  Document doc = new Document()
+    			  		.append("rating",user.getRating());
+    	  String acknow1 = tc.updateOne(eq("username", user.getUsername()),new Document("$set",doc)).toString();
+    	  Acknowledgement acknowledge1 = new GeneralServices().stoacknowmethod(s ->{
+              String sa [] = s.substring(s.indexOf("{")+1,s.indexOf("}")).split(",");
+                 ac2.setMatchedCount(sa[0]);ac2.setModifiedCount(sa[1]);ac2.setUpsertedId(sa[2]);
+              return ac2;}, acknow1);
+    	  return acknowledge1;
+      }
+
 }
