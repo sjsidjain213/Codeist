@@ -28,7 +28,7 @@ public class UserResource {
 	public ArrayList<NotificationBean> login(@Context HttpServletRequest req,User user)
 	{
 		new DatabaseServices();
-		return new SessionService().sessionCreate(req,user.getUsername());
+		return new SessionService().sessionCreate(req,user.getUsername(),user.getPassword());
 	}
 	
 	@POST
@@ -46,7 +46,8 @@ public class UserResource {
 	@Path("/insert")
 	public Acknowledgement insertUser(User users,@Context HttpServletRequest req)
 	{
-	return (new SessionService().sessionVerifier(req))?new UserDao().insertUser(users):new GeneralServices().response(null);
+	//return (new SessionService().sessionVerifier(req))?new UserDao().insertUser(users):new GeneralServices().response(null);
+	return new UserDao().insertUser(users);
 	}
 	
 	// For Demo Purpose : : User here can access his/her profile ONLY after login 

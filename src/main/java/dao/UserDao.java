@@ -16,7 +16,7 @@ import static com.mongodb.client.model.Filters.*;
 import java.util.ArrayList;
 
 public class UserDao {
-	  MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("userdata");
+	  MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("testuserdata");
   	  public Acknowledgement insertUser(User user)
 	  { Document test = tc.find(eq("username",user.getUsername())).first();
 		  if(test==null)
@@ -26,16 +26,16 @@ public class UserDao {
 				  .append("email_id",user.getEmail_id())
 				  .append("linkedin_id",user.getLinkedin_id())
 				  .append("github_id",user.getGithub_id())
-				//  .append("country", user.getCountry().toLowerCase())
+				  .append("country", user.getCountry().toLowerCase())
 				  .append("state",user.getState().toLowerCase())
 				  .append("city",user.getCity())
 				  .append("zipcode", user.getZipcode());
 		  Document doc = new Document("username",user.getUsername())
-				  .append("password","KSHBDI$MAJ#")
+				  .append("password",GeneralServices.get_SHA_256_SecurePassword(user.getUsername(),user.getPassword()))
 				  .append("name",user.getName())
 				  .append("bio",user.getBio())
 				  .append("date",user.getDate())
-				  .append("rating",user.getRating())
+				  //.append("rating",user.getRating())
 				  .append("contact_information",contact_information)
 				  .append("favourite_tags",user.getFavourite_tags()); 
 		  tc.insertOne(doc);
@@ -69,10 +69,14 @@ public class UserDao {
     	      user.setLinkedin_id(innerdoc.getString("linkedin_id"));
     	      user.setGithub_id(innerdoc.getString("github_id"));
               innerdoc = (Document) d.get("history");
+              try{
               user.setTags_viewed((ArrayList<String>)innerdoc.get("tags_viewed"));
               user.setProblem_category_viewed((ArrayList<String>)innerdoc.get("problem_category_viewed"));
               user.setUser_viewed((ArrayList<String>)innerdoc.get("user_viewed"));
-              user.setProject_viewed((ArrayList<String>)innerdoc.get("project_viewed"));
+              user.setProject_viewed((ArrayList<String>)innerdoc.get("project_viewed"));}
+              catch(NullPointerException e){
+            	  
+              }
               //System.out.println(d);
     	  } 
     	  return user;

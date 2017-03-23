@@ -48,7 +48,14 @@ public class NotificationService {
 	public ArrayList<NotificationBean> getAllNotifications(String username,String s_id)
 	{
 		 Document doc = tc.find(eq("username",username)).first();
-	     ArrayList<Document> arnotify = (ArrayList<Document>) doc.get("notifications");
+		 
+		 ArrayList<Document> arnotify=null;
+	     try{
+	    	 arnotify = (ArrayList<Document>) doc.get("notifications");
+	     }
+	     catch(NullPointerException e){
+	    	 
+	     }
 	     ArrayList<NotificationBean> aldoc = new ArrayList<NotificationBean>();
 	     /*ArrayList<ArrayList<String>> day = new ArrayList<ArrayList<String>>();
 	     day.forEach(hour->hour.add("coding"));*/
