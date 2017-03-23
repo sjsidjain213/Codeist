@@ -13,7 +13,7 @@ import bean.Notifications;
 //details2 -> commitermsg 
 public class NotificationService {
     String prefixurl= "http://localhost:8080/Codeist";
-    MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("userdata");
+    MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("testuserdata");
 	public void commentNotification(String username,String projectname,String commitername,String commitermsg,Notifications notify)
 	{
         String suffixurl= "/project/retrieveselect/"+username+"/"+projectname;
