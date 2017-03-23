@@ -3,7 +3,20 @@ package bean;
 import java.util.Date;
 
 public class NotificationBean {
-private String message,url,generator,messagebygenerator,seen;
+private String message,url,generator,messagebygenerator,seen,msg,s_id;
+
+public String getS_id() {
+	return s_id;
+}
+public void setS_id(String s_id) {
+	this.s_id = s_id;
+}
+public String getMsg() {
+	return msg;
+}
+public void setMsg(String msg) {
+	this.msg = msg;
+}
 public String getMessage() {
 	return message;
 }

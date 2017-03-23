@@ -45,20 +45,30 @@ public class NotificationService {
 	     tc.updateOne(eq("username",username),new Document("$addToSet",new Document("notifications",doc)));
 		
 	}
-	public ArrayList<NotificationBean> getAllNotifications(String username)
+	public ArrayList<NotificationBean> getAllNotifications(String username,String s_id)
 	{
-		Document doc = tc.find(eq("username",username)).first();
-	    ArrayList<Document> arnotify = (ArrayList<Document>) doc.get("notifications");
-	    ArrayList<NotificationBean> aldoc = new ArrayList<NotificationBean>();
-	    for(Document din : arnotify)
-	    {NotificationBean notify = new NotificationBean();
+		 Document doc = tc.find(eq("username",username)).first();
+	     ArrayList<Document> arnotify = (ArrayList<Document>) doc.get("notifications");
+	     ArrayList<NotificationBean> aldoc = new ArrayList<NotificationBean>();
+	     /*ArrayList<ArrayList<String>> day = new ArrayList<ArrayList<String>>();
+	     day.forEach(hour->hour.add("coding"));*/
+	     NotificationBean notify = new NotificationBean();
+	     if(arnotify!=null){
+	     for(Document din : arnotify)
+	    {
 	     notify.setDate(din.getDate("date"));
 	     notify.setGenerator(din.getString("generator"));
 	     notify.setMessagebygenerator(din.getString("messagebygenerator"));
 	     notify.setMessage(din.getString("message"));
 	     notify.setUrl(din.getString("url"));
+	     notify.setS_id(s_id);
 	     aldoc.add(notify); 
-	    }
+	    }}
+	     else{
+	    	  notify.setS_id(s_id);
+	 	      aldoc.add(notify);  
+	         }
 	    return aldoc;
 	    }
+	
 }

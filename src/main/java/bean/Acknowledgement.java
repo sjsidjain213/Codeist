@@ -1,7 +1,16 @@
 package bean;
 
 public class Acknowledgement {
-private String matchedCount,modifiedCount,upsertedId;
+private String matchedCount,modifiedCount,upsertedId,msg;
+
+
+public String getMsg() {
+	return msg;
+}
+
+public void setMsg(String msg) {
+	this.msg = msg;
+}
 
 public String getMatchedCount() {
 	return matchedCount;

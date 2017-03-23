@@ -82,6 +82,7 @@ public Acknowledgement response(String s)
 		ac2.setMatchedCount("0");
 		ac2.setModifiedCount("0");
 		ac2.setUpsertedId("0");
+		ac2.setMsg("user is not logged in");
 		return ac2;
 	}
 }

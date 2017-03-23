@@ -16,12 +16,9 @@ import static com.mongodb.client.model.Filters.*;
 import java.util.ArrayList;
 
 public class UserDao {
-	  MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("testuserdata");
-  	
-	  
-	  public Acknowledgement insertUser(User user)
+	  MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("userdata");
+  	  public Acknowledgement insertUser(User user)
 	  { Document test = tc.find(eq("username",user.getUsername())).first();
-	  System.out.println(user.getBio());
 		  if(test==null)
 		  { 
 			  System.out.println(user.getGithub_id());
@@ -81,17 +78,15 @@ public class UserDao {
     	  return user;
       }
       
-      public ArrayList<Acknowledgement> updateUserDetails(User user,String username)
-      {   Acknowledgement ac2 = new Acknowledgement();
-          ArrayList<Acknowledgement> alacknow = new ArrayList<Acknowledgement>();
-    	  System.out.println(user.getBio()+"this is bip");
+      public Acknowledgement updateUserDetails(User user,String username)
+      {   System.out.println(user.getBio()+"this is bip");
     	  Document outdoc = new Document("name",user.getName())
         		  .append("followers",user.getFollowers())
         		  .append("following",user.getFollowing())
         		  .append("favourite_tags",user.getFavourite_tags())
         		  .append("contributing",user.getContributing())
         		  .append("bio",user.getBio());
-          String acknow1 = tc.updateOne(eq("username", user.getUsername()),new Document("$set",outdoc)).toString();   	
+                   tc.updateOne(eq("username", user.getUsername()),new Document("$set",outdoc));   	
           Document doc=new Document("phone_no",user.getPhone_no())
         		  .append("email_id",user.getEmail_id())
     	          .append("country",user.getCountry())
@@ -101,17 +96,7 @@ public class UserDao {
     	          .append("zipcode",user.getZipcode())
     	          .append("state",user.getState());
         String acknow2= tc.updateOne(eq("username",user.getUsername()),new Document("$set",new Document("contact_information",doc))).toString();
-    	 Acknowledgement acknowledge1 = new GeneralServices().stoacknowmethod(s ->{
-             String sa [] = s.substring(s.indexOf("{")+1,s.indexOf("}")).split(",");
-                ac2.setMatchedCount(sa[0]);ac2.setModifiedCount(sa[1]);ac2.setUpsertedId(sa[2]);
-             return ac2;}, acknow1);
-
-    	 Acknowledgement acknowledge2 = new GeneralServices().stoacknowmethod(s ->{
-             String sa [] = s.substring(s.indexOf("{")+1,s.indexOf("}")).split(",");
-                ac2.setMatchedCount(sa[0]);ac2.setModifiedCount(sa[1]);ac2.setUpsertedId(sa[2]);
-             return ac2;}, acknow2);
-        alacknow.add(acknowledge1);alacknow.add(acknowledge2);
-        return alacknow;
+           return 	new GeneralServices().response(acknow2);
       }
       
       @SuppressWarnings("unchecked")
@@ -137,6 +122,7 @@ public class UserDao {
       {
     	  User user = new User();
     	  FindIterable <Document> fi = tc.find(eq("username",username));
+    	  System.out.println(username);
     	  for(Document d : fi){
     		  user.setRating(d.getLong("rating"));
     	  }
@@ -156,13 +142,9 @@ public class UserDao {
     	  return acknowledge1;
       }
       
-      public Acknowledgement updateFavTags(String username,Tag favTags){
-    	     	  Acknowledgement ac2 = new Acknowledgement();
+      public Acknowledgement updateFavTags(Tag favTags,String username){
     	  String acknow= tc.updateOne(eq("username",username),new Document("$set", new Document("favourite_tags",favTags.getTags()))).toString();
-    	  Acknowledgement acknowledge1 = new GeneralServices().stoacknowmethod(s ->{
-              String sa [] = s.substring(s.indexOf("{")+1,s.indexOf("}")).split(",");
-                 ac2.setMatchedCount(sa[0]);ac2.setModifiedCount(sa[1]);ac2.setUpsertedId(sa[2]);
-              return ac2;}, acknow);
+    	  Acknowledgement acknowledge1 = new GeneralServices().response(acknow);
     	  return acknowledge1;
       }
       public Acknowledgement updateTagsViewed(String username,Tag tagsViewed){

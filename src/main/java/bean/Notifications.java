@@ -12,8 +12,10 @@ DOWNVOTESPROJECT("Your project have received downvotes"),
 UPVOTESQUESTION("Your question have received upvotes"),
 DOWNVOTESQUESTION("Your question have received downvotes"),
 UPVOTESANSWER("Your answer have received upvotes"),
-DOWNVOTESANSWER("Your answer have received downvotes");
-
+DOWNVOTESANSWER("Your answer have received downvotes"),
+SESSIONDONOTEXSIT("Session do not exsist"),
+USERISNOTLOGGEDIN("user is not logged in"),
+USERLOGGEDOUT("user is succesfully logged out");	
 	private final String msg;
 
 	public String getMsg() {
