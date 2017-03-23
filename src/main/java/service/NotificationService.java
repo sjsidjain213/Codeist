@@ -19,8 +19,8 @@ public class NotificationService {
         String suffixurl= "/project/retrieveselect/"+username+"/"+projectname;
 		Document doc = new Document("date",new Date())
     		       .append("message",notify.getMsg())
-    		       .append("detail1",commitername)
-    		       .append("details2",commitermsg)
+    		       .append("generator",commitername)
+    		       .append("messagegenerator",commitermsg)
     		       .append("url",prefixurl+suffixurl);
         tc.updateOne(eq("username",username),new Document("$addToSet",new Document("notifications",doc)));
 	}
@@ -29,8 +29,8 @@ public class NotificationService {
 	{   String suffixurl="/question/retrieve/"+username+"/"+question;
 		Document doc = new Document("date",new Date())
  		       .append("message",notify.getMsg())
- 		       .append("detail1",commitername)
- 		       .append("details2",commitermsg)
+ 		       .append("generator",commitername)
+ 		       .append("messagebygenerator",commitermsg)
  		       .append("url",prefixurl+suffixurl);
 	     tc.updateOne(eq("username",username),new Document("$addToSet",new Document("notifications",doc)));
 	}
@@ -40,7 +40,7 @@ public class NotificationService {
 		Document doc = new Document("date",new Date())
  		       .append("message",notify.getMsg())
  		       .append("generator",username)
- 		       .append("message","vote increased")
+ 		       .append("messagebygenerator","vote increased")
  		       .append("url",prefixurl+suffixurl);
 	     tc.updateOne(eq("username",username),new Document("$addToSet",new Document("notifications",doc)));
 		
@@ -53,8 +53,8 @@ public class NotificationService {
 	    for(Document din : arnotify)
 	    {NotificationBean notify = new NotificationBean();
 	     notify.setDate(din.getDate("date"));
-	     notify.setDetail1(din.getString("detail1"));
-	     notify.setDetail2(din.getString("detail2"));
+	     notify.setGenerator(din.getString("generator"));
+	     notify.setMessagebygenerator(din.getString("messagebygenerator"));
 	     notify.setMessage(din.getString("message"));
 	     notify.setUrl(din.getString("url"));
 	     aldoc.add(notify); 

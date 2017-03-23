@@ -24,12 +24,11 @@ import service.GeneralServices;
 import service.NotificationService;
 public class ProjectInsert
 {
-	MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("project");
+	MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("testproject");
 	
 //inserting a new project to database
-public String insertProject(Project project)
-{ Date date = new Date();
-	    Document doc = new Document()
+public Acknowledgement insertProject(Project project)
+{       Document doc = new Document()
 	    		 .append("username", project.getUsername())
 	    		 .append("title",project.getTitle())	
 	    		 .append("date",project.getDate())
@@ -48,7 +47,7 @@ public String insertProject(Project project)
 	    				 	.append("downvotes",project.getDownvotes())
 	    				 	.append("viewcount",project.getViewcount()));
 		          tc.insertOne(doc);
-	    	 return "Inserted";
+	    	return new GeneralServices().response("insert");
 }
 
 public List<Project> getProjectBrief(String username)

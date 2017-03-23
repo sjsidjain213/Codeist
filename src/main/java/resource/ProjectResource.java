@@ -25,7 +25,7 @@ public class ProjectResource {
 @Path("/insert")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public String insertProject(Project project)
+public Acknowledgement insertProject(Project project)
 {
 return new ProjectInsert().insertProject(project);
 }

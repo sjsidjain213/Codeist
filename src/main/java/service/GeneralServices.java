@@ -68,7 +68,6 @@ public Acknowledgement response(String s)
 	       ac2.setModifiedCount("1");
 	       ac2.setUpsertedId("0");
 	    return ac2;
-			
 	}
 	else if(s!=null)
 	{ Acknowledgement ac2 = new Acknowledgement();
