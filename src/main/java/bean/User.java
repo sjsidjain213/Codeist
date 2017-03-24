@@ -8,12 +8,19 @@ import javax.xml.bind.annotation.XmlRootElement;
     @XmlRootElement
 public class User extends SearchBean {
 	@XmlElement
-private String username,name,bio,phone_no,email_id,linkedin_id,github_id,country,state,city,message="Log in First";
+private String username,password,name,bio,phone_no,email_id,linkedin_id,github_id,country,state,city,message="Log in First";
 	private ArrayList<String> favourite_tags,following,followers,contributing;
 	private ArrayList<String> tags_viewed, user_viewed, problem_category_viewed, project_viewed;
 	private long rating,zipcode;
 	private Date date = new Date();
 
+	
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
 	public Date getDate() {
 		return date;
 	}
@@ -162,12 +169,13 @@ private String username,name,bio,phone_no,email_id,linkedin_id,github_id,country
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public User(String username, String name, String bio, String phone_no, String email_id, String linkedin_id,
+	public User(String username,String password, String name, String bio, String phone_no, String email_id, String linkedin_id,
 			String github_id, String country, String state, String city, long zipcode,
 			ArrayList<String> favourite_tags, ArrayList<String> following, ArrayList<String> followers,
 			ArrayList<String> contributing) {
 		super();
 		this.username = username;
+		this.password=password;
 		this.name = name;
 		this.bio = bio;
 		this.phone_no = phone_no;

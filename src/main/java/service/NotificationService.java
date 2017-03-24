@@ -13,7 +13,7 @@ import bean.Notifications;
 //details2 -> commitermsg 
 public class NotificationService {
     String prefixurl= "http://localhost:8080/Codeist";
-    MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("userdata");
+    MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("testuserdata");
 	public void commentNotification(String username,String projectname,String commitername,String commitermsg,Notifications notify)
 	{   projectname = new GeneralServices().spaceRemover(projectname);
         String suffixurl= "/project/retrieveselect/"+username+"/"+projectname;
@@ -48,7 +48,14 @@ public class NotificationService {
 	public ArrayList<NotificationBean> getAllNotifications(String username,String s_id)
 	{
 		 Document doc = tc.find(eq("username",username)).first();
-	     ArrayList<Document> arnotify = (ArrayList<Document>) doc.get("notifications");
+		 
+		 ArrayList<Document> arnotify=null;
+	     try{
+	    	 arnotify = (ArrayList<Document>) doc.get("notifications");
+	     }
+	     catch(NullPointerException e){
+	    	 
+	     }
 	     ArrayList<NotificationBean> aldoc = new ArrayList<NotificationBean>();
 	     /*ArrayList<ArrayList<String>> day = new ArrayList<ArrayList<String>>();
 	     day.forEach(hour->hour.add("coding"));*/
