@@ -90,7 +90,7 @@ public class UserDao {
         		  .append("favourite_tags",user.getFavourite_tags())
         		  .append("contributing",user.getContributing())
         		  .append("bio",user.getBio());
-                   tc.updateOne(eq("username", user.getUsername()),new Document("$set",outdoc));   	
+                   tc.updateOne(eq("username", username),new Document("$set",outdoc));   	
           Document doc=new Document("phone_no",user.getPhone_no())
         		  .append("email_id",user.getEmail_id())
     	          .append("country",user.getCountry())
@@ -99,7 +99,7 @@ public class UserDao {
     	          .append("github_id",user.getGithub_id())
     	          .append("zipcode",user.getZipcode())
     	          .append("state",user.getState());
-        String acknow2= tc.updateOne(eq("username",user.getUsername()),new Document("$set",new Document("contact_information",doc))).toString();
+        String acknow2= tc.updateOne(eq("username",username),new Document("$set",new Document("contact_information",doc))).toString();
            return 	new GeneralServices().response(acknow2);
       }
       
@@ -125,7 +125,10 @@ public class UserDao {
     	  FindIterable <Document> fi = tc.find(eq("username",username));
     	  System.out.println(username);
     	  for(Document d : fi){
-    		  user.setRating(d.getLong("rating"));
+    		  if(d.getLong("rating") != null)
+    			  user.setRating(d.getLong("rating"));
+    		  else
+    			  user.setRating(0);
     	  }
     	  return user;
       }
@@ -135,7 +138,7 @@ public class UserDao {
     	  Acknowledgement ac2 = new Acknowledgement();
     	  Document doc = new Document()
     			  		.append("rating",user.getRating());
-    	  String acknow1 = tc.updateOne(eq("username", user.getUsername()),new Document("$set",doc)).toString();
+    	  String acknow1 = tc.updateOne(eq("username", username),new Document("$set",doc)).toString();
     	  Acknowledgement acknowledge1 = new GeneralServices().stoacknowmethod(s ->{
               String sa [] = s.substring(s.indexOf("{")+1,s.indexOf("}")).split(",");
                  ac2.setMatchedCount(sa[0]);ac2.setModifiedCount(sa[1]);ac2.setUpsertedId(sa[2]);
