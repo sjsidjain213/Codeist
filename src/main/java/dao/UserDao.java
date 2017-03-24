@@ -108,9 +108,6 @@ public class UserDao {
     		  User user = new User();
     		  user.setName(doc.getString("name"));
     		  user.setUsername(doc.getString("username"));
-    		  user.setFavourite_tags((ArrayList<String>)doc.get("favourite_tags"));
-    		  user.setBio(doc.getString("bio"));
-    		  user.setContributing((ArrayList<String>)doc.get("contributing"));
     	  aluser.add(user);
     	  });
     	  return aluser;

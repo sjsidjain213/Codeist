@@ -17,7 +17,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.Context;
 
 import service.DatabaseServices;
 import service.GeneralServices;
@@ -33,7 +32,6 @@ public Acknowledgement insertProject(Project project)
 	    		 .append("title",project.getTitle())	
 	    		 .append("date",project.getDate())
 	    		 .append("description",project.getDescription())
-	    		 .append("project_url",project.getProject_url())
 	    		 .append("tags",(List<String>)project.getTags())
 	    		 .append("comments",(List<String>)project.getComments())
 	    		 .append("contributors",(List<String>)project.getContributors())
@@ -42,12 +40,14 @@ public Acknowledgement insertProject(Project project)
 	    		 .append("_private", project.get_private())
 	    		 .append("video_url",project.getVideo_url())
 	    		 .append("zip_file",project.getZip_file())
-	    		 .append("images",(List<String>)project.getImages())
-	    		 .append("info", new Document("upvotes",project.getUpvotes())
-	    				 	.append("downvotes",project.getDownvotes())
-	    				 	.append("viewcount",project.getViewcount()));
-		          tc.insertOne(doc);
-	    	return new GeneralServices().response("insert");
+	    		 .append("images",(List<String>)project.getImages());
+	    		  tc.insertOne(doc);
+	    		  String p_id= tc.find(and(eq("username","sidda"),eq("title","unique"))).first().get("_id").toString();
+	             String title =  new GeneralServices().spaceRemover(project.getTitle());
+	    		  String url = "http:8080//localhost/webapi/project/"+p_id+"/retrieveselect/"+title;
+	    		  tc.updateOne(and(eq("username",project.getUsername()),eq("title",project.getTitle())),new Document("$set",new Document("project_url",url)));	
+	    
+	    return new GeneralServices().response("insert");
 }
 
 public List<Project> getProjectBrief(String username)

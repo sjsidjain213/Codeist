@@ -87,4 +87,10 @@ public Acknowledgement response(String s)
 	}
 }
 
+public String spaceRemover(String s)
+{
+s=	s.replaceAll(" ", "-");
+return s;	
+}
+
 }

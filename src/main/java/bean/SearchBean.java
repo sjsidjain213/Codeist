@@ -3,7 +3,25 @@ package bean;
 import java.util.ArrayList;
 
 public class SearchBean {
-private String source,name,username,title,description,bio,priority;
+private String source,name,username,title,description,bio,priority,url;
+private long matchedcount;
+
+public long getMatchedcount() {
+	return matchedcount;
+}
+
+public void setMatchedcount(long matchedcount) {
+	this.matchedcount = matchedcount;
+}
+
+public String getUrl() {
+	return url;
+}
+
+public void setUrl(String url) {
+	this.url = url;
+}
+
 public String getPriority() {
 	return priority;
 }

@@ -15,7 +15,7 @@ public class NotificationService {
     String prefixurl= "http://localhost:8080/Codeist";
     MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("userdata");
 	public void commentNotification(String username,String projectname,String commitername,String commitermsg,Notifications notify)
-	{
+	{   projectname = new GeneralServices().spaceRemover(projectname);
         String suffixurl= "/project/retrieveselect/"+username+"/"+projectname;
 		Document doc = new Document("date",new Date())
     		       .append("message",notify.getMsg())
