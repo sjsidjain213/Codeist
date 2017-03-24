@@ -89,6 +89,10 @@ public Acknowledgement response(String s)
 	}
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
 public String spaceRemover(String s)
 {
 s=	s.replaceAll(" ", "-");
