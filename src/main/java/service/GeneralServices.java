@@ -89,12 +89,11 @@ public Acknowledgement response(String s)
 	}
 }
 
-<<<<<<< HEAD
 public String spaceRemover(String s)
 {
 s=	s.replaceAll(" ", "-");
 return s;	
-=======
+}
 public static String get_SHA_256_SecurePassword(String username,String passwordToHash)
 {
 	byte[] salt =username.getBytes();
@@ -115,7 +114,6 @@ public static String get_SHA_256_SecurePassword(String username,String passwordT
         e.printStackTrace();
     }
     return generatedPassword;
->>>>>>> origin/master
 }
 
 }

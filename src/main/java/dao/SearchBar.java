@@ -1,6 +1,7 @@
 package dao;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
@@ -11,10 +12,8 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import static com.mongodb.client.model.Filters.*;
 
-import bean.Project;
 import bean.SearchBean;
 import bean.Tag;
-import bean.User;
 import service.DatabaseServices;
 
 public class SearchBar {
@@ -39,7 +38,7 @@ public class SearchBar {
         	    user.setBio(doc.getString("bio"));
         	    user.setName(doc.getString("name"));
         	    user.setMatchedcount(1);
-        	    boolean bool =(doc.getString("username").equals(s)||doc.getString("name").equals(s))?user.setPriority("high"):user.setPriority("low");    
+        	    boolean bool =(doc.getString("username").equals(s)||doc.getString("name").equals(s))?user.setPriority("z"):user.setPriority("b");    
        	        alsearch.add(user);   
                 hmuser.put(doc.get("_id"),user);
         }else{
@@ -65,7 +64,7 @@ public class SearchBar {
   	             project.setTags((ArrayList<String>)doc.get("tags"));
   	             project.setUrl(doc.getString("project_url"));
   	             project.setMatchedcount(1);
-  	             boolean bool =(doc.getString("title").matches("(?i:"+s+")"))?project.setPriority("high"):project.setPriority("low");    
+  	             boolean bool =(doc.getString("title").matches("(?i:"+s+")"))?project.setPriority("z"):project.setPriority("b");    
         	     alsearch.add(project);
                  hmproject.put(doc.get("_id"),project);
         	     }else{
@@ -91,7 +90,7 @@ public class SearchBar {
   	             project.setTags((ArrayList<String>)doc.get("tags"));
   	             project.setUrl(doc.getString("project_url"));
   	             project.setMatchedcount(1);
-  	             boolean bool =(doc.getString("title").matches("(?i:"+s+")"))?project.setPriority("low"):project.setPriority("lowest");    
+  	             boolean bool =(doc.getString("title").matches("(?i:"+s+")"))?project.setPriority("b"):project.setPriority("a");    
         	     alsearch.add(project);
                  hmproject.put(doc.get("_id"),project);
         	     }else{
@@ -124,7 +123,7 @@ public class SearchBar {
 	             project.setUsername(doc.getString("username"));
 	             project.setUrl(doc.getString("project_url"));
 	             project.setMatchedcount(1);
-	             boolean bool =(st.matches("(?:"+s+")"))?project.setPriority("high"):project.setPriority("low");    
+	             boolean bool =(st.matches("(?:"+s+")"))?project.setPriority("z"):project.setPriority("b");    
       	         alsearch.add(project);
       	         hmtags.put(doc.get("_id"),project);
       	         System.out.println("hmtags updated size"+hmtags.size()+"::"+st);
@@ -149,7 +148,13 @@ public class SearchBar {
       	         }	    	 
       	     }
           });
-        });}); 
+        });});
+        Collections.sort(alsearch, SearchBean.searchsort);
+
+        for(SearchBean str: alsearch){
+        		System.out.println(str);
+        }
+
          return alsearch;
 	}
 }
