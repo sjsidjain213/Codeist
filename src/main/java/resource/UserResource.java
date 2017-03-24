@@ -80,7 +80,7 @@ public class UserResource {
 	@GET
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/userrating/{username}")
+	@Path("/userrating")
 	public User getUserRating(@PathParam("username") String username,@Context HttpServletRequest req)
 	{
 	return (new SessionService().sessionVerifier(req))?new UserDao().getUserRating(req.getSession().getAttribute("username").toString()):new User();
