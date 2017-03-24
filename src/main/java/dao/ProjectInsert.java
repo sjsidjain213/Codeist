@@ -26,9 +26,9 @@ public class ProjectInsert
 	MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("testproject");
 	
 //inserting a new project to database
-public Acknowledgement insertProject(Project project)
+public Acknowledgement insertProject(Project project,HttpServletRequest req)
 {       Document doc = new Document()
-	    		 .append("username", project.getUsername())
+	    		 .append("username", req.getSession().getAttribute("username"))
 	    		 .append("title",project.getTitle())	
 	    		 .append("date",project.getDate())
 	    		 .append("description",project.getDescription())
@@ -87,17 +87,19 @@ public Project getSelectedProject(String username,String title)
 	   		project.setZip_file((ArrayList<String>)d.get("zip_file"));
 	   		project.setImages((ArrayList<String>)d.get("images"));
 	   		Document innerdoc = (Document)d.get("info");
+	   		if(innerdoc!=null){
 	   		project.setUpvotes(innerdoc.getLong("upvotes"));
 	   		project.setDownvotes(innerdoc.getLong("downvotes"));
 	   		project.setViewcount(innerdoc.getLong("viewcount"));
-		}
+	   		}
+		}	
 	}
 	return project;
 }
 
-public Acknowledgement insertComment(Comment comment,String username,String projectname)
+public Acknowledgement insertComment(Comment comment,String username,String projectname,HttpServletRequest req)
 {
-Document doc = new Document("username",comment.getUsername())
+Document doc = new Document("username",req.getSession().getAttribute("username"))
                   .append("comment", comment.getComment())
                   .append("date",new Date());
 String acknow= tc.updateOne(and(eq("username",username),eq("title",projectname)),new Document("$push",new Document("comments",doc))).toString();
@@ -144,21 +146,16 @@ public List<Project> searchProject(Tag tags)
 return project;
 }
 
-public Acknowledgement changeUpvotes(String action,String projecttitle,HttpServletRequest req)
+public Acknowledgement changeUpvotes(String action,String username,String title,HttpServletRequest req)
 {
-String user=	(String) req.getSession().getAttribute("username");
-if(!(user==null))
-{Document d = tc.find(and(eq("username",user),eq("title",projecttitle))).first();
+
+Document d = tc.find(and(eq("username",username),eq("title",title))).first();
 Document info=  (Document) d.get("info");
 long upvotes = info.getLong("upvotes");
 if(action.equals("inc")){upvotes++;}else{upvotes--;}
-String acknow = tc.updateOne(and(eq("username",user),eq("title",projecttitle)),new Document("$set",new Document("info.upvotes",upvotes))).toString();
-new NotificationService().voteNotification("akshaykumar",projecttitle,Notifications.UPVOTESQUESTION);
+String acknow = tc.updateOne(and(eq("username",username),eq("title",title)),new Document("$set",new Document("info.upvotes",upvotes))).toString();
+new NotificationService().voteNotification(username,title,Notifications.UPVOTESQUESTION);
 return new GeneralServices().response(acknow);
-}
-else{
-return new GeneralServices().response(null);	
-}
 
 }
 

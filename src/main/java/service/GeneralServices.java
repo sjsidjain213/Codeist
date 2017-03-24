@@ -9,6 +9,7 @@ import com.mongodb.Block;
 import com.mongodb.client.FindIterable;
 
 import bean.Acknowledgement;
+import bean.Project;
 import bean.Tag;
 import bean.Tile;
 import interfaces.service.AtoSCon;
@@ -95,6 +96,11 @@ public String spaceRemover(String s)
 s=	s.replaceAll(" ", "-");
 return s;	
 }
+public static String spaceAdder(String s)
+{
+s=	s.replaceAll("-", " ");
+return s;	
+}
 public static String get_SHA_256_SecurePassword(String username,String passwordToHash)
 {
 	byte[] salt =username.getBytes();
@@ -116,5 +122,11 @@ public static String get_SHA_256_SecurePassword(String username,String passwordT
     }
     return generatedPassword;
 }
+
+public static List<Project> nullProject(){
+	List<Project> pro=new ArrayList<Project>();
+	pro.add(new Project());
+	return pro;
+	}
 
 }

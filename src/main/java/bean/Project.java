@@ -6,7 +6,8 @@ import java.util.Date;
 public class Project extends SearchBean{
 	private String username,title,description,readme,license,project_url,_private;
     private long downvotes, viewcount,upvotes;
-   	private ArrayList<String> images,video_url,zip_file,contributors,tags,comments;
+   	private ArrayList<String> images,video_url,zip_file,contributors,tags,comments,upby,downby,viewby;
+   	
     /*	private ArrayList<String> video_url = new ArrayList<String>();
     	private ArrayList<String> zip_file = new ArrayList<String>();
     	private ArrayList<String> contributors = new ArrayList<String>();
@@ -42,6 +43,25 @@ public class Project extends SearchBean{
 		this.contributors = contributors;
 		this.tags = tags;
 		
+	}
+	
+	public ArrayList<String> getUpby() {
+		return upby;
+	}
+	public void setUpby(ArrayList<String> upby) {
+		this.upby = upby;
+	}
+	public ArrayList<String> getDownby() {
+		return downby;
+	}
+	public void setDownby(ArrayList<String> downby) {
+		this.downby = downby;
+	}
+	public ArrayList<String> getViewby() {
+		return viewby;
+	}
+	public void setViewby(ArrayList<String> viewby) {
+		this.viewby = viewby;
 	}
 	public Date getDate() {
 		return date;
