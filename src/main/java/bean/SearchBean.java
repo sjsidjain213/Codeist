@@ -9,10 +9,18 @@ private String source,name,username,title,description,bio,priority,url;
 public String toString() {
 	return "SearchBean [source=" + source + ", name=" + name + ", username=" + username + ", title=" + title
 			+ ", description=" + description + ", bio=" + bio + ", priority=" + priority + ", url=" + url
-			+ ", matchedcount=" + matchedcount + ", tags=" + tags + "]";
+			+ ", matchedcount=" + matchedcount + ", tags=" + tags + ", upvotes=" + upvotes +"]";
 }
 
-private long matchedcount;
+private long matchedcount,upvotes;
+
+public long getUpvotes() {
+	return upvotes;
+}
+
+public void setUpvotes(long upvotes) {
+	this.upvotes = upvotes;
+}
 
 public long getMatchedcount() {
 	return matchedcount;
@@ -107,15 +115,25 @@ public static Comparator<SearchBean> searchsort = new Comparator<SearchBean>() {
 	   {   return -1;
 	   }else if(s1.getPriority().compareTo(s2.getPriority())==0)
 	   {
-		   return -(match1-match2);
+		   return (match2-match1);
 	   }
 	   else {
-		   return -(match1-match2);
+		   return (match2-match1);
 	   }
 	   /*For ascending order*/
 
 	   /*For descending order*/
 	   //rollno2-rollno1;
   }};
+  
+  public static Comparator<SearchBean> upvoteSort = new Comparator<SearchBean>() {
+
+		public int compare(SearchBean s1,SearchBean s2) {
+
+		   int upvote1 = (int)s1.getUpvotes();
+		   int upvote2 = (int)s2.getUpvotes();
+
+		   return upvote2-upvote1;
+	  }};
 
 }
