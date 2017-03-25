@@ -177,7 +177,7 @@ return (new SessionService().sessionVerifier(req))?new ProjectInsert().up(userna
 public Acknowledgement down(@PathParam("username")String username,@PathParam("title")String title,@Context HttpServletRequest req)
 {
 //return new ProjectInsert().down(username,title,req.getSession().getAttribute("username").toString());
-return (new SessionService().sessionVerifier(req))?new ProjectInsert().down(username,title,req.getSession().getAttribute("username").toString()):new GeneralServices().response(null);
+return (new SessionService().sessionVerifier(req))?new ProjectInsert().down(username,GeneralServices.spaceAdder(title),req.getSession().getAttribute("username").toString()):new GeneralServices().response(null);
 }
 }
 

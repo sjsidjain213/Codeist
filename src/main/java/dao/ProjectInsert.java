@@ -4,6 +4,8 @@ import org.bson.Document;
 
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.result.UpdateResult;
+
 import bean.Acknowledgement;
 import bean.Comment;
 import bean.Notifications;
@@ -46,9 +48,10 @@ public Acknowledgement insertProject(Project project,HttpServletRequest req)
 	    		  tc.insertOne(doc);
 	    		  String p_id= tc.find(and(eq("username",req.getSession().getAttribute("username")),eq("title",project.getTitle()))).first().get("_id").toString();
 	             String title =  new GeneralServices().spaceRemover(project.getTitle());
-	    		  String url = p_id+"/"+title;
-	    		  tc.updateOne(and(eq("username",project.getUsername()),eq("title",project.getTitle())),new Document("$set",new Document("project_url",url)));	
-	    
+	    		  String url = ""+p_id+"/"+title;
+	    		  System.out.println(url);
+	    		  UpdateResult rs=tc.updateOne(and(eq("username",req.getSession().getAttribute("username")),eq("title",project.getTitle())),new Document("$set",new Document("project_url",url)));	
+	    		 
 	    return new GeneralServices().response("insert");
 }
 
@@ -66,6 +69,7 @@ public List<Project> getProjectBrief(String username)
          pro.setDescription(d.getString("description"));
          pro.setUpvotes((ArrayList<String>)d1.get("upvotes"));
          pro.setDownvotes((ArrayList<String>)d1.get("downvotes"));
+         pro.setProject_url(d.getString("project_url"));
          project.add(pro); 
   }
 return project;
@@ -346,7 +350,7 @@ public Acknowledgement down(String username,String title,String user){
 		
 		if(down!=null){
 			if(!down.contains(user)){
-				if(up.contains(user)){
+				if(up!=null && up.contains(user)){
 					up.remove(user);
 					 String acknow2 = tc.updateOne(and(eq("username", username),eq("title",title)),new Document("$set",new Document("info.upvotes",up))).toString();	 
 				}
@@ -361,7 +365,7 @@ public Acknowledgement down(String username,String title,String user){
 		return new GeneralServices().response("already exist");
 		}
 		else{
-			if(up.contains(user)){
+			if(up!=null && up.contains(user)){
 				up.remove(user);
 				 String acknow2 = tc.updateOne(and(eq("username", username),eq("title",title)),new Document("$set",new Document("info.upvotes",up))).toString();	 
 			}
