@@ -27,7 +27,7 @@ public class ProjectInsert
 //inserting a new project to database
 public Acknowledgement insertProject(Project project,HttpServletRequest req)
 {  
-	Document info=new Document().append("upvotes", (List<String>)project.getUpvotes()).append("downvotes",(List<String>)project.getDownvotes()).append("viewby",(List<String>)project.getViewby());
+	Document info=new Document().append("upvotes", (ArrayList<String>)project.getUpvotes()).append("downvotes",(ArrayList<String>)project.getDownvotes()).append("viewby",(List<String>)project.getViewby());
 	Document doc = new Document()
 	    		 .append("username", req.getSession().getAttribute("username"))
 	    		 .append("title",project.getTitle())	
@@ -119,13 +119,12 @@ return new GeneralServices().response(acknow);
 @SuppressWarnings("unchecked")
 public ArrayList<Comment> getAllComments(String username,String projectname)
 {   Document document = tc.find(and(eq("username",username),eq("title",projectname))).first();
-	Comment comment = new Comment();
 	ArrayList<Comment> alcomment = new ArrayList<Comment>();
     	    ArrayList<Document> al =  (ArrayList<Document>) document.get("comments");
     	    if(al!=null){
 		    for(Document din : al)
-		    {
-		    	comment.setUsername(din.getString("username"));
+		    {   Comment comment = new Comment();
+				comment.setUsername(din.getString("username"));
 		    	comment.setComment(din.getString("comment"));
 		    	comment.setDate(din.getDate("date"));
 	            alcomment.add(comment);
@@ -276,7 +275,6 @@ public ArrayList<Comment> getAllComments(String username,String projectname)
 //
 //public Acknowledgement setProjectViewcount(Project project, String username, String title)
 //{
-//	  Acknowledgement ac2 = new Acknowledgement();
 //	  FindIterable <Document> fi = tc.find(eq("username",username));
 //	  for(Document d : fi){
 //		  if(d.getString("title").equalsIgnoreCase(title)){

@@ -3,13 +3,13 @@ package bean;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Project extends SearchBean{
+public class Project{
 	private String username,title,description,readme,license,project_url,_private;
     //private long downvotes, viewcount,upvotes;
-   	private ArrayList<String> images,video_url,zip_file,contributors,tags,upvotes,downvotes,viewby;
+   	private ArrayList<String> images,video_url,zip_file,contributors,tags,downvotes,viewby;
    	private ArrayList<Comment> comments;
      private Date date = new Date();
-    
+    ArrayList<String> upvotes;
 	public Project() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -41,15 +41,10 @@ public class Project extends SearchBean{
 	}
 
 
-	public ArrayList<String> getUpvotes() {
-		return upvotes;
-	}
 	public void setUpvotes(ArrayList<String> upvotes) {
 		this.upvotes = upvotes;
 	}
-	public ArrayList<String> getDownvotes() {
-		return downvotes;
-	}
+
 	public void setDownvotes(ArrayList<String> downvotes) {
 		this.downvotes = downvotes;
 	}
@@ -167,6 +162,17 @@ public class Project extends SearchBean{
 	public void setTags(ArrayList<String> tags) {
 		this.tags = tags;
 	}
+
+
+	public ArrayList<String> getDownvotes() {
+		return downvotes;
+	}
+
+
+	public ArrayList<String> getUpvotes() {
+		return upvotes;
+	}
+
 
     
 	
