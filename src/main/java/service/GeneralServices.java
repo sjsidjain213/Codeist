@@ -9,6 +9,7 @@ import com.mongodb.Block;
 import com.mongodb.client.FindIterable;
 
 import bean.Acknowledgement;
+import bean.Project;
 import bean.Tag;
 import bean.Tile;
 import interfaces.service.AtoSCon;
@@ -71,6 +72,14 @@ public Acknowledgement response(String s)
 	       ac2.setUpsertedId("0");
 	    return ac2;
 	}
+	
+	else if(s!=null&&s.equals("already exist"))
+	{ Acknowledgement ac2 = new Acknowledgement();
+    ac2.setMatchedCount("2");
+    ac2.setModifiedCount("1");
+    ac2.setUpsertedId("0");
+ return ac2;
+	}
 	else if(s!=null)
 	{ Acknowledgement ac2 = new Acknowledgement();
     String sa [] = s.substring(s.indexOf("{")+1,s.indexOf("}")).split(",");
@@ -89,13 +98,14 @@ public Acknowledgement response(String s)
 	}
 }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/master
 public String spaceRemover(String s)
 {
 s=	s.replaceAll(" ", "-");
+return s;	
+}
+public static String spaceAdder(String s)
+{
+s=	s.replaceAll("-", " ");
 return s;	
 }
 public static String get_SHA_256_SecurePassword(String username,String passwordToHash)
@@ -119,5 +129,11 @@ public static String get_SHA_256_SecurePassword(String username,String passwordT
     }
     return generatedPassword;
 }
+
+public static List<Project> nullProject(){
+	List<Project> pro=new ArrayList<Project>();
+	pro.add(new Project());
+	return pro;
+	}
 
 }
