@@ -4,15 +4,41 @@ import java.util.ArrayList;
 import java.util.Comparator;
 
 public class SearchBean {
-private String source,name,username,title,description,bio,priority,url;
+private String source,name,username,title,description,bio,priority,url, ques_url;
+
 @Override
 public String toString() {
 	return "SearchBean [source=" + source + ", name=" + name + ", username=" + username + ", title=" + title
 			+ ", description=" + description + ", bio=" + bio + ", priority=" + priority + ", url=" + url
-			+ ", matchedcount=" + matchedcount + ", tags=" + tags + ", upvotes=" + upvotes +"]";
+			+ ", matchedcount=" + matchedcount + ", tags=" + tags + ", upvotes=" + upvotes + ", downvotes=" + downvotes 
+			+ ", rating=" + rating + ", ques_url" + "ques_url" +"]";
 }
 
-private long matchedcount,upvotes;
+private long matchedcount,upvotes, rating, downvotes;
+
+public String getQues_url() {
+	return ques_url;
+}
+
+public void setQues_url(String ques_url) {
+	this.ques_url = ques_url;
+}
+
+public long getRating() {
+	return rating;
+}
+
+public void setRating(long rating) {
+	this.rating = rating;
+}
+
+public long getDownvotes() {
+	return downvotes;
+}
+
+public void setDownvotes(long downvotes) {
+	this.downvotes = downvotes;
+}
 
 public long getUpvotes() {
 	return upvotes;
@@ -120,7 +146,11 @@ public static Comparator<SearchBean> searchsort = new Comparator<SearchBean>() {
 	   else {
 		   return (match2-match1);
 	   }
- }};
+	   /*For ascending order*/
+
+	   /*For descending order*/
+	   //rollno2-rollno1;
+  }};
   
   public static Comparator<SearchBean> upvoteSort = new Comparator<SearchBean>() {
 
