@@ -112,10 +112,6 @@ public static Comparator<SearchBean> searchsort = new Comparator<SearchBean>() {
 	   else {
 		   return -(match1-match2);
 	   }
-	   /*For ascending order*/
-
-	   /*For descending order*/
-	   //rollno2-rollno1;
-  }};
+ }};
 
 }
