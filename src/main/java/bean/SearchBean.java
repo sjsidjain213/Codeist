@@ -120,14 +120,7 @@ public static Comparator<SearchBean> searchsort = new Comparator<SearchBean>() {
 	   else {
 		   return (match2-match1);
 	   }
-<<<<<<< HEAD
  }};
-=======
-	   /*For ascending order*/
-
-	   /*For descending order*/
-	   //rollno2-rollno1;
-  }};
   
   public static Comparator<SearchBean> upvoteSort = new Comparator<SearchBean>() {
 
@@ -138,6 +131,5 @@ public static Comparator<SearchBean> searchsort = new Comparator<SearchBean>() {
 
 		   return upvote2-upvote1;
 	  }};
->>>>>>> origin/master
 
 }
