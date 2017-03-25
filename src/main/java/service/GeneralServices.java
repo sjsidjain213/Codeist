@@ -72,6 +72,14 @@ public Acknowledgement response(String s)
 	       ac2.setUpsertedId("0");
 	    return ac2;
 	}
+	
+	else if(s!=null&&s.equals("already exist"))
+	{ Acknowledgement ac2 = new Acknowledgement();
+    ac2.setMatchedCount("2");
+    ac2.setModifiedCount("1");
+    ac2.setUpsertedId("0");
+ return ac2;
+	}
 	else if(s!=null)
 	{ Acknowledgement ac2 = new Acknowledgement();
     String sa [] = s.substring(s.indexOf("{")+1,s.indexOf("}")).split(",");

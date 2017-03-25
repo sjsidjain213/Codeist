@@ -5,57 +5,53 @@ import java.util.Date;
 
 public class Project extends SearchBean{
 	private String username,title,description,readme,license,project_url,_private;
-    private long downvotes, viewcount,upvotes;
-   	private ArrayList<String> images,video_url,zip_file,contributors,tags,comments,upby,downby,viewby;
-   	
-    /*	private ArrayList<String> video_url = new ArrayList<String>();
-    	private ArrayList<String> zip_file = new ArrayList<String>();
-    	private ArrayList<String> contributors = new ArrayList<String>();
-    	private ArrayList<String> tags = new ArrayList<String>();
-    	private ArrayList<String> comments = new ArrayList<String>();
-   */ private Date date = new Date();
+    //private long downvotes, viewcount,upvotes;
+   	private ArrayList<String> images,video_url,zip_file,contributors,tags,upvotes,downvotes,viewby;
+   	private ArrayList<Comment> comments;
+     private Date date = new Date();
     
 	public Project() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public Project(String title, String description, String readme, String license, String project_url,
-			String _private,long upvotes, long downvotes, long viewcount, ArrayList<String> images,
-			ArrayList<String> video_url, ArrayList<String> zip_file, ArrayList<String> contributors,
-			ArrayList<String> tags, ArrayList<String> comments) {
+	
+	
+	public Project(String username, String title, String description, String readme, String license, String project_url,
+			String _private, ArrayList<String> images, ArrayList<String> video_url, ArrayList<String> zip_file,
+			ArrayList<String> contributors, ArrayList<String> tags, ArrayList<Comment> comments,
+			ArrayList<String> upvotes, ArrayList<String> downvotes, ArrayList<String> viewby, Date date) {
 		super();
+		this.username = username;
 		this.title = title;
 		this.description = description;
 		this.readme = readme;
 		this.license = license;
-		//this.keywords = keywords;
 		this.project_url = project_url;
-		this.comments = comments;
 		this._private = _private;
-		this.upvotes = upvotes;
-		this.downvotes = downvotes;
-		this.viewcount = viewcount;
-		//this.index = index;
-		//this.like = like;
 		this.images = images;
 		this.video_url = video_url;
 		this.zip_file = zip_file;
 		this.contributors = contributors;
 		this.tags = tags;
-		
+		this.comments = comments;
+		this.upvotes = upvotes;
+		this.downvotes = downvotes;
+		this.viewby = viewby;
+		this.date = date;
 	}
-	
-	public ArrayList<String> getUpby() {
-		return upby;
+
+
+	public ArrayList<String> getUpvotes() {
+		return upvotes;
 	}
-	public void setUpby(ArrayList<String> upby) {
-		this.upby = upby;
+	public void setUpvotes(ArrayList<String> upvotes) {
+		this.upvotes = upvotes;
 	}
-	public ArrayList<String> getDownby() {
-		return downby;
+	public ArrayList<String> getDownvotes() {
+		return downvotes;
 	}
-	public void setDownby(ArrayList<String> downby) {
-		this.downby = downby;
+	public void setDownvotes(ArrayList<String> downvotes) {
+		this.downvotes = downvotes;
 	}
 	public ArrayList<String> getViewby() {
 		return viewby;
@@ -72,8 +68,7 @@ public class Project extends SearchBean{
 	@Override
 	public String toString() {
 		return "Project [title=" + title + ", description=" + description + ", readme=" + readme + ", license="
-						+ license + ", project_url=" + project_url + ", _private=" + _private + ", upvotes=" + upvotes 
-						+ ", downvotes=" + downvotes + ", viewcount=" + viewcount + ", images=" + images + ", video_url=" + video_url + ","
+						+ license + ", project_url=" + project_url + ", _private=" + _private  + ", images=" + images + ", video_url=" + video_url + ","
 						+ " zip_file=" + zip_file + ", contributors=" + contributors + ", tags=" + tags + ", comments=" + comments + "]";
 	}
 	public String getUsername() {
@@ -82,28 +77,28 @@ public class Project extends SearchBean{
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	public long getUpvotes() {
-		return upvotes;
-	}
-	public void setUpvotes(long upvotes) {
-		this.upvotes = upvotes;
-	}
-	public long getDownvotes() {
-		return downvotes;
-	}
-	public void setDownvotes(long downvotes) {
-		this.downvotes = downvotes;
-	}
-	public long getViewcount() {
-		return viewcount;
-	}
-	public void setViewcount(long viewcount) {
-		this.viewcount = viewcount;
-	}
-	public ArrayList<String> getComments() {
+//	public long getUpvotes() {
+//		return upvotes;
+//	}
+//	public void setUpvotes(long upvotes) {
+//		this.upvotes = upvotes;
+//	}
+//	public long getDownvotes() {
+//		return downvotes;
+//	}
+//	public void setDownvotes(long downvotes) {
+//		this.downvotes = downvotes;
+//	}
+//	public long getViewcount() {
+//		return viewcount;
+//	}
+//	public void setViewcount(long viewcount) {
+//		this.viewcount = viewcount;
+//	}
+	public ArrayList<Comment> getComments() {
 		return comments;
 	}
-	public void setComments(ArrayList<String> comments) {
+	public void setComments(ArrayList<Comment> comments) {
 		this.comments = comments;
 	}
 	public String getTitle() {
