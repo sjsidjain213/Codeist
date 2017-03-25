@@ -63,7 +63,7 @@ public class SearchBar {
         //search on basis of project
         fi = tctwo.find(or(eq("title",Pattern.compile("(?i:.*"+s+".*)"))));	
         fi.forEach((Block<Document>) doc -> { 
-        	     if(!hm.containsKey(doc.get("_id"))){
+        	     if(doc.getString("title").matches("(?i:.*"+s+".*)")&&!hm.containsKey(doc.get("_id"))){
         	     SearchBean project = new SearchBean();
                  project.setSource("title");
   	             project.setTitle(doc.getString("title"));
@@ -108,7 +108,7 @@ public class SearchBar {
 	            	 project.setDownvotes(innerd.getInteger("downvotes"));
 	             }
   	             project.setMatchedcount(1);
-  	             boolean bool =(doc.getString("title").matches("(?i:"+s+")"))?project.setPriority("b"):project.setPriority("a");    
+  	             boolean bool =(doc.getString("description").matches("(?i:"+s+")"))?project.setPriority("b"):project.setPriority("a");    
         	     alsearch.add(project);
                  hm.put(doc.get("_id"),project);
         	     }else{
@@ -157,9 +157,9 @@ public class SearchBar {
       	         { 
            	    if(st.matches("(?:"+s+")"))
            	    {
-           	    	if(sb.getPriority().equals("low"))
+           	    	if(sb.getPriority().equals("b") || sb.getPriority().equals("a"))
            	    	{
-           	    		sb.setPriority("high");
+           	    		sb.setPriority("z");
            	    	}
            	    }
                 long count = sb.getMatchedcount()+1;	
@@ -202,9 +202,9 @@ public class SearchBar {
       	         { 
            	    if(st.matches("(?:"+s+")"))
            	    {
-           	    	if(sb.getPriority().equals("low"))
+           	    	if(sb.getPriority().equals("b") || sb.getPriority().equals("a"))
            	    	{
-           	    		sb.setPriority("high");
+           	    		sb.setPriority("z");
            	    	}
            	    }
                 long count = sb.getMatchedcount()+1;	
@@ -237,13 +237,22 @@ public class SearchBar {
         	    	 alsearch.add(ques);
         	    	 hm.put(doc.get("_id"),ques);
         	     }
-        	     else{
+        	    else if(doc.getString("question").matches("(?i:.*"+s+".*)")){
                     SearchBean sb=hm.get(doc.get("_id"));
-        	         if(sb!=null)
-        	         {
-        	         	sb.setMatchedcount((sb.getMatchedcount()+1));
+                    System.out.println("else");
+                   if(sb!=null)
+        	         { 
+             	    if(doc.getString("question").matches("(?:"+s+")"))
+             	    {
+             	    	if(sb.getPriority().equals("b") || sb.getPriority().equals("a"))
+             	    	{
+             	    		sb.setPriority("z");
+             	    	}
+             	    }
+                  long count = sb.getMatchedcount()+1;	
+        	         //System.out.println("else id"+doc.get("_id")+st+"::"+count);
+        	         sb.setMatchedcount((count));
         	            String source = sb.getSource();
-        	      //      source = source+ ":title";
         	            sb.setSource(source);
         	         	hm.put(doc.get("_id"),sb);
         	         }	    	 
