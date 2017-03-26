@@ -48,11 +48,9 @@ public class UserDao {
 	  { Document test = tc.find(eq("username",user.getUsername())).first();
 		  if(test==null)
 		  { 
-			  System.out.println(user.getGithub_id());
+
 		  Document contact_information = new Document("phone_no",user.getPhone_no())
 				  .append("email_id",user.getEmail_id())
-				  .append("linkedin_id",user.getLinkedin_id())
-				  .append("github_id",user.getGithub_id())
 				  .append("country", user.getCountry().toLowerCase())
 				  .append("state",user.getState().toLowerCase())
 				  .append("city",user.getCity())
@@ -64,7 +62,7 @@ public class UserDao {
 				  .append("date",user.getDate())
 				  //.append("rating",user.getRating())
 				  .append("contact_information",contact_information)
-				  .append("favourite_tags",user.getFavourite_tags()); 
+				  .append("favourite_tags",user.getFavourite_tag()); 
 		  tc.insertOne(doc);
 		  return new GeneralServices().response("insert");
 		  }
@@ -83,9 +81,9 @@ public class UserDao {
               user.setName(d.getString("name"));
               user.setUsername(d.getString("username"));
     	      user.setContributing((ArrayList<String>)d.get("contributing"));
-    	      user.setFollowers((ArrayList<String>)d.get("followers"));
+    	      user.setFollower((ArrayList<String>)d.get("followers"));
     	      user.setFollowing((ArrayList<String>)d.get("following"));
-    	      user.setFavourite_tags((ArrayList<String>)d.get("favourite_tags"));
+    	      user.setFavourite_tag((ArrayList<String>)d.get("favourite_tags"));
               Document innerdoc = (Document) d.get("contact_information");
               user.setCity(innerdoc.getString("city"));
               user.setCountry(innerdoc.getString("country"));
@@ -93,14 +91,12 @@ public class UserDao {
     	      user.setEmail_id(innerdoc.getString("email_id"));
     	      user.setPhone_no(innerdoc.getString("phone_no"));
     	      user.setZipcode(innerdoc.getLong("zipcode"));
-    	      user.setLinkedin_id(innerdoc.getString("linkedin_id"));
-    	      user.setGithub_id(innerdoc.getString("github_id"));
-              innerdoc = (Document) d.get("history");
+    	      innerdoc = (Document) d.get("history");
               try{
-              user.setTags_viewed((ArrayList<String>)innerdoc.get("tags_viewed"));
-              user.setProblem_category_viewed((ArrayList<String>)innerdoc.get("problem_category_viewed"));
-              user.setUser_viewed((ArrayList<String>)innerdoc.get("user_viewed"));
-              user.setProject_viewed((ArrayList<String>)innerdoc.get("project_viewed"));}
+              user.setTags_view((ArrayList<String>)innerdoc.get("tags_viewed"));
+              user.setProblem_category_view((ArrayList<String>)innerdoc.get("problem_category_viewed"));
+              user.setUser_view((ArrayList<String>)innerdoc.get("user_viewed"));
+              user.setProject_view((ArrayList<String>)innerdoc.get("project_viewed"));}
               catch(NullPointerException e){
             	  
               }
@@ -112,9 +108,9 @@ public class UserDao {
       public Acknowledgement updateUserDetails(User user,String username)
       {   System.out.println(user.getBio()+"this is bip");
     	  Document outdoc = new Document("name",user.getName())
-        		  .append("followers",user.getFollowers())
+        		  .append("followers",user.getFollower())
         		  .append("following",user.getFollowing())
-        		  .append("favourite_tags",user.getFavourite_tags())
+        		  .append("favourite_tags",user.getFavourite_tag())
         		  .append("contributing",user.getContributing())
         		  .append("bio",user.getBio());
                    tc.updateOne(eq("username", user.getUsername()),new Document("$set",outdoc));   	
@@ -122,8 +118,6 @@ public class UserDao {
         		  .append("email_id",user.getEmail_id())
     	          .append("country",user.getCountry())
     	          .append("city",user.getCity())
-    	          .append("linkedin_id", user.getLinkedin_id())
-    	          .append("github_id",user.getGithub_id())
     	          .append("zipcode",user.getZipcode())
     	          .append("state",user.getState());
         String acknow2= tc.updateOne(eq("username",user.getUsername()),new Document("$set",new Document("contact_information",doc))).toString();
