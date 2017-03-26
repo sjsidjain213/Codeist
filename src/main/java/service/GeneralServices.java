@@ -1,6 +1,8 @@
 package service;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import org.bson.Document;
@@ -10,8 +12,10 @@ import com.mongodb.client.FindIterable;
 
 import bean.Acknowledgement;
 import bean.Project;
+import bean.Signup;
 import bean.Tag;
 import bean.Tile;
+import dao.UserDao;
 import interfaces.service.AtoSCon;
 import interfaces.service.StoACon;
 import interfaces.service.StoAcknowCon;
@@ -108,6 +112,7 @@ public static String spaceAdder(String s)
 s=	s.replaceAll("-", " ");
 return s;	
 }
+
 public static String get_SHA_256_SecurePassword(String username,String passwordToHash)
 {
 	byte[] salt =username.getBytes();
@@ -136,4 +141,32 @@ public static List<Project> nullProject(){
 	return pro;
 	}
 
+public Date getCurrentDate()
+{Date date = null;
+	try {
+	SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+    String strDate = sdfDate.format(new Date());
+    SimpleDateFormat sdf1 = new SimpleDateFormat();
+    sdf1.applyPattern("yyyy-MM-dd HH:mm:ss.SSS");
+    date = sdf1.parse(strDate);
+		return date;
+	} catch (ParseException e) {
+		e.printStackTrace();
+	}
+return date;
+}
+/*
+public void signup(Signup signup)
+{
+	String name = signup.getName();
+	String email = signup.getEmailid();
+	String password = signup.getPassword();
+	Date date = new GeneralServices().getCurrentDate();
+		long dateepoch = date.getTime();
+	    String hashed1 = get_SHA_256_SecurePassword(name,String.valueOf(dateepoch));
+	    String hashed2 = get_SHA_256_SecurePassword(email,String.valueOf(dateepoch));
+        new UserDao().signupUser(name, password, email, date);
+        new MGSample().SendSimple(hashed1, hashed2);
+	}
+*/
 }
