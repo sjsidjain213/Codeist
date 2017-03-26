@@ -166,7 +166,7 @@ public void signup(Signup signup)
 	    String hashed1 = linkEncryptCreator(name,String.valueOf(dateepoch));
 	    String hashed2 = linkEncryptCreator(email,String.valueOf(dateepoch));
         new UserDao().signupUser(name, password, email, date);
-        new SendEmail().SendSimple(hashed1, hashed2);
+        new SendEmail().SendSimple(email,hashed1, hashed2);
 }
 public static String linkDecrypter(byte[] _bytes)
 {

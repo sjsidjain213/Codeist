@@ -22,7 +22,7 @@ public static void main(String args[])
 {//SendSimple();
 System.out.println();	
 }
-    public static ClientResponse SendSimple(String hash1,String hash2) {
+    public static ClientResponse SendSimple(String email,String hash1,String hash2) {
 
         Client client = ClientBuilder.newClient();
         client.register(HttpAuthenticationFeature.basic(
@@ -33,7 +33,7 @@ System.out.println();
         String text = "http://codeist.mi43ujva9v.us-west-2.elasticbeanstalk.com/webapi/user/verifier/"+hash1+"/"+hash2;
         Form reqData = new Form();
         reqData.param("from", "Siddhartha <sid@javacrunch.in>");
-        reqData.param("to", "sjsidjain213@gmail.com");
+        reqData.param("to", email);
         reqData.param("subject", "Signup Process");
         reqData.param("text", text);
 
