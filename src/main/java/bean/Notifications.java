@@ -18,6 +18,10 @@ USERISNOTLOGGEDIN("user is not logged in"),
 QUESTIONMODULE("question"),
 PROJECTMODULE("project"),
 COMMENTMODULE("comment"),
+PROJECTUPVOTE("20"),
+PROJECTDOWNVOTE("-10"),
+QUESTIONUPVOTE("10"),
+QUESTIONDOWNVOTE("-5"),
 USERLOGGEDOUT("user is succesfully logged out");	
 	private final String msg;
 

@@ -1,5 +1,6 @@
 package resource;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,6 +11,9 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.container.ContainerResponseContext;
+import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
@@ -22,7 +26,7 @@ import service.SendEmail;
 import service.EmailVerifier;
 import service.SessionService;
 @Path("/user")
-public class UserResource {
+public class UserResource implements ContainerResponseFilter {
 	
 	@POST
 	@Path("/verifier")
@@ -88,6 +92,15 @@ public class UserResource {
     return (new SessionService().sessionVerifier(req))?new UserDao().updateUserDetails(user,req.getSession().getAttribute("username").toString()):new GeneralServices().response(null);
 	}
 	//@Path("/highratinguser")
+	@Override
+	public void filter(ContainerRequestContext  requestContext, ContainerResponseContext cres) throws IOException {
+		// TODO Auto-generated method stub
+		cres.getHeaders().add("Access-Control-Allow-Origin", "*");
+	      cres.getHeaders().add("Access-Control-Allow-Headers", "origin, content-type, accept, authorization");
+	      cres.getHeaders().add("Access-Control-Allow-Credentials", "true");
+	      cres.getHeaders().add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
+	      cres.getHeaders().add("Access-Control-Max-Age", "1209600");
+	}
 	
 	
 	/*

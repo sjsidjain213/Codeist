@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/json; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<form method="get" action="http://codeist.mi43ujva9v.us-west-2.elasticbeanstalk.com/webapi/user/profile" enctype='application/json'>
+  <div class="imgcontainer">
+  </div>
+
+  <div class="container">
+    <label><b>Username</b></label>
+    <input type="text" placeholder="Enter Username" name="username" id="password" required>
+
+    <label><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" name="password" id="password" required>
+
+    <button type="submit">Login</button>
+  </div>
+</form>
+<input type="text" name="username" id="username" class="text" maxlength="30" />
+<br />
+<input type="password" name="password" id="password" class="text" maxlength="30" />
+<br />
+<input type="submit" name="btnSubmit" id="btnSubmit" />
+<script>
+$(document).ready(function () {
+    $("#btnSubmit").click(function () {
+        //collect userName and password entered by users
+        var userName = $("#username").val();
+        var password = $("#password").val();
+alert("df");
+        auth(userName, password);
+    });
+});
+
+//authenticate function to make ajax call
+function auth(userName, password) {
+    $.ajax
+    ({
+        type: "POST",
+        //SEND TO MY SERVER URL
+        url: "http://codeist.mi43ujva9v.us-west-2.elasticbeanstalk.com/webapi/user/login",
+        dataType: 'json',
+        async: false,
+        data: '{"userName": "' + userName + '", "password" : "' + password + '"}',
+        success: function (jsonresponse) {
+alert(jsonresponse)
+            //???????????????????????
+        }
+    })
+}
+</script>
+</body>
+</html>

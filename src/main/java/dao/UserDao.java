@@ -157,5 +157,13 @@ public class UserDao {
               return ac2;}, acknow);
     	  return acknowledge1;
       }
-
+      
+      public void ratingUpdate(String username,Notifications notify)
+      {
+      long changerating = Long.valueOf(notify.getMsg());
+      long currentrating = tc.find(eq("username",username)).first().getLong("rating");
+      currentrating = currentrating+changerating;
+      if(currentrating<0)
+      tc.updateOne(eq("username",username),new Document("$set",new Document("rating",currentrating)));
+      }
 }

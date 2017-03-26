@@ -16,10 +16,11 @@ import static com.mongodb.client.model.Filters.*;
 import java.util.ArrayList;
 public class SessionService {
 MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("testuserdata");
+
 	public ArrayList<NotificationBean> sessionCreate(HttpServletRequest req,String username,String password)
 	{    System.out.println(username);
 		Document doc = tc.find(eq("username",username)).first();		
-		if(doc!=null && (GeneralServices.get_SHA_256_SecurePassword(username, password)).equals(doc.getString("password")))
+		if(req.getSession().getAttribute("username")!=null&&doc!=null &&(GeneralServices.get_SHA_256_SecurePassword(username, password)).equals(doc.getString("password")))
 	{	req.getSession().setAttribute("username",username);
 	    String s_id = req.getSession().getId();
 	    req.getSession().setAttribute("s_id",s_id);
