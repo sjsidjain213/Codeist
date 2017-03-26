@@ -30,7 +30,7 @@ MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("tes
 	else {
 		ArrayList<NotificationBean> nb = new ArrayList<NotificationBean>();
 		NotificationBean notify = new NotificationBean();
-		notify.setMsg(Notifications.USERISNOTLOGGEDIN.getMsg());
+		notify.setMsg(Notifications.USERISNOTLOGGEDIN.getMsg()+"or"+ Notifications.SESSIONISALREADYACTIVE.getMsg());
 		notify.setS_id(Notifications.SESSIONDONOTEXSIT.getMsg());
 		nb.add(notify);
 		return nb;
