@@ -5,12 +5,24 @@ import java.util.Date;
 
 public class Question {
 
-	private String username,question;
+	private String username,question,url;
 	private Date date = new Date();
 	private ArrayList<String> tags;
 	private long featured_points;
 	private ArrayList<String> upvotes,downvotes;
-	private ArrayList<Answer> answers = new ArrayList<Answer>();
+	private ArrayList<Answer> answers = new ArrayList<Answer>();	
+	public String getUrl() {
+		return url;
+	}
+	public void setUrl(String url) {
+		this.url = url;
+	}
+	public ArrayList<Answer> getAnswers() {
+		return answers;
+	}
+	public void setAnswers(ArrayList<Answer> answers) {
+		this.answers = answers;
+	}
 	public ArrayList<Answer> getAnswer() {
 		return answers;
 	}
