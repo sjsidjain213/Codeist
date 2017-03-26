@@ -125,15 +125,15 @@ public class UserDao {
            return 	new GeneralServices().response(acknow2);
       }
       
-     	public void moduleIDAdder(Notifications notify,String username,String variableid)
+      public void moduleIDAdder(Notifications notify,String username,String variableid)
   	   {
         if(notify.equals(Notifications.QUESTIONMODULE))
         {
-        	  tc.updateOne(eq("username",username),new Document("$addToSet",new Document("question_ask",variableid)));
+       	  tc.updateOne(eq("username",username),new Document("$addToSet",new Document("question_ask",variableid)));
         }
         else if(notify.equals(Notifications.PROJECTMODULE))
         {
-       	  tc.updateOne(eq("username",username),new Document("$addToSet",new Document("answer_ask",variableid)));
+       	  tc.updateOne(eq("username",username),new Document("$addToSet",new Document("project_ask",variableid)));
         }
   	   }
 
