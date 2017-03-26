@@ -6,7 +6,7 @@ import java.util.Date;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
     @XmlRootElement
-public class User extends SearchBean {
+public class User {
 	@XmlElement
 private String username,password,name,bio,phone_no,email_id,linkedin_id,github_id,country,state,city,message="Log in First";
 	private ArrayList<String> favourite_tags,following,followers,contributing;

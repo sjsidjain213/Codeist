@@ -19,7 +19,7 @@ import dao.UserDao;
 import interfaces.service.AtoSCon;
 import interfaces.service.StoACon;
 import interfaces.service.StoAcknowCon;
-
+import org.apache.tomcat.util.codec.binary.Base64;
 public class GeneralServices{
 static final HashMap<Object,Tile> hm = new HashMap<Object,Tile>();
 public String atosmethod(AtoSCon<String> ats,ArrayList<String> al)
@@ -141,7 +141,7 @@ public static List<Project> nullProject(){
 	return pro;
 	}
 
-public Date getCurrentDate()
+public static Date getCurrentDate()
 {Date date = null;
 	try {
 	SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
@@ -155,7 +155,7 @@ public Date getCurrentDate()
 	}
 return date;
 }
-
+//**********************************
 public void signup(Signup signup)
 {
 	String name = signup.getName();
@@ -163,10 +163,29 @@ public void signup(Signup signup)
 	String password = signup.getPassword();
 	Date date = new GeneralServices().getCurrentDate();
 		long dateepoch = date.getTime();
-	    String hashed1 = get_SHA_256_SecurePassword(name,String.valueOf(dateepoch));
-	    String hashed2 = get_SHA_256_SecurePassword(email,String.valueOf(dateepoch));
+	    String hashed1 = linkEncryptCreator(name,String.valueOf(dateepoch));
+	    String hashed2 = linkEncryptCreator(email,String.valueOf(dateepoch));
         new UserDao().signupUser(name, password, email, date);
-        new MGSample().SendSimple(hashed1, hashed2);
+        new SendEmail().SendSimple(hashed1, hashed2);
+}
+public static String linkDecrypter(byte[] _bytes)
+{
+    String file_string = "";
+
+    for(int i = 0; i < _bytes.length; i++)
+    {
+        file_string += (char)_bytes[i];
+    }
+
+    return file_string;    
+}
+public static String linkEncryptCreator(String encrypt1,String encrypt2)
+{String x;
+// encrypt2 == date
+	x=Base64.encodeBase64URLSafeString((encrypt1+"|"+encrypt2).getBytes());
+    System.out.println(x);
+   // System.out.println(openFileToString(Base64.decodeBase64(x)));	
+return x;
 }
 
 }

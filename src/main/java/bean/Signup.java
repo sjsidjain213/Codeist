@@ -1,91 +1,48 @@
 package bean;
 
-import java.util.ArrayList;
+import java.util.Date;
 
-public class Signup 
-{
-  
-	
-	private String username,emailaddress, profileurl,location;
-	private ArrayList<String> following,followers;
-	  //--profile image
-	 
-	 private int age;
-	
-	public String getEmailaddress() {
-		return emailaddress;
-	}
-
-	public void setEmailaddress(String emailaddress) {
-		this.emailaddress = emailaddress;
-	}
-
-	public String getProfileurl() {
-		return profileurl;
-	}
-
-	public void setProfileurl(String profileurl) {
-		this.profileurl = profileurl;
-	}
-
-	public String getLocation() {
-		return location;
-	}
-
-	public void setLocation(String location) {
-		this.location = location;
-	}
-
-	public ArrayList<String> getFollowing() {
-		return following;
-	}
-
-	public void setFollowing(ArrayList<String> following) {
-		this.following = following;
-	}
-
-	public ArrayList<String> getFollowers() {
-		return followers;
-	}
-
-	public void setFollowers(ArrayList<String> followers) {
-		this.followers = followers;
-	}
-
-	public int getAge() {
-		return age;
-	}
-
-	public Signup(String username, String emailaddress, String profileurl, String location, ArrayList<String> following,
-			ArrayList<String> followers, int age) {
-		super();
-		this.username = username;
-		this.emailaddress = emailaddress;
-		this.profileurl = profileurl;
-		this.location = location;
-		this.following = following;
-		this.followers = followers;
-		this.age = age;
-	}
-
-	public void setAge(int age) {
-		this.age = age;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public Signup()
-	{
-		
-		
+public class Signup {
+private String name,password,emailid;
+public Signup(String name, String password, String emailid, Date date) {
 	super();
-		
-	}
+	this.name = name;
+	this.password = password;
+	this.emailid = emailid;
+	this.date = date;
+}
+public String getEmailid() {
+	return emailid;
+}
+public void setEmailid(String emailid) {
+	this.emailid = emailid;
+}
+private Date date;
+public Signup() {
+	super();
+	// TODO Auto-generated constructor stub
+}
 
+@Override
+public String toString() {
+	return "Signup [name=" + name + ", password=" + password + ", emailid=" + emailid + ", date=" + date + "]";
+}
+public String getName() {
+	return name;
+}
+public void setName(String name) {
+	this.name = name;
+}
+public String getPassword() {
+	return password;
+}
+public void setPassword(String password) {
+	this.password = password;
+}
+public Date getDate() {
+	return date;
+}
+public void setDate(Date date) {
+	this.date = date;
+}
 }

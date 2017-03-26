@@ -3,6 +3,7 @@ package dao;
 import org.bson.Document;
 
 import bean.Acknowledgement;
+import bean.Signup;
 import bean.Tag;
 import bean.User;
 import service.DatabaseServices;
@@ -13,11 +14,37 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import static com.mongodb.client.model.Filters.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class UserDao {
+	
+	
 	  MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("testuserdata");
-  	  public Acknowledgement insertUser(User user)
+	  public void signupUser(String name,String password,String emailid,Date date)
+	  {MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("unverifieduserdata");
+	    Document doc = new Document("name",name)
+				  .append("password", password)
+				  .append("emailid",emailid)
+				  .append("date",date)
+				  .append("verified", "n");
+		 tc.insertOne(doc);
+	  }
+	  public String userVerifier(String name,String email,Date date)
+	  {MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("unverifieduserdata");
+	  System.out.println(date+"<< data");System.out.println(email);System.out.println(name);
+	  Document doc= tc.find(and(eq("name",name),eq("emailid",email),eq("date",date))).first();
+		 if(doc!=null)
+		 {
+			 return "verified";
+		 }
+		 else{
+			 return "unverified";
+		 }
+	  }
+	  public Acknowledgement insertUser(User user)
 	  { Document test = tc.find(eq("username",user.getUsername())).first();
 		  if(test==null)
 		  { 

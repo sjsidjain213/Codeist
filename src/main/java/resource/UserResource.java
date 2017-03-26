@@ -16,11 +16,30 @@ import javax.ws.rs.core.MediaType;
 import bean.*;
 import dao.*;
 import service.DatabaseServices;
+import service.EmailVerifier;
 import service.GeneralServices;
+import service.SendEmail;
+import service.EmailVerifier;
 import service.SessionService;
 @Path("/user")
 public class UserResource {
 	
+	@POST
+	@Path("/verifier")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void signupverifier(Signup signup)
+	{//@PathParam("date") String date
+	//new MGSample().SendSimple();
+		new GeneralServices().signup(signup);
+	}
+	@GET
+	@Path("/verifier/{hash1}/{hash2}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String signupverifier2(@PathParam("hash1") String hash1,@PathParam("hash2") String hash2)
+	{//@PathParam("date") String date
+	System.out.println("called");
+	return new EmailVerifier().test(hash1,hash2);
+	}
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
