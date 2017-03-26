@@ -3,6 +3,7 @@ package dao;
 import org.bson.Document;
 
 import bean.Acknowledgement;
+import bean.Notifications;
 import bean.Signup;
 import bean.Tag;
 import bean.User;
@@ -124,45 +125,18 @@ public class UserDao {
            return 	new GeneralServices().response(acknow2);
       }
       
-      @SuppressWarnings("unchecked")
-	public ArrayList<User> getAllUsers()
-      {
-    	  ArrayList<User> aluser = new ArrayList<User>();
-    	  
-    	  tc.find().forEach((Block<Document>)doc -> {
-    		  User user = new User();
-    		  user.setName(doc.getString("name"));
-    		  user.setUsername(doc.getString("username"));
-    	  aluser.add(user);
-    	  });
-    	  return aluser;
-      }
-	
-      
-     // Database Getter and Setter 
-      public User getUserRating(String username)
-      {
-    	  User user = new User();
-    	  FindIterable <Document> fi = tc.find(eq("username",username));
-    	  System.out.println(username);
-    	  for(Document d : fi){
-    		  user.setRating(d.getLong("rating"));
-    	  }
-    	  return user;
-      }
-      
-      public Acknowledgement setUserRating(User user, String username)
-      {
-    	  Acknowledgement ac2 = new Acknowledgement();
-    	  Document doc = new Document()
-    			  		.append("rating",user.getRating());
-    	  String acknow1 = tc.updateOne(eq("username", user.getUsername()),new Document("$set",doc)).toString();
-    	  Acknowledgement acknowledge1 = new GeneralServices().stoacknowmethod(s ->{
-              String sa [] = s.substring(s.indexOf("{")+1,s.indexOf("}")).split(",");
-                 ac2.setMatchedCount(sa[0]);ac2.setModifiedCount(sa[1]);ac2.setUpsertedId(sa[2]);
-              return ac2;}, acknow1);
-    	  return acknowledge1;
-      }
+     	public void moduleIDAdder(Notifications notify,String username,String variableid)
+  	   {
+        if(notify.equals(Notifications.QUESTIONMODULE))
+        {
+        	  tc.updateOne(eq("username",username),new Document("$addToSet",new Document("question_ask",variableid)));
+        }
+        else if(notify.equals(Notifications.PROJECTMODULE))
+        {
+       	  tc.updateOne(eq("username",username),new Document("$addToSet",new Document("answer_ask",variableid)));
+        }
+  	   }
+
       
       public Acknowledgement updateFavTags(Tag favTags,String username){
     	  String acknow= tc.updateOne(eq("username",username),new Document("$set", new Document("favourite_tags",favTags.getTags()))).toString();

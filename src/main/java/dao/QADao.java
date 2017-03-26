@@ -11,29 +11,38 @@ import bean.Question;
 import service.DatabaseServices;
 import service.GeneralServices;
 import service.NotificationService;
-
 import static com.mongodb.client.model.Filters.*;
-
 import java.util.ArrayList;
-import java.util.List;
 
+import javax.management.Notification;
 import javax.servlet.http.HttpServletRequest;
+
 public class QADao {
-	MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("testqa");
-    public Acknowledgement insertQuestion(Question question)
-	{ Document info=new Document().append("upvotes", (ArrayList<String>)question.getUpvotes()).append("downvotes",(ArrayList<String>)question.getDownvotes());
 	
-		Document doc2 = tc.find(eq("question",question.getQuestion())).first();
+	MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("testqa");
+    public Acknowledgement insertQuestion(Question question, HttpServletRequest req)
+	{   String userfromsession = req.getSession().getAttribute("username").toString();
+	    Document doc2 = tc.find(and(eq("username",userfromsession),eq("question",question.getQuestion()))).first();
 		if(doc2==null)
-		{Document doc = new Document("username",question.getUsername())
+		{Document info=new Document().append("upvotes", (ArrayList<String>)question.getUpvotes()).append("downvotes",(ArrayList<String>)question.getDownvotes());
+			Document doc = new Document("username",question.getUsername())
 	    		.append("question",question.getQuestion())
 	    		.append("date",question.getDate())
 	    		.append("info",info)
 	    		.append("featured_points", question.getFeatured_points());
-	    tc.insertOne(doc);
-		Acknowledgement acknow = new Acknowledgement();
-	     acknow.setModifiedCount("1");
-	     acknow.setMatchedCount("0");
+	       tc.insertOne(doc);
+	    
+	    String id = tc.find(and(eq("username",userfromsession),eq("question",question.getQuestion()))).first().get("_id").toString();
+
+	    // for userdata 
+	    new UserDao().moduleIDAdder(Notifications.QUESTIONMODULE,userfromsession, id);
+	    
+	    // for url
+	    String url = GeneralServices.urlGenerator(Notifications.QUESTIONMODULE, id, question.getQuestion());
+	    tc.updateOne(and(eq("username",userfromsession),eq("question",question.getQuestion())),new Document("$set",new Document("url",url)));
+	    Acknowledgement acknow = new Acknowledgement();
+	    acknow.setModifiedCount("1");
+	    acknow.setMatchedCount("0");
 		return acknow;
 		}
 	    else{
@@ -42,7 +51,7 @@ public class QADao {
 		     acknow.setMatchedCount("1");
 	    	return acknow;
 	    }
-		}
+	}
 	
 	@SuppressWarnings("unchecked")
 	public Question getQuestion(String question)
@@ -52,6 +61,7 @@ public class QADao {
 	quest.setUsername(doc.getString("username"));
 	quest.setDate(doc.getDate("date"));
 	quest.setTags((ArrayList<String>)doc.get("tags"));
+	quest.setUrl(doc.getString("url"));
 	Document document=(Document) doc.get("info");
 	
 	quest.setDownvotes((ArrayList<String>)document.get("downvotes"));
@@ -75,9 +85,8 @@ public class QADao {
 	}
 	
 	public Acknowledgement insertAnswer(Answer answer,HttpServletRequest req)
-	{ Document info=new Document().append("upvotes", (ArrayList<String>)answer.getUpvotes()).append("downvotes",(ArrayList<String>)answer.getDownvotes());
-	
-		Document doc = new Document("username",req.getSession().getAttribute("username"))
+	{ Document info=new Document().append("upvotes", (ArrayList<String>)answer.getUpvotes()).append("downvotes",(ArrayList<String>)answer.getDownvotes());	
+	  Document doc = new Document("username",req.getSession().getAttribute("username"))
 	    		.append("answer",answer.getAnswer())
 	    		.append("date",answer.getDate())
 	    		.append("info",info)
@@ -164,6 +173,6 @@ String acknow =tc.updateOne(eq("question",answer.getQuestion()),new Document("$p
 				
 			}
 	}
-	
+
 
 }

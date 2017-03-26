@@ -15,6 +15,8 @@ UPVOTESANSWER("Your answer have received upvotes"),
 DOWNVOTESANSWER("Your answer have received downvotes"),
 SESSIONDONOTEXSIT("Session do not exsist"),
 USERISNOTLOGGEDIN("user is not logged in"),
+QUESTIONMODULE("question"),
+PROJECTMODULE("project"),
 USERLOGGEDOUT("user is succesfully logged out");	
 	private final String msg;
 

@@ -62,7 +62,7 @@ public class UserResource {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("/insert")
+	@Path("/signup")
 	public Acknowledgement insertUser(User users,@Context HttpServletRequest req)
 	{
 	//return (new SessionService().sessionVerifier(req))?new UserDao().insertUser(users):new GeneralServices().response(null);
@@ -82,12 +82,15 @@ public class UserResource {
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/updateuser")
+	@Path("profile/update")
 	public Acknowledgement upsertUserDetails(User user,@Context HttpServletRequest req)
 	{
     return (new SessionService().sessionVerifier(req))?new UserDao().updateUserDetails(user,req.getSession().getAttribute("username").toString()):new GeneralServices().response(null);
 	}
+	//@Path("/highratinguser")
 	
+	
+	/*
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/retrievealluser")
@@ -95,6 +98,8 @@ public class UserResource {
 	{
 	return (new SessionService().sessionVerifier(req))?new UserDao().getAllUsers():new ArrayList<User>();
 	}
+	
+	
 	
 	@GET
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -128,5 +133,5 @@ public class UserResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Acknowledgement updateTagsViewed(Tag tagsViewed,@Context HttpServletRequest req){
 	return (new SessionService().sessionVerifier(req))?new UserDao().updateTagsViewed(req.getSession().getAttribute("username").toString(), tagsViewed):new GeneralServices().response(null);
-	}
+	}***/
 }

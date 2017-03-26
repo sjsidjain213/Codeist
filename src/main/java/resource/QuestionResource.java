@@ -22,9 +22,9 @@ public class QuestionResource {
 	@Path("/insert")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Acknowledgement insertQuestion(Question question)
+	public Acknowledgement insertQuestion(Question question,@Context HttpServletRequest req)
 	{
-		return new QADao().insertQuestion(question);
+		return new QADao().insertQuestion(question,req);
 	}
 	@POST
 	@Path("/insertanswer")

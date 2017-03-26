@@ -11,6 +11,7 @@ import com.mongodb.Block;
 import com.mongodb.client.FindIterable;
 
 import bean.Acknowledgement;
+import bean.Notifications;
 import bean.Project;
 import bean.Signup;
 import bean.Tag;
@@ -102,7 +103,7 @@ public Acknowledgement response(String s)
 	}
 }
 
-public String spaceRemover(String s)
+public static String spaceRemover(String s)
 {
 s=	s.replaceAll(" ", "-");
 return s;	
@@ -193,8 +194,10 @@ public void chnageRating()
 	
 }
 
-public static String Generate(String module,String id,String name)
+public static String urlGenerator(Notifications notify,String id,String name)
 {
+name=spaceRemover(name);
+String module = notify.toString();
 String url = "/"+module+"/"+id+"/"+name;
 return url;
 }
@@ -211,4 +214,5 @@ hm.put("module",module);
 hm.put("id", id);
 return hm;
 }
+
 }
