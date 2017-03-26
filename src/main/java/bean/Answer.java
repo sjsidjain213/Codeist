@@ -3,7 +3,13 @@ package bean;
 import java.util.Date;
 
 public class Answer {
-private String username,answer;
+private String username,answer,question;
+public String getQuestion() {
+	return question;
+}
+public void setQuestion(String question) {
+	this.question = question;
+}
 private long upvotes,downvotes,featured_points;
 private Date date = new Date();
 public String getUsername() {

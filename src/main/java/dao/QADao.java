@@ -11,21 +11,26 @@ import bean.Question;
 import service.DatabaseServices;
 import service.GeneralServices;
 import service.NotificationService;
+import service.SessionService;
 
 import static com.mongodb.client.model.Filters.*;
 
 import java.util.ArrayList;
+
+import javax.servlet.http.HttpServletRequest;
 public class QADao {
 	MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("qa");
     public Acknowledgement insertQuestion(Question question)
 	{ 
 		Document doc2 = tc.find(eq("question",question.getQuestion())).first();
+		long intial = 0;
 		if(doc2==null)
 		{Document doc = new Document("username",question.getUsername())
 	    		.append("question",question.getQuestion())
 	    		.append("date",question.getDate())
-	    		.append("upvotes",question.getUpvotes())
-	    		.append("downvotes", question.getDownvotes())
+	    		.append("tags",question.getTags())
+	            .append("upvotes",intial)
+	            .append("downvotes",intial)
 	    		.append("featured_points", question.getFeatured_points());
 	    tc.insertOne(doc);
 		Acknowledgement acknow = new Acknowledgement();
@@ -47,13 +52,14 @@ public class QADao {
 	Question quest = new Question();
 	quest.setUsername(doc.getString("username"));
 	quest.setDate(doc.getDate("date"));
+	quest.setFeatured_points(doc.getLong("featured_points"));
 	quest.setTags((ArrayList<String>)doc.get("tags"));
 	quest.setDownvotes(doc.getLong("downvotes"));
 	quest.setUpvotes(doc.getLong("upvotes"));
-	quest.setFeatured_points(doc.getLong("featured_points"));
 	ArrayList<Answer> alansw = new ArrayList<Answer>();
 	ArrayList<Document> aldo = (ArrayList<Document>) doc.get("answers");
-	for(Document d:aldo)
+	if(aldo!=null&&aldo.size()>0)
+	{	for(Document d:aldo)
 	{	Answer answer =  new Answer();
 		answer.setUsername(d.getString("username"));
 		answer.setAnswer(d.getString("answer"));
@@ -64,24 +70,23 @@ public class QADao {
 		alansw.add(answer);
 	}
 	quest.setAnswer(alansw);
+	}
 	return quest;
 	}
 	
-	public Acknowledgement insertAnswer(Answer answer,String question,String username)
-	{ 
+	public Acknowledgement insertAnswer(Answer answer, HttpServletRequest req)
+	{ long intial = 0;
 		Document doc = new Document("username",answer.getUsername())
 	    		.append("answer",answer.getAnswer())
 	    		.append("date",answer.getDate())
-	    		.append("upvotes",answer.getUpvotes())
-	    		.append("downvotes", answer.getDownvotes())
-	    		.append("featured_points", answer.getFeatured_points());
-String acknow =tc.updateOne(eq("question",question),new Document("$push",new Document("answers",doc))).toString();
-    Acknowledgement acknowledge = new GeneralServices().stoacknowmethod(s ->{
-	Acknowledgement ac2 = new Acknowledgement();
-    String sa [] = s.substring(s.indexOf("{")+1,s.indexOf("}")).split(",");
-    ac2.setMatchedCount(sa[0]);ac2.setModifiedCount(sa[1]);ac2.setUpsertedId(sa[2]);
-    return ac2;}, acknow);
-    new NotificationService().answerNotification(username,question,answer.getUsername(),answer.getAnswer(),Notifications.QUESTIONSOLVED);
+	    		.append("upvotes",intial)
+	    		.append("downvotes", intial)
+	    		.append("featured_points",intial);
+    String acknow =tc.updateOne(eq("question",answer.getQuestion()),new Document("$push",new Document("answers",doc))).toString();
+    Acknowledgement acknowledge = new GeneralServices().response(acknow);
+    
+    //public void answerNotification(String username,String question,String commitername,String commitermsg,Notifications notify)
+	new NotificationService().answerNotification(answer.getUsername(),answer.getQuestion(),req.getSession().getAttribute("username").toString(),answer.getAnswer(),Notifications.QUESTIONSOLVED);
     return acknowledge;
 	}
 	

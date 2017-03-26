@@ -155,7 +155,7 @@ public Date getCurrentDate()
 	}
 return date;
 }
-/*
+
 public void signup(Signup signup)
 {
 	String name = signup.getName();
@@ -167,6 +167,6 @@ public void signup(Signup signup)
 	    String hashed2 = get_SHA_256_SecurePassword(email,String.valueOf(dateepoch));
         new UserDao().signupUser(name, password, email, date);
         new MGSample().SendSimple(hashed1, hashed2);
-	}
-*/
+}
+
 }
