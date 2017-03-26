@@ -29,9 +29,11 @@ public class ProjectInsert
 	
 //inserting a new project to database
 public Acknowledgement insertProject(Project project,HttpServletRequest req)
-{  
-	Document info=new Document().append("upvotes", (ArrayList<String>)project.getUpvotes()).append("downvotes",(ArrayList<String>)project.getDownvotes()).append("viewby",(List<String>)project.getViewby());
-	Document doc = new Document()
+{  String userfromsession = req.getSession().getAttribute("username").toString();
+   Document docexsit = tc.find(and(eq("username",userfromsession),eq("title",project.getTitle()))).first();
+   if(docexsit==null)
+    { Document info=new Document().append("upvotes", (ArrayList<String>)project.getUpvotes()).append("downvotes",(ArrayList<String>)project.getDownvotes()).append("viewby",(List<String>)project.getViewby());
+	  Document doc = new Document()
 	    		 .append("username", req.getSession().getAttribute("username"))
 	    		 .append("title",project.getTitle())	
 	    		 .append("date",project.getDate())
@@ -47,16 +49,23 @@ public Acknowledgement insertProject(Project project,HttpServletRequest req)
 	    		 .append("images",(List<String>)project.getImages())
 	    		 .append("info", info);
 	    		  tc.insertOne(doc);
-	    		  String p_id= tc.find(and(eq("username",req.getSession().getAttribute("username")),eq("title",project.getTitle()))).first().get("_id").toString();
-	             String title =  new GeneralServices().spaceRemover(project.getTitle());
-	    		  String url = ""+p_id+"/"+title;
-	    		  System.out.println(url);
-	    		  UpdateResult rs=tc.updateOne(and(eq("username",req.getSession().getAttribute("username")),eq("title",project.getTitle())),new Document("$set",new Document("project_url",url)));	
-	    		 
-	    return new GeneralServices().response("insert");
-}
-@SuppressWarnings("unchecked")
-public Acknowledgement updateproject(Project project,HttpServletRequest req,String id){
+	    		  String projectid= tc.find(and(eq("username",userfromsession),eq("title",project.getTitle()))).first().get("_id").toString();
+	    		  String url = GeneralServices.urlGenerator(Notifications.PROJECTMODULE, projectid, project.getTitle());
+	    		  new UserDao().moduleIDAdder(Notifications.PROJECTMODULE,userfromsession, projectid);
+	    		  UpdateResult rs=tc.updateOne(and(eq("username",userfromsession),eq("title",project.getTitle())),new Document("$set",new Document("project_url",url)));		    		 
+	    		  Acknowledgement acknow = new Acknowledgement();
+	    		    acknow.setModifiedCount("1");
+	    		    acknow.setMatchedCount("0");
+	    			return acknow;
+	    			}else{
+	                    Acknowledgement acknow = new Acknowledgement();
+           	            acknow.setModifiedCount("0");
+	                    acknow.setMatchedCount("1");
+	                 	return acknow;
+                       }
+                    }
+    @SuppressWarnings("unchecked")
+   public Acknowledgement updateproject(Project project,HttpServletRequest req,String id){
 	
 	System.out.println(id);
 	ObjectId oid = new ObjectId(id.toString());
