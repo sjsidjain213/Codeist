@@ -156,11 +156,12 @@ public Project getSelectedProject(String username,String title,HttpServletReques
 
 public Acknowledgement insertComment(Comment comment,String username,String projectname,HttpServletRequest req)
 {
+	String project_id = tc.find(and(eq("username",username),eq("title",projectname))).first().get("_id").toString();
 Document doc = new Document("username",req.getSession().getAttribute("username"))
                   .append("comment", comment.getComment())
-                  .append("date",new Date());
+                  .append("date",GeneralServices.getCurrentDate());
 String acknow= tc.updateOne(and(eq("username",username),eq("title",projectname)),new Document("$push",new Document("comments",doc))).toString();
-new NotificationService().commentNotification(username,projectname,comment.getUsername(),comment.getComment(),Notifications.COMMENT);
+new NotificationService().commentNotification(username,projectname,project_id,req.getSession().getAttribute("username").toString(),comment.getComment(),Notifications.COMMENT);
 return new GeneralServices().response(acknow);
 }
 

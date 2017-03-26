@@ -85,20 +85,18 @@ public class QADao {
 	}
 	
 	public Acknowledgement insertAnswer(Answer answer,HttpServletRequest req)
-	{ Document info=new Document().append("upvotes", (ArrayList<String>)answer.getUpvotes()).append("downvotes",(ArrayList<String>)answer.getDownvotes());	
-	  Document doc = new Document("username",req.getSession().getAttribute("username"))
+	{   Document info=new Document().append("upvotes", (ArrayList<String>)answer.getUpvotes()).append("downvotes",(ArrayList<String>)answer.getDownvotes());	
+    	String userfromsession = req.getSession().getAttribute("username").toString();
+	    String q_id = tc.find(and(eq("username",answer.getUsername()),eq("question",answer.getQuestion()))).first().get("_id").toString();
+	    Document doc = new Document("username",userfromsession)
 	    		.append("answer",answer.getAnswer())
 	    		.append("date",answer.getDate())
 	    		.append("info",info)
 	    		.append("featured_points", answer.getFeatured_points());
-String acknow =tc.updateOne(eq("question",answer.getQuestion()),new Document("$push",new Document("answers",doc))).toString();
-    Acknowledgement acknowledge = new GeneralServices().stoacknowmethod(s ->{
-	Acknowledgement ac2 = new Acknowledgement();
-    String sa [] = s.substring(s.indexOf("{")+1,s.indexOf("}")).split(",");
-    ac2.setMatchedCount(sa[0]);ac2.setModifiedCount(sa[1]);ac2.setUpsertedId(sa[2]);
-    return ac2;}, acknow);
-    new NotificationService().answerNotification(answer.getUsername(),answer.getQuestion(),req.getSession().getAttribute("username").toString(),answer.getAnswer(),Notifications.QUESTIONSOLVED);
-    return acknowledge;
+       String acknow =tc.updateOne(eq("question",answer.getQuestion()),new Document("$push",new Document("answers",doc))).toString();
+       Acknowledgement acknowledge = new GeneralServices().response(acknow);
+       new NotificationService().answerNotification(answer.getUsername(),answer.getQuestion(),q_id,req.getSession().getAttribute("username").toString(),answer.getAnswer(),Notifications.QUESTIONSOLVED);
+       return acknowledge;
 	}
 	
 	@SuppressWarnings("unchecked")

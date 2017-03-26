@@ -4,6 +4,7 @@ import org.bson.Document;
 
 import bean.Acknowledgement;
 import bean.Notifications;
+import bean.Project;
 import bean.Signup;
 import bean.Tag;
 import bean.User;
@@ -73,7 +74,7 @@ public class UserDao {
 	  }
 	@SuppressWarnings("unchecked")
 	public User getUserDetails(String username)
-      { 
+      { //username from session
     	  User user = new User();
     	  FindIterable <Document> fi = tc.find(eq("username",username));
     	  for(Document d : fi)
@@ -99,7 +100,7 @@ public class UserDao {
               user.setUser_view((ArrayList<String>)innerdoc.get("user_viewed"));
               user.setProject_view((ArrayList<String>)innerdoc.get("project_viewed"));}
               catch(NullPointerException e){
-            	  
+            	System.out.println(e.getMessage());  
               }
               //System.out.println(d);
     	  } 

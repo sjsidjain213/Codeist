@@ -14,24 +14,24 @@ import bean.Notifications;
 public class NotificationService {
     String prefixurl= "http://localhost:8080/Codeist";
     MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("testuserdata");
-	public void commentNotification(String username,String projectname,String commitername,String commitermsg,Notifications notify)
+	public void commentNotification(String username,String projectname,String project_id,String commitername,String commitermsg,Notifications notify)
 	{   projectname = new GeneralServices().spaceRemover(projectname);
         String suffixurl= "/project/retrieveselect/"+username+"/"+projectname;
-		Document doc = new Document("date",new Date())
+		Document doc = new Document("date",GeneralServices.getCurrentDate())
     		       .append("message",notify.getMsg())
     		       .append("generator",commitername)
     		       .append("messagegenerator",commitermsg)
-    		       .append("url",prefixurl+suffixurl);
+    		       .append("url",GeneralServices.urlGenerator(Notifications.PROJECTMODULE,project_id,projectname));
         tc.updateOne(eq("username",username),new Document("$addToSet",new Document("notifications",doc)));
 	}
 	
-	public void answerNotification(String username,String question,String commitername,String commitermsg,Notifications notify)
+	public void answerNotification(String username,String question,String question_id,String commitername,String commitermsg,Notifications notify)
 	{   String suffixurl="/question/retrieve/"+username+"/"+question;
 		Document doc = new Document("date",new Date())
  		       .append("message",notify.getMsg())
  		       .append("generator",commitername)
  		       .append("messagebygenerator",commitermsg)
- 		       .append("url",prefixurl+suffixurl);
+ 		       .append("url",GeneralServices.urlGenerator(Notifications.QUESTIONMODULE,question_id,question));
 	     tc.updateOne(eq("username",username),new Document("$addToSet",new Document("notifications",doc)));
 	}
 	public void voteNotification(String username,String projectitle,Notifications notify)
@@ -48,13 +48,11 @@ public class NotificationService {
 	public ArrayList<NotificationBean> getAllNotifications(String username,String s_id)
 	{
 		 Document doc = tc.find(eq("username",username)).first();
-		 
 		 ArrayList<Document> arnotify=null;
 	     try{
 	    	 arnotify = (ArrayList<Document>) doc.get("notifications");
 	     }
-	     catch(NullPointerException e){
-	    	 
+	     catch(NullPointerException e){ 
 	     }
 	     ArrayList<NotificationBean> aldoc = new ArrayList<NotificationBean>();
 	     /*ArrayList<ArrayList<String>> day = new ArrayList<ArrayList<String>>();

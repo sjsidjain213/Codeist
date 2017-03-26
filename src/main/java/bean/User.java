@@ -9,23 +9,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class User {
 	@XmlElement
     private String username,password,name,bio,phone_no,gender,email_id,country,state,city,message,category,institute;
-	private ArrayList<String> favourite_tag,following,follower,contributing,project,project_bookmark,question_bookmark;
-	private ArrayList<String> tags_view, user_view, problem_category_view, project_view,question_ask,question_answer;
+	private ArrayList<String> favourite_tag,following,follower,contributing,project_id,project_bookmark,question_bookmark;
+	private ArrayList<String> tag_view, user_view, problem_category_view, project_view,question_ask,question_answer;
 	private long rating,zipcode;
 	private Date date = new Date();
-	
-	public String getCategory() {
-		return category;
-	}
-	public void setCategory(String category) {
-		this.category = category;
-	}
-	public String getInstitute() {
-		return institute;
-	}
-	public void setInstitute(String institute) {
-		this.institute = institute;
-	}
 	public String getUsername() {
 		return username;
 	}
@@ -92,6 +79,18 @@ public class User {
 	public void setMessage(String message) {
 		this.message = message;
 	}
+	public String getCategory() {
+		return category;
+	}
+	public void setCategory(String category) {
+		this.category = category;
+	}
+	public String getInstitute() {
+		return institute;
+	}
+	public void setInstitute(String institute) {
+		this.institute = institute;
+	}
 	public ArrayList<String> getFavourite_tag() {
 		return favourite_tag;
 	}
@@ -116,11 +115,11 @@ public class User {
 	public void setContributing(ArrayList<String> contributing) {
 		this.contributing = contributing;
 	}
-	public ArrayList<String> getProject() {
-		return project;
+	public ArrayList<String> getProject_id() {
+		return project_id;
 	}
-	public void setProject(ArrayList<String> project) {
-		this.project = project;
+	public void setProject_id(ArrayList<String> project_id) {
+		this.project_id = project_id;
 	}
 	public ArrayList<String> getProject_bookmark() {
 		return project_bookmark;
@@ -135,10 +134,10 @@ public class User {
 		this.question_bookmark = question_bookmark;
 	}
 	public ArrayList<String> getTags_view() {
-		return tags_view;
+		return tag_view;
 	}
 	public void setTags_view(ArrayList<String> tags_view) {
-		this.tags_view = tags_view;
+		this.tag_view = tags_view;
 	}
 	public ArrayList<String> getUser_view() {
 		return user_view;
@@ -192,21 +191,21 @@ public class User {
 	public String toString() {
 		return "User [username=" + username + ", password=" + password + ", name=" + name + ", bio=" + bio
 				+ ", phone_no=" + phone_no + ", gender=" + gender + ", email_id=" + email_id + ", country=" + country
-				+ ", state=" + state + ", city=" + city + ", message=" + message + ", favourite_tag=" + favourite_tag
-				+ ", following=" + following + ", follower=" + follower + ", contributing=" + contributing
-				+ ", project=" + project + ", project_bookmark=" + project_bookmark + ", question_bookmark="
-				+ question_bookmark + ", tags_view=" + tags_view + ", user_view=" + user_view
-				+ ", problem_category_view=" + problem_category_view + ", project_view=" + project_view
-				+ ", question_ask=" + question_ask + ", question_answer=" + question_answer + ", rating=" + rating
-				+ ", zipcode=" + zipcode + ", date=" + date + "]";
+				+ ", state=" + state + ", city=" + city + ", message=" + message + ", category=" + category
+				+ ", institute=" + institute + ", favourite_tag=" + favourite_tag + ", following=" + following
+				+ ", follower=" + follower + ", contributing=" + contributing + ", project_id=" + project_id
+				+ ", project_bookmark=" + project_bookmark + ", question_bookmark=" + question_bookmark + ", tags_view="
+				+ tag_view + ", user_view=" + user_view + ", problem_category_view=" + problem_category_view
+				+ ", project_view=" + project_view + ", question_ask=" + question_ask + ", question_answer="
+				+ question_answer + ", rating=" + rating + ", zipcode=" + zipcode + ", date=" + date + "]";
 	}
 	public User(String username, String password, String name, String bio, String phone_no, String gender,
-			String email_id, String country, String state, String city, String message, ArrayList<String> favourite_tag,
-			ArrayList<String> following, ArrayList<String> follower, ArrayList<String> contributing,
-			ArrayList<String> project, ArrayList<String> project_bookmark, ArrayList<String> question_bookmark,
-			ArrayList<String> tags_view, ArrayList<String> user_view, ArrayList<String> problem_category_view,
-			ArrayList<String> project_view, ArrayList<String> question_ask, ArrayList<String> question_answer,
-			long rating, long zipcode, Date date) {
+			String email_id, String country, String state, String city, String message, String category,
+			String institute, ArrayList<String> favourite_tag, ArrayList<String> following, ArrayList<String> follower,
+			ArrayList<String> contributing, ArrayList<String> project_id, ArrayList<String> project_bookmark,
+			ArrayList<String> question_bookmark, ArrayList<String> tags_view, ArrayList<String> user_view,
+			ArrayList<String> problem_category_view, ArrayList<String> project_view, ArrayList<String> question_ask,
+			ArrayList<String> question_answer, long rating, long zipcode, Date date) {
 		super();
 		this.username = username;
 		this.password = password;
@@ -219,14 +218,16 @@ public class User {
 		this.state = state;
 		this.city = city;
 		this.message = message;
+		this.category = category;
+		this.institute = institute;
 		this.favourite_tag = favourite_tag;
 		this.following = following;
 		this.follower = follower;
 		this.contributing = contributing;
-		this.project = project;
+		this.project_id = project_id;
 		this.project_bookmark = project_bookmark;
 		this.question_bookmark = question_bookmark;
-		this.tags_view = tags_view;
+		this.tag_view = tags_view;
 		this.user_view = user_view;
 		this.problem_category_view = problem_category_view;
 		this.project_view = project_view;
@@ -240,4 +241,5 @@ public class User {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	 
     }

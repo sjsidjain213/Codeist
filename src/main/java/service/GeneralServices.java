@@ -197,7 +197,7 @@ public void chnageRating()
 public static String urlGenerator(Notifications notify,String id,String name)
 {
 name=spaceRemover(name);
-String module = notify.toString();
+String module = notify.getMsg();
 String url = "/"+module+"/"+id+"/"+name;
 return url;
 }

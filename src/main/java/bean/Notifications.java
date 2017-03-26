@@ -17,6 +17,7 @@ SESSIONDONOTEXSIT("Session do not exsist"),
 USERISNOTLOGGEDIN("user is not logged in"),
 QUESTIONMODULE("question"),
 PROJECTMODULE("project"),
+COMMENTMODULE("comment"),
 USERLOGGEDOUT("user is succesfully logged out");	
 	private final String msg;
 
