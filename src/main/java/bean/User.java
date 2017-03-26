@@ -8,37 +8,35 @@ import javax.xml.bind.annotation.XmlRootElement;
     @XmlRootElement
 public class User {
 	@XmlElement
-private String username,password,name,bio,phone_no,email_id,linkedin_id,github_id,country,state,city,message="Log in First";
-	private ArrayList<String> favourite_tags,following,followers,contributing;
-	private ArrayList<String> tags_viewed, user_viewed, problem_category_viewed, project_viewed;
+    private String username,password,name,bio,phone_no,gender,email_id,country,state,city,message,category,institute;
+	private ArrayList<String> favourite_tag,following,follower,contributing,project,project_bookmark,question_bookmark;
+	private ArrayList<String> tags_view, user_view, problem_category_view, project_view,question_ask,question_answer;
 	private long rating,zipcode;
 	private Date date = new Date();
-
 	
+	public String getCategory() {
+		return category;
+	}
+	public void setCategory(String category) {
+		this.category = category;
+	}
+	public String getInstitute() {
+		return institute;
+	}
+	public void setInstitute(String institute) {
+		this.institute = institute;
+	}
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
 	public String getPassword() {
 		return password;
 	}
 	public void setPassword(String password) {
 		this.password = password;
-	}
-	public Date getDate() {
-		return date;
-	}
-	public void setDate(Date date) {
-		this.date = date;
-	}
-	public String getUsername() {
-		return username;
-	}
-	public String getMessage() {
-		return message;
-	}
-	public void setMessage(String message) {
-		this.message = message;
-	}
-	public void setUsername(String username) {
-		this.username = username;
-	    this.message="either you are not logged in or searched user do not exsist";
 	}
 	public String getName() {
 		return name;
@@ -58,23 +56,17 @@ private String username,password,name,bio,phone_no,email_id,linkedin_id,github_i
 	public void setPhone_no(String phone_no) {
 		this.phone_no = phone_no;
 	}
+	public String getGender() {
+		return gender;
+	}
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
 	public String getEmail_id() {
 		return email_id;
 	}
 	public void setEmail_id(String email_id) {
 		this.email_id = email_id;
-	}
-	public String getLinkedin_id() {
-		return linkedin_id;
-	}
-	public void setLinkedin_id(String linkedin_id) {
-		this.linkedin_id = linkedin_id;
-	}
-	public String getGithub_id() {
-		return github_id;
-	}
-	public void setGithub_id(String github_id) {
-		this.github_id = github_id;
 	}
 	public String getCountry() {
 		return country;
@@ -94,18 +86,17 @@ private String username,password,name,bio,phone_no,email_id,linkedin_id,github_i
 	public void setCity(String city) {
 		this.city = city;
 	}
-	
-	public long getZipcode() {
-		return zipcode;
+	public String getMessage() {
+		return message;
 	}
-	public void setZipcode(long zipcode) {
-		this.zipcode = zipcode;
+	public void setMessage(String message) {
+		this.message = message;
 	}
-	public ArrayList<String> getFavourite_tags() {
-		return favourite_tags;
+	public ArrayList<String> getFavourite_tag() {
+		return favourite_tag;
 	}
-	public void setFavourite_tags(ArrayList<String> favourite_tags) {
-		this.favourite_tags = favourite_tags;
+	public void setFavourite_tag(ArrayList<String> favourite_tag) {
+		this.favourite_tag = favourite_tag;
 	}
 	public ArrayList<String> getFollowing() {
 		return following;
@@ -113,11 +104,11 @@ private String username,password,name,bio,phone_no,email_id,linkedin_id,github_i
 	public void setFollowing(ArrayList<String> following) {
 		this.following = following;
 	}
-	public ArrayList<String> getFollowers() {
-		return followers;
+	public ArrayList<String> getFollower() {
+		return follower;
 	}
-	public void setFollowers(ArrayList<String> followers) {
-		this.followers = followers;
+	public void setFollower(ArrayList<String> follower) {
+		this.follower = follower;
 	}
 	public ArrayList<String> getContributing() {
 		return contributing;
@@ -125,71 +116,128 @@ private String username,password,name,bio,phone_no,email_id,linkedin_id,github_i
 	public void setContributing(ArrayList<String> contributing) {
 		this.contributing = contributing;
 	}
-	
+	public ArrayList<String> getProject() {
+		return project;
+	}
+	public void setProject(ArrayList<String> project) {
+		this.project = project;
+	}
+	public ArrayList<String> getProject_bookmark() {
+		return project_bookmark;
+	}
+	public void setProject_bookmark(ArrayList<String> project_bookmark) {
+		this.project_bookmark = project_bookmark;
+	}
+	public ArrayList<String> getQuestion_bookmark() {
+		return question_bookmark;
+	}
+	public void setQuestion_bookmark(ArrayList<String> question_bookmark) {
+		this.question_bookmark = question_bookmark;
+	}
+	public ArrayList<String> getTags_view() {
+		return tags_view;
+	}
+	public void setTags_view(ArrayList<String> tags_view) {
+		this.tags_view = tags_view;
+	}
+	public ArrayList<String> getUser_view() {
+		return user_view;
+	}
+	public void setUser_view(ArrayList<String> user_view) {
+		this.user_view = user_view;
+	}
+	public ArrayList<String> getProblem_category_view() {
+		return problem_category_view;
+	}
+	public void setProblem_category_view(ArrayList<String> problem_category_view) {
+		this.problem_category_view = problem_category_view;
+	}
+	public ArrayList<String> getProject_view() {
+		return project_view;
+	}
+	public void setProject_view(ArrayList<String> project_view) {
+		this.project_view = project_view;
+	}
+	public ArrayList<String> getQuestion_ask() {
+		return question_ask;
+	}
+	public void setQuestion_ask(ArrayList<String> question_ask) {
+		this.question_ask = question_ask;
+	}
+	public ArrayList<String> getQuestion_answer() {
+		return question_answer;
+	}
+	public void setQuestion_answer(ArrayList<String> question_answer) {
+		this.question_answer = question_answer;
+	}
 	public long getRating() {
 		return rating;
 	}
 	public void setRating(long rating) {
 		this.rating = rating;
 	}
-	public ArrayList<String> getTags_viewed() {
-		return tags_viewed;
+	public long getZipcode() {
+		return zipcode;
 	}
-	public void setTags_viewed(ArrayList<String> tags_viewed) {
-		this.tags_viewed = tags_viewed;
+	public void setZipcode(long zipcode) {
+		this.zipcode = zipcode;
 	}
-	public ArrayList<String> getUser_viewed() {
-		return user_viewed;
+	public Date getDate() {
+		return date;
 	}
-	public void setUser_viewed(ArrayList<String> user_viewed) {
-		this.user_viewed = user_viewed;
+	public void setDate(Date date) {
+		this.date = date;
 	}
-	public ArrayList<String> getProblem_category_viewed() {
-		return problem_category_viewed;
-	}
-	public void setProblem_category_viewed(ArrayList<String> problem_category_viewed) {
-		this.problem_category_viewed = problem_category_viewed;
-	}
-	public ArrayList<String> getProject_viewed() {
-		return project_viewed;
-	}
-	public void setProject_viewed(ArrayList<String> project_viewed) {
-		this.project_viewed = project_viewed;
-	}
-	
 	@Override
 	public String toString() {
-		return "User [username=" + username + ", name=" + name + ", bio=" + bio + ", phone_no=" + phone_no
-				+ ", email_id=" + email_id + ", linkedin_id=" + linkedin_id + ", github_id=" + github_id + ", country="
-				+ country + ", state=" + state + ", city=" + city + ", zipcode=" + zipcode + ", favourite_tags="
-				+ favourite_tags + ", following=" + following + ", followers=" + followers + ", contributing="
-				+ contributing + "]";
+		return "User [username=" + username + ", password=" + password + ", name=" + name + ", bio=" + bio
+				+ ", phone_no=" + phone_no + ", gender=" + gender + ", email_id=" + email_id + ", country=" + country
+				+ ", state=" + state + ", city=" + city + ", message=" + message + ", favourite_tag=" + favourite_tag
+				+ ", following=" + following + ", follower=" + follower + ", contributing=" + contributing
+				+ ", project=" + project + ", project_bookmark=" + project_bookmark + ", question_bookmark="
+				+ question_bookmark + ", tags_view=" + tags_view + ", user_view=" + user_view
+				+ ", problem_category_view=" + problem_category_view + ", project_view=" + project_view
+				+ ", question_ask=" + question_ask + ", question_answer=" + question_answer + ", rating=" + rating
+				+ ", zipcode=" + zipcode + ", date=" + date + "]";
+	}
+	public User(String username, String password, String name, String bio, String phone_no, String gender,
+			String email_id, String country, String state, String city, String message, ArrayList<String> favourite_tag,
+			ArrayList<String> following, ArrayList<String> follower, ArrayList<String> contributing,
+			ArrayList<String> project, ArrayList<String> project_bookmark, ArrayList<String> question_bookmark,
+			ArrayList<String> tags_view, ArrayList<String> user_view, ArrayList<String> problem_category_view,
+			ArrayList<String> project_view, ArrayList<String> question_ask, ArrayList<String> question_answer,
+			long rating, long zipcode, Date date) {
+		super();
+		this.username = username;
+		this.password = password;
+		this.name = name;
+		this.bio = bio;
+		this.phone_no = phone_no;
+		this.gender = gender;
+		this.email_id = email_id;
+		this.country = country;
+		this.state = state;
+		this.city = city;
+		this.message = message;
+		this.favourite_tag = favourite_tag;
+		this.following = following;
+		this.follower = follower;
+		this.contributing = contributing;
+		this.project = project;
+		this.project_bookmark = project_bookmark;
+		this.question_bookmark = question_bookmark;
+		this.tags_view = tags_view;
+		this.user_view = user_view;
+		this.problem_category_view = problem_category_view;
+		this.project_view = project_view;
+		this.question_ask = question_ask;
+		this.question_answer = question_answer;
+		this.rating = rating;
+		this.zipcode = zipcode;
+		this.date = date;
 	}
 	public User() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public User(String username,String password, String name, String bio, String phone_no, String email_id, String linkedin_id,
-			String github_id, String country, String state, String city, long zipcode,
-			ArrayList<String> favourite_tags, ArrayList<String> following, ArrayList<String> followers,
-			ArrayList<String> contributing) {
-		super();
-		this.username = username;
-		this.password=password;
-		this.name = name;
-		this.bio = bio;
-		this.phone_no = phone_no;
-		this.email_id = email_id;
-		this.linkedin_id = linkedin_id;
-		this.github_id = github_id;
-		this.country = country;
-		this.state = state;
-		this.city = city;
-		this.zipcode = zipcode;
-		this.favourite_tags = favourite_tags;
-		this.following = following;
-		this.followers = followers;
-		this.contributing = contributing;
-	}	
-
     }
