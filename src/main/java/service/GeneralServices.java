@@ -188,4 +188,27 @@ public static String linkEncryptCreator(String encrypt1,String encrypt2)
 return x;
 }
 
+public void chnageRating()
+{
+	
+}
+
+public static String Generate(String module,String id,String name)
+{
+String url = "/"+module+"/"+id+"/"+name;
+return url;
+}
+
+public static HashMap<String,String> urlDegenerate(String url)
+{url = url.substring(1);
+int index = url.indexOf("/")+1;
+String module	=url.substring(0, url.indexOf("/"));
+String id = url.substring(index,url.lastIndexOf("/"));
+String name = url.substring((url.lastIndexOf("/")+1),url.length());
+HashMap<String,String> hm = new HashMap<String,String>();
+hm.put("name",name);
+hm.put("module",module);
+hm.put("id", id);
+return hm;
+}
 }
