@@ -8,7 +8,8 @@ public class Question {
 	private String username,question;
 	private Date date = new Date();
 	private ArrayList<String> tags;
-	private long upvotes,downvotes,featured_points;
+	private long featured_points;
+	private ArrayList<String> upvotes,downvotes;
 	private ArrayList<Answer> answers = new ArrayList<Answer>();
 	public ArrayList<Answer> getAnswer() {
 		return answers;
@@ -20,7 +21,7 @@ public class Question {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public Question(String username, String question, Date date, ArrayList<String> tags, long upvotes, long downvotes,
+	public Question(String username, String question, Date date, ArrayList<String> tags, ArrayList<String> upvotes, ArrayList<String> downvotes,
 			long featured_points) {
 		super();
 		this.username = username;
@@ -60,16 +61,16 @@ public class Question {
 	public void setTags(ArrayList<String> tags) {
 		this.tags = tags;
 	}
-	public long getUpvotes() {
+	public ArrayList<String> getUpvotes() {
 		return upvotes;
 	}
-	public void setUpvotes(long upvotes) {
+	public void setUpvotes(ArrayList<String> upvotes) {
 		this.upvotes = upvotes;
 	}
-	public long getDownvotes() {
+	public ArrayList<String> getDownvotes() {
 		return downvotes;
 	}
-	public void setDownvotes(long downvotes) {
+	public void setDownvotes(ArrayList<String> downvotes) {
 		this.downvotes = downvotes;
 	}
 	public long getFeatured_points() {

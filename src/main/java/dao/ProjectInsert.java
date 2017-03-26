@@ -1,6 +1,7 @@
 package dao;
 
 import org.bson.Document;
+import org.bson.types.ObjectId;
 
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
@@ -54,6 +55,40 @@ public Acknowledgement insertProject(Project project,HttpServletRequest req)
 	    		 
 	    return new GeneralServices().response("insert");
 }
+@SuppressWarnings("unchecked")
+public Acknowledgement updateproject(Project project,HttpServletRequest req,String id){
+	
+	System.out.println(id);
+	ObjectId oid = new ObjectId(id.toString());
+	Document document = tc.find(eq("_id",oid)).first();
+	if(document!=null){
+		System.out.println(id);
+		Document info=(Document) document.get("info");
+		  String title =  new GeneralServices().spaceRemover(project.getTitle());
+		  String url = ""+document.getString("id")+"/"+title;
+	Document doc = new Document()
+   		 .append("username", document.getString("username"))
+   		 .append("title",project.getTitle())	
+   		 .append("date",new GeneralServices().getCurrentDate())
+   		 .append("description",project.getDescription())
+   		.append("project_url",url)
+   		 .append("tags",(List<String>)project.getTags())
+   		 .append("comments",(ArrayList<Comment>)document.get("comments"))
+   		 .append("contributors",document.get("contributors"))
+   		 .append("readme", project.getReadme())
+   		 .append("license", project.getLicense())
+   		 .append("_private", project.get_private())
+   		 .append("video_url",project.getVideo_url())
+   		 .append("zip_file",project.getZip_file())
+   		 .append("images",(List<String>)project.getImages())
+   		 .append("info",info );
+	tc.updateOne(eq("_id",oid),new Document("$set",doc));
+	return new GeneralServices().response("insert");
+	}
+	return new GeneralServices().response(null);
+}
+
+
 
 @SuppressWarnings("unchecked")
 public List<Project> getProjectBrief(String username)

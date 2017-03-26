@@ -37,6 +37,16 @@ public Acknowledgement insertProject(Project project,@Context HttpServletRequest
 return (new SessionService().sessionVerifier(req))?new ProjectInsert().insertProject(project,req):new GeneralServices().response(null);
 }
 
+@POST
+@Path("/update/{id}")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
+public Acknowledgement updateProject(Project project,@Context HttpServletRequest req,@PathParam("id")String id)
+{
+//return new ProjectInsert().insertProject(project);
+return (new SessionService().sessionVerifier(req))?new ProjectInsert().updateproject(project,req,id):new GeneralServices().response(null);
+}
+
 @GET
 @Path("/retrieveall")   //logged in user
 @Produces(MediaType.APPLICATION_JSON)

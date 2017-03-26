@@ -1,17 +1,21 @@
 package bean;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Answer {
 private String username,answer,question;
+
+private long featured_points;
+ArrayList<String> upvotes,downvotes;
+private Date date = new Date();
+
 public String getQuestion() {
 	return question;
 }
 public void setQuestion(String question) {
 	this.question = question;
 }
-private long upvotes,downvotes,featured_points;
-private Date date = new Date();
 public String getUsername() {
 	return username;
 }
@@ -24,16 +28,16 @@ public String getAnswer() {
 public void setAnswer(String answer) {
 	this.answer = answer;
 }
-public long getUpvotes() {
+public ArrayList<String> getUpvotes() {
 	return upvotes;
 }
-public void setUpvotes(long upvotes) {
+public void setUpvotes(ArrayList<String> upvotes) {
 	this.upvotes = upvotes;
 }
-public long getDownvotes() {
+public ArrayList<String> getDownvotes() {
 	return downvotes;
 }
-public void setDownvotes(long downvotes) {
+public void setDownvotes(ArrayList<String> downvotes) {
 	this.downvotes = downvotes;
 }
 public long getFeatured_points() {
@@ -57,7 +61,7 @@ public Answer() {
 	super();
 	// TODO Auto-generated constructor stub
 }
-public Answer(String username, String answer, long upvotes, long downvotes, long featured_points, Date date) {
+public Answer(String username, String answer, ArrayList<String> upvotes, ArrayList<String> downvotes, long featured_points, Date date) {
 	super();
 	this.username = username;
 	this.answer = answer;
