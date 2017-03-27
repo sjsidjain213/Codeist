@@ -28,13 +28,14 @@ public class ProjectInsert
 	MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("testproject");
 	
 //inserting a new project to database
-public Acknowledgement insertProject(Project project,HttpServletRequest req)
-{  String userfromsession = req.getSession().getAttribute("username").toString();
-   Document docexsit = tc.find(and(eq("username",userfromsession),eq("title",project.getTitle()))).first();
+public Project insertProject(Project project,HttpServletRequest req)
+{  //String userfromsession = req.getSession().getAttribute("username").toString();
+   Document docexsit = tc.find(and(eq("username",project.getUsername()),eq("title",project.getTitle()))).first();
    if(docexsit==null)
     { Document info=new Document().append("upvotes", (ArrayList<String>)project.getUpvotes()).append("downvotes",(ArrayList<String>)project.getDownvotes()).append("viewby",(List<String>)project.getViewby());
 	  Document doc = new Document()
-	    		 .append("username", req.getSession().getAttribute("username"))
+	    		// .append("username", req.getSession().getAttribute("username"))
+	    		 .append("username", project.getUsername())
 	    		 .append("title",project.getTitle())	
 	    		 .append("date",project.getDate())
 	    		 .append("description",project.getDescription())
@@ -49,19 +50,19 @@ public Acknowledgement insertProject(Project project,HttpServletRequest req)
 	    		 .append("images",(List<String>)project.getImages())
 	    		 .append("info", info);
 	    		  tc.insertOne(doc);
-	    		  String projectid= tc.find(and(eq("username",userfromsession),eq("title",project.getTitle()))).first().get("_id").toString();
+	    		  String projectid= tc.find(and(eq("username",project.getUsername()),eq("title",project.getTitle()))).first().get("_id").toString();
 	    		  String url = GeneralServices.urlGenerator(Notifications.PROJECTMODULE, projectid, project.getTitle());
-	    		  new UserDao().moduleIDAdder(Notifications.PROJECTMODULE,userfromsession, projectid);
-	    		  UpdateResult rs=tc.updateOne(and(eq("username",userfromsession),eq("title",project.getTitle())),new Document("$set",new Document("project_url",url)));		    		 
+	    		  new UserDao().moduleIDAdder(Notifications.PROJECTMODULE,project.getUsername(), projectid);
+	    		  UpdateResult rs=tc.updateOne(and(eq("username",project.getUsername()),eq("title",project.getTitle())),new Document("$set",new Document("project_url",url)));		    		 
 	    		  Acknowledgement acknow = new Acknowledgement();
 	    		    acknow.setModifiedCount("1");
 	    		    acknow.setMatchedCount("0");
-	    			return acknow;
+	    			return project;
 	    			}else{
 	                    Acknowledgement acknow = new Acknowledgement();
            	            acknow.setModifiedCount("0");
 	                    acknow.setMatchedCount("1");
-	                 	return acknow;
+	                 	return project;
                        }
                     }
     @SuppressWarnings("unchecked")
@@ -101,7 +102,7 @@ public Acknowledgement insertProject(Project project,HttpServletRequest req)
 
 @SuppressWarnings("unchecked")
 public List<Project> getProjectBrief(String username)
-{
+{System.out.println("here");
   List<Project> project = new ArrayList<Project>();
   Project pro=null;
   FindIterable <Document> fi = tc.find(eq("username",username));

@@ -14,7 +14,8 @@ import bean.Notifications;
 public class NotificationService {
     String prefixurl= "http://localhost:8080/Codeist";
     MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("testuserdata");
-	public void commentNotification(String username,String projectname,String project_id,String commitername,String commitermsg,Notifications notify)
+	
+    public void commentNotification(String username,String projectname,String project_id,String commitername,String commitermsg,Notifications notify)
 	{   projectname = new GeneralServices().spaceRemover(projectname);
         String suffixurl= "/project/retrieveselect/"+username+"/"+projectname;
 		Document doc = new Document("date",GeneralServices.getCurrentDate())
@@ -26,24 +27,42 @@ public class NotificationService {
 	}
 	
 	public void answerNotification(String username,String question,String question_id,String commitername,String commitermsg,Notifications notify)
-	{   String suffixurl="/question/retrieve/"+username+"/"+question;
-		Document doc = new Document("date",new Date())
+	{   Document doc = new Document("date",GeneralServices.getCurrentDate())
  		       .append("message",notify.getMsg())
  		       .append("generator",commitername)
  		       .append("messagebygenerator",commitermsg)
  		       .append("url",GeneralServices.urlGenerator(Notifications.QUESTIONMODULE,question_id,question));
 	     tc.updateOne(eq("username",username),new Document("$addToSet",new Document("notifications",doc)));
 	}
-	public void voteNotification(String username,String projectitle,Notifications notify)
+	//username string id will have value of either question id or project id
+	public void voteNotification(String username,String pqname,String pqid,String commitername,Notifications notify)
 	{
-		String suffixurl="/retrieveselect/"+username+"/"+projectitle;
-		Document doc = new Document("date",new Date())
+        if(notify==Notifications.UPVOTESQUESTION||notify==Notifications.DOWNVOTESQUESTION)
+        {
+    	Document doc = new Document("date",GeneralServices.getCurrentDate())
  		       .append("message",notify.getMsg())
- 		       .append("generator",username)
- 		       .append("messagebygenerator","vote increased")
- 		       .append("url",prefixurl+suffixurl);
+ 		       .append("generator",commitername)
+ 		       .append("messagebygenerator",notify.getMsg())
+ 		       .append("url",GeneralServices.urlGenerator(Notifications.QUESTIONMODULE,pqid,pqname));
 	     tc.updateOne(eq("username",username),new Document("$addToSet",new Document("notifications",doc)));
-		
+	    	
+        }else if(notify==Notifications.UPVOTESPROJECT||notify==Notifications.DOWNVOTESPROJECT)
+        {
+        	Document doc = new Document("date",GeneralServices.getCurrentDate())
+      		       .append("message",notify.getMsg())
+      		       .append("generator",username)
+      		       .append("messagebygenerator",notify.getMsg())
+      		       .append("url",GeneralServices.urlGenerator(Notifications.PROJECTMODULE,pqid,pqname));
+      		 tc.updateOne(eq("username",username),new Document("$addToSet",new Document("notifications",doc)));
+        }else if(notify==Notifications.UPVOTESANSWER||notify==Notifications.DOWNVOTESANSWER)
+        {
+        	Document doc = new Document("date",GeneralServices.getCurrentDate())
+      		       .append("message",notify.getMsg())
+      		       .append("generator",username)
+      		       .append("messagebygenerator",notify.getMsg())
+      		       .append("url",GeneralServices.urlGenerator(Notifications.QUESTIONMODULE,pqid,pqname));
+      		 tc.updateOne(eq("username",username),new Document("$addToSet",new Document("notifications",doc)));
+        }
 	}
 	public ArrayList<NotificationBean> getAllNotifications(String username,String s_id)
 	{

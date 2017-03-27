@@ -1,5 +1,6 @@
 package resource;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,8 +13,12 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.container.ContainerResponseContext;
+import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.ext.Provider;
 
 import bean.Acknowledgement;
 import bean.Comment;
@@ -31,10 +36,11 @@ public class ProjectResource {
 @Path("/insert")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public Acknowledgement insertProject(Project project,@Context HttpServletRequest req)
+public Project insertProject(Project project,@Context HttpServletRequest req)
 {
 //return new ProjectInsert().insertProject(project);
-return (new SessionService().sessionVerifier(req))?new ProjectInsert().insertProject(project,req):new GeneralServices().response(null);
+//return (new SessionService().sessionVerifier(req))?new ProjectInsert().insertProject(project,req):new GeneralServices().response(null);
+return	new ProjectInsert().insertProject(project,req);
 }
 
 @POST
