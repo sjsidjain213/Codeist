@@ -24,8 +24,8 @@ public class QADao {
 	{   String userfromsession = req.getSession().getAttribute("username").toString();
 	    Document doc2 = tc.find(and(eq("username",userfromsession),eq("question",question.getQuestion()))).first();
 		if(doc2==null)
-		{Document info=new Document().append("upvotes", (ArrayList<String>)question.getUpvotes()).append("downvotes",(ArrayList<String>)question.getDownvotes());
-			Document doc = new Document("username",req.getSession().getAttribute("username"))
+		{Document info=new Document().append("upvotes",new ArrayList<String>()).append("downvotes",new ArrayList<String>());
+			Document doc = new Document("username",userfromsession)
 	    		.append("question",question.getQuestion())
 	    		.append("date",question.getDate())
 	    		.append("info",info)
@@ -85,18 +85,19 @@ public class QADao {
 	}
 	
 	public Acknowledgement insertAnswer(Answer answer,HttpServletRequest req)
-	{   Document info=new Document().append("upvotes", (ArrayList<String>)answer.getUpvotes()).append("downvotes",(ArrayList<String>)answer.getDownvotes());	
+	{   Document info=new Document().append("upvotes",new ArrayList<String>()).append("downvotes",new ArrayList<String>());	
     	String userfromsession = req.getSession().getAttribute("username").toString();
 	    String q_id = tc.find(and(eq("username",answer.getUsername()),eq("question",answer.getQuestion()))).first().get("_id").toString();
 	    Document doc = new Document("username",userfromsession)
 	    		.append("answer",answer.getAnswer())
-	    		.append("date",answer.getDate())
+	    		.append("date",GeneralServices.getCurrentDate())
 	    		.append("info",info)
 	    		.append("featured_points", answer.getFeatured_points());
-       String acknow =tc.updateOne(eq("question",answer.getQuestion()),new Document("$push",new Document("answers",doc))).toString();
-       Acknowledgement acknowledge = new GeneralServices().response(acknow);
-       new NotificationService().answerNotification(answer.getUsername(),answer.getQuestion(),q_id,req.getSession().getAttribute("username").toString(),answer.getAnswer(),Notifications.QUESTIONSOLVED);
-       return acknowledge;
+        String acknow =tc.updateOne(eq("question",answer.getQuestion()),new Document("$push",new Document("answers",doc))).toString();
+        Acknowledgement acknowledge = new GeneralServices().response(acknow);
+        //answer.getUsername is owner of question
+        new NotificationService().answerNotification(answer.getUsername(),answer.getQuestion(),q_id,req.getSession().getAttribute("username").toString(),answer.getAnswer(),Notifications.QUESTIONSOLVED);
+        return acknowledge;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -106,7 +107,6 @@ public class QADao {
 		Document infodetails=(Document)d.get("info");
 			ArrayList<String> up=(ArrayList<String>)infodetails.get("upvotes");
 			ArrayList<String> down=(ArrayList<String>)infodetails.get("downvotes");
-			
 			if(up!=null){
 				if(!up.contains(user)){
 					if(down!=null &&down.contains(user)){
