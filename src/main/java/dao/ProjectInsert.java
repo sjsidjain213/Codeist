@@ -33,7 +33,7 @@ public Project insertProject(Project project,HttpServletRequest req)
    Document docexsit = tc.find(and(eq("username",project.getUsername()),eq("title",project.getTitle()))).first();
    if(docexsit==null)
     { Document info=new Document().append("upvotes", (ArrayList<String>)project.getUpvotes()).append("downvotes",(ArrayList<String>)project.getDownvotes()).append("viewby",(List<String>)project.getViewby());
-	  Document doc = new Document()
+      Document doc = new Document()
 	    		// .append("username", req.getSession().getAttribute("username"))
 	    		 .append("username", project.getUsername())
 	    		 .append("title",project.getTitle())	
@@ -48,7 +48,9 @@ public Project insertProject(Project project,HttpServletRequest req)
 	    		 .append("video_url",project.getVideo_url())
 	    		 .append("zip_file",project.getZip_file())
 	    		 .append("images",(List<String>)project.getImages())
-	    		 .append("info", info);
+	    		 .append("info", info)
+	    		 .append("upvotecount", 0L)
+	    		 .append("downvotecount", 0L);
 	    		  tc.insertOne(doc);
 	    		  String projectid= tc.find(and(eq("username",project.getUsername()),eq("title",project.getTitle()))).first().get("_id").toString();
 	    		  String url = GeneralServices.urlGenerator(Notifications.PROJECTMODULE, projectid, project.getTitle());
@@ -196,27 +198,32 @@ public Acknowledgement up(String username,String title,String user){
 			if(!up.contains(user)){
 				if(down!=null &&down.contains(user)){
 					down.remove(user);
-					 String acknow2 = tc.updateOne(and(eq("username", username),eq("title",title)),new Document("$set",new Document("info.downvotes",down))).toString();	 
+					 String acknow2 = tc.updateOne(and(eq("username", username),eq("title",title)),new Document("$set",new Document("info.downvotes",down))).toString();
+					 tc.updateOne(and(eq("username", username),eq("title",title)),new Document("$set",new Document("downvotecount",down.size())));
 				}
 			up.add(user);
-			String acknow2 = tc.updateOne(and(eq("username", username),eq("title",title)),new Document("$set",new Document("info.upvotes",up))).toString();	 
+			String acknow2 = tc.updateOne(and(eq("username", username),eq("title",title)),new Document("$set",new Document("info.upvotes",up))).toString();	
+			tc.updateOne(and(eq("username", username),eq("title",title)),new Document("$set",new Document("upvotecount",up.size())));
 			//changes make in other too
 			new NotificationService().voteNotification(username,title,p_id,user,Notifications.UPVOTESQUESTION);
            	 return new GeneralServices().response(acknow2);}
 			else{
 				up.remove(user);
 				String acknow2 = tc.updateOne(and(eq("username", username),eq("title",title)),new Document("$set",new Document("info.upvotes",up))).toString();	 	 
+				tc.updateOne(and(eq("username", username),eq("title",title)),new Document("$set",new Document("upvotecount",up.size())));
 			}
 		return new GeneralServices().response("already exist");
 		}
 		else{
 			if(down!=null && down.contains(user)){
 				down.remove(user);
-				 String acknow2 = tc.updateOne(and(eq("username", username),eq("title",title)),new Document("$set",new Document("info.downvotes",down))).toString();	 
+				 String acknow2 = tc.updateOne(and(eq("username", username),eq("title",title)),new Document("$set",new Document("info.downvotes",down))).toString();
+				 tc.updateOne(and(eq("username", username),eq("title",title)),new Document("$set",new Document("downvotecount",down.size())));
 			}
 			up=new ArrayList<String>();
 			up.add(user);
-			 String acknow2 = tc.updateOne(and(eq("username", username),eq("title",title)),new Document("$set",new Document("info.upvotes",up))).toString();	 
+			 String acknow2 = tc.updateOne(and(eq("username", username),eq("title",title)),new Document("$set",new Document("info.upvotes",up))).toString();
+			 tc.updateOne(and(eq("username", username),eq("title",title)),new Document("$set",new Document("upvotecount",up.size())));
 		//make chnages here
 			 //	 new NotificationService().voteNotification(username,title,Notifications.UPVOTESPROJECT);
 			 return new GeneralServices().response(acknow2);

@@ -9,6 +9,7 @@ public class Project{
    	private ArrayList<String> images,video_url,zip_file,contributors,tags,downvotes,viewby;
    	private ArrayList<Comment> comments;
      private Date date = new Date();
+     private Long upvotecount,downvotecount;
     ArrayList<String> upvotes;
 	public Project() {
 		super();

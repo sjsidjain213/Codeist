@@ -25,7 +25,7 @@ public class QADao {
 	    Document doc2 = tc.find(and(eq("username",userfromsession),eq("question",question.getQuestion()))).first();
 		if(doc2==null)
 		{Document info=new Document().append("upvotes", (ArrayList<String>)question.getUpvotes()).append("downvotes",(ArrayList<String>)question.getDownvotes());
-			Document doc = new Document("username",question.getUsername())
+			Document doc = new Document("username",req.getSession().getAttribute("username"))
 	    		.append("question",question.getQuestion())
 	    		.append("date",question.getDate())
 	    		.append("info",info)
