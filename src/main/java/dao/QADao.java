@@ -114,7 +114,10 @@ public class QADao {
 					}
 				up.add(user);
 				String acknow2 = tc.updateOne(and(eq("username", username),eq("question",question.getQuestion())),new Document("$set",new Document("info.upvotes",up))).toString();	 
-				 new NotificationService().voteNotification(username,question.getQuestion(),Notifications.UPVOTESQUESTION);
+		//public void voteNotification(String username,String pqname,String pqid,String commitername,Notifications notify)
+		String q_id = tc.find(and(eq("username",question.getUsername()),eq("question",question.getQuestion()))).first().get("_id").toString();
+				   
+				new NotificationService().voteNotification(username,question.getQuestion(),q_id,user,Notifications.UPVOTESQUESTION);
 				 return new GeneralServices().response(acknow2);}
 				else{
 					up.remove(user);
@@ -130,8 +133,9 @@ public class QADao {
 				up=new ArrayList<String>();
 				up.add(user);
 				 String acknow2 = tc.updateOne(and(eq("username", username),eq("question",question.getQuestion())),new Document("$set",new Document("info.upvotes",up))).toString();	 
-				 new NotificationService().voteNotification(username,question.getQuestion(),Notifications.UPVOTESQUESTION);
-				 return new GeneralServices().response(acknow2);
+				 String q_id = tc.find(and(eq("username",question.getUsername()),eq("question",question.getQuestion()))).first().get("_id").toString();
+				 new NotificationService().voteNotification(username,question.getQuestion(),q_id,user,Notifications.UPVOTESQUESTION);
+			return new GeneralServices().response(acknow2);
 				
 			}
 	}
@@ -150,7 +154,8 @@ public class QADao {
 					}
 				down.add(user);
 				String acknow2 = tc.updateOne(and(eq("username", username),eq("question",question.getQuestion())),new Document("$set",new Document("info.downvotes",down))).toString();	 
-				 new NotificationService().voteNotification(username,question.getQuestion(),Notifications.DOWNVOTESPROJECT);
+				 String q_id = tc.find(and(eq("username",question.getUsername()),eq("question",question.getQuestion()))).first().get("_id").toString();
+				 new NotificationService().voteNotification(username,question.getQuestion(),q_id,user,Notifications.DOWNVOTESQUESTION);
 				 return new GeneralServices().response(acknow2);}
 				else{
 					down.remove(user);
@@ -166,7 +171,8 @@ public class QADao {
 				down=new ArrayList<String>();
 				down.add(user);
 				 String acknow2 = tc.updateOne(and(eq("username", username),eq("question",question.getQuestion())),new Document("$set",new Document("info.downvotes",down))).toString();	 
-				 new NotificationService().voteNotification(username,question.getQuestion(),Notifications.DOWNVOTESPROJECT);
+				 String q_id = tc.find(and(eq("username",question.getUsername()),eq("question",question.getQuestion()))).first().get("_id").toString();
+				 new NotificationService().voteNotification(username,question.getQuestion(),q_id,user,Notifications.DOWNVOTESQUESTION);
 				 return new GeneralServices().response(acknow2);
 				
 			}
