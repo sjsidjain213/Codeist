@@ -19,6 +19,6 @@ public class HomePageResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public ArrayList<Tile> getUserHistory(@PathParam("username") String username)
 	{
-	return new HomePage().getHistory(username);
+    	return new HomePage().getHistory(username);
 	}
 }

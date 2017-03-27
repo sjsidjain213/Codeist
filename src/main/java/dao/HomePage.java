@@ -20,15 +20,15 @@ public class HomePage {
  	    
 	@SuppressWarnings("unchecked")
 	public ArrayList<Tile> getHistory(String username)
-	{
-	   MongoCollection<Document> tc =new DatabaseServices().getDb().getCollection("userdata");
+	{MongoCollection<Document> tc =new DatabaseServices().getDb().getCollection("userdata");
+	   
 	   Document doc = tc.find(eq("username",username)).first();
        
-	   ArrayList<String> alfavtags = (ArrayList<String>) doc.get("favourite_tags");
+	   ArrayList<String> alfavtags = (ArrayList<String>) doc.get("favourite_tag");
        doc = (Document) doc.get("history");
-       ArrayList<String> alviewedtags = (ArrayList<String>) doc.get("tags_viewed");
-       ArrayList<String> alvieweduser = (ArrayList<String>) doc.get("user_viewed");
-       ArrayList<String> alviewedproject = (ArrayList<String>) doc.get("project_viewed");
+       ArrayList<String> alviewedtags = (ArrayList<String>) doc.get("tag_view");
+       ArrayList<String> alvieweduser = (ArrayList<String>) doc.get("user_view");
+       ArrayList<String> alviewedproject = (ArrayList<String>) doc.get("project_view");
 
        tc =new DatabaseServices().getDb().getCollection("project");
        FindIterable <Document> docfavtags =  tc.find(in("tags",alfavtags));
@@ -44,7 +44,11 @@ public class HomePage {
       getHistory(altl,docviewedproject,"viewedproject");
        return altl;   
 	}	
-	
+	public void getProjectTrending()
+	{
+		MongoCollection<Document> tc =new DatabaseServices().getDb().getCollection("projectdata");
+		 FindIterable<Document> fi =  tc.find().sort(new Document("date",1));
+	}
 	public void getHistory(ArrayList<Tile> altl, FindIterable<Document> fi,String source)
 	{
 		for(Document d:fi)
