@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import org.bson.Document;
+import org.bson.types.ObjectId;
+
 import static com.mongodb.client.model.Filters.*;
 
 import com.mongodb.Block;
@@ -17,13 +19,11 @@ import service.GeneralServices;
 
 public class HomePage {
     HashMap<Object,Tile> hm = new HashMap<Object,Tile>();
- 	    
-	@SuppressWarnings("unchecked")
+ 	@SuppressWarnings("unchecked")
 	public ArrayList<Tile> getHistory(String username)
 	{MongoCollection<Document> tc =new DatabaseServices().getDb().getCollection("userdata");
 	   
 	   Document doc = tc.find(eq("username",username)).first();
-       
 	   ArrayList<String> alfavtags = (ArrayList<String>) doc.get("favourite_tag");
        doc = (Document) doc.get("history");
        ArrayList<String> alviewedtags = (ArrayList<String>) doc.get("tag_view");
@@ -43,11 +43,12 @@ public class HomePage {
       getHistory(altl,docvieweduser,"vieweduser");
       getHistory(altl,docviewedproject,"viewedproject");
        return altl;   
-	}	
-	public void getProjectTrending()
+	}
+ 	
+	public void getProjects(String id)
 	{
-		MongoCollection<Document> tc =new DatabaseServices().getDb().getCollection("projectdata");
-		 FindIterable<Document> fi =  tc.find().sort(new Document("date",1));
+		MongoCollection<Document> tc =new DatabaseServices().getDb().getCollection("project");
+		FindIterable<Document> fi =  tc.find().sort(new Document("date",1));
 	}
 	public void getHistory(ArrayList<Tile> altl, FindIterable<Document> fi,String source)
 	{

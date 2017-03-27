@@ -162,12 +162,15 @@ public void signup(Signup signup)
 	String name = signup.getName();
 	String email = signup.getEmailid();
 	String password = signup.getPassword();
-	Date date = new GeneralServices().getCurrentDate();
-		long dateepoch = date.getTime();
+	password = GeneralServices.get_SHA_256_SecurePassword(name,password);
+	Date date = GeneralServices.getCurrentDate();
+		
+	   long dateepoch = date.getTime();
 	    String hashed1 = linkEncryptCreator(name,String.valueOf(dateepoch));
 	    String hashed2 = linkEncryptCreator(email,String.valueOf(dateepoch));
-        new UserDao().signupUser(name, password, email, date);
-        new SendEmail().SendSimple(email,hashed1, hashed2);
+        //enter for verification
+	    new UserDao().signupUser(name, password, email, date);
+        SendEmail.SendSimple(email,hashed1, hashed2);
 }
 public static String linkDecrypter(byte[] _bytes)
 {

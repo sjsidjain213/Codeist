@@ -4,13 +4,17 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.tomcat.util.codec.binary.Base64;
 
 import dao.UserDao;
 
 public class EmailVerifier extends SendEmail{
-public String test(String hash1,String hash2)
-{System.out.println(hash1);
+	
+public String test(String hash1,String hash2,HttpServletResponse response)
+{
+System.out.println(hash1);
 System.out.println(hash2);
 String name = GeneralServices.linkDecrypter(Base64.decodeBase64(hash1));
 String email = GeneralServices.linkDecrypter(Base64.decodeBase64(hash2));
@@ -32,8 +36,7 @@ try {
 	// TODO Auto-generated catch block
 	e.printStackTrace();
 }
-
-String s = new UserDao().userVerifier(name,email,dateone);
+String s = new UserDao().userVerifier(name,email,dateone,response);
 return s;
 }
 }

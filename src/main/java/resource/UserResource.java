@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -29,20 +30,17 @@ import service.SessionService;
 public class UserResource implements ContainerResponseFilter {
 	
 	@POST
-	@Path("/verifier")
+	@Path("/signup")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void signupverifier(Signup signup)
+	public void signup(Signup signup)
 	{//@PathParam("date") String date
-	//new MGSample().SendSimple();
 		new GeneralServices().signup(signup);
 	}
 	@GET
 	@Path("/verifier/{hash1}/{hash2}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public String signupverifier2(@PathParam("hash1") String hash1,@PathParam("hash2") String hash2)
-	{//@PathParam("date") String date
-	System.out.println("called");
-	return new EmailVerifier().test(hash1,hash2);
+	public String signupverifier2(@PathParam("hash1") String hash1,@PathParam("hash2") String hash2,@Context HttpServletResponse response)
+	{	return new EmailVerifier().test(hash1,hash2,response);
 	}
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
@@ -66,7 +64,7 @@ public class UserResource implements ContainerResponseFilter {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("/signup")
+	@Path("/insert")
 	public Acknowledgement insertUser(User users,@Context HttpServletRequest req)
 	{
 	//return (new SessionService().sessionVerifier(req))?new UserDao().insertUser(users):new GeneralServices().response(null);

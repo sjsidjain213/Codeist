@@ -16,39 +16,78 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import static com.mongodb.client.model.Filters.*;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.servlet.http.HttpServletResponse;
+
 public class UserDao {
 	
 	
 	  MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("testuserdata");
+	
 	  public void signupUser(String name,String password,String emailid,Date date)
 	  {MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("unverifieduserdata");
-	    Document doc = new Document("name",name)
-				  .append("password", password)
+	   Document doc = new Document("name",name)
+				  .append("password",password)
 				  .append("emailid",emailid)
 				  .append("date",date)
-				  .append("verified", "n");
-		 tc.insertOne(doc);
+				  .append("verified","n");
+		           tc.insertOne(doc);
 	  }
-	  public String userVerifier(String name,String email,Date date)
+	  public String userVerifier(String name,String email,Date date,HttpServletResponse response)
 	  {MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("unverifieduserdata");
 	  System.out.println(date+"<< data");System.out.println(email);System.out.println(name);
 	  Document doc= tc.find(and(eq("name",name),eq("emailid",email),eq("date",date))).first();
 		 if(doc!=null)
-		 {
+		 {   String password = tc.find(and(eq("name",name),eq("emailid",email),eq("date",date))).first().getString("password");
+		    	new UserDao().insertNewUser(name,email,date,password,doc);
 			 return "verified";
 		 }
 		 else{
 			 return "unverified";
 		 }
 	  }
-	  public void signUpUser()
-	  {
+	  public void insertNewUser(String name,String email,Date date,String password,Document unverified){
+
+		  Document contact_information = new Document("phone_no","")
+				  .append("email_id","")
+				  .append("country", "")
+				  .append("state","")
+				  .append("city","")
+				  .append("zipcode", new Long(0));
 		  
+		  Document history = new Document("tag_view",new ArrayList<String>())
+				              .append("problem_category_view",new ArrayList<String>())
+				              .append("project_view",new ArrayList<String>())
+				              .append("user_view",new ArrayList<String>());
+
+		  Document doc = new Document("username","")
+					  .append("password",password)
+					  .append("name",name)
+					  .append("bio","")
+					  .append("date",date)
+					  .append("gender","")
+					  .append("category","")
+					  .append("institute","")
+					  .append("following",new ArrayList<String>())
+					  .append("follower", new ArrayList<String>())
+					  .append("contributing",new ArrayList<String>())
+					  .append("project_id", new ArrayList<String>())
+					  .append("project_bookmark", new ArrayList<String>())
+					  .append("question_bookmark", new ArrayList<String>())
+					  .append("rating",new Long(0))
+					  .append("question_ask", new ArrayList<String>())
+					  .append("question_answer", new ArrayList<String>())
+					  .append("contact_information",contact_information)
+					  .append("history",history)
+					  .append("favourite_tag",new ArrayList<String>()); 
+                  		  tc.insertOne(doc);
+      MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("unverifieduserdata");
+	  tc.deleteOne(doc);
 	  }
 	  public Acknowledgement insertUser(User user)
 	  { Document test = tc.find(eq("username",user.getUsername())).first();
