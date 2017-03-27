@@ -61,7 +61,7 @@ public class QADao {
 	quest.setUsername(doc.getString("username"));
 	quest.setDate(doc.getDate("date"));
 	quest.setTags((ArrayList<String>)doc.get("tags"));
-	quest.setUrl(doc.getString("url"));
+	quest.setQuestion_url(doc.getString("url"));
 	Document document=(Document) doc.get("info");
 	
 	quest.setDownvotes((ArrayList<String>)document.get("downvotes"));
@@ -80,7 +80,7 @@ public class QADao {
 		answer.setFeatured_points(d.getLong("featured_points"));
 		alansw.add(answer);
 	}
-	quest.setAnswer(alansw);
+	quest.setAnswers(alansw);
 	return quest;
 	}
 	

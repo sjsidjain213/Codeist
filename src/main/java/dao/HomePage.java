@@ -13,6 +13,7 @@ import com.mongodb.Block;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 
+import bean.Question;
 import bean.Tile;
 import service.DatabaseServices;
 import service.GeneralServices;
@@ -68,5 +69,26 @@ public class HomePage {
 	 	      	hm.put(d.get("_id"),tl);
 	         	}
 	      }
+	}
+	
+	public static ArrayList<Tile> trendingQuestion()
+	{
+// test pending
+		MongoCollection<Document> tc =new DatabaseServices().getDb().getCollection("question");
+		FindIterable <Document> fi =tc.find().sort(new Document("date",-1).append("upvotecount", -1).append("downvotecount",1));
+		ArrayList<Tile> ques = new ArrayList<Tile>();
+		for(Document d:fi)
+		{Tile doc = new Tile();
+		        doc.setUsername(d.getString("username"));
+		        doc.setTitle(d.getString("question"));
+		        doc.setUpvotecount(d.getLong("upvotecount"));
+		        doc.setDownvotecount(d.getLong("downvotecount"));
+		        // description might throw error check database 
+		        doc.setDescription(d.getString("description"));
+		        doc.setUrl(d.getString("question_url"));
+		        ques.add(doc);
+		        System.out.println(ques);
+		}
+		return ques;
 	}
 }
