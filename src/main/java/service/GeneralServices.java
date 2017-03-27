@@ -56,12 +56,12 @@ public Tile returnTile(Document d,String source,String subject)
 	    altwo.add(source);
 	    tl.setSource(altwo);
 	    tl.setSubject(subject);
-	    tl.setTitle(d.getString("title"));
-		tl.setDescription(d.getString("description"));
-		tl.setTags((ArrayList<String>)d.get("tags"));
-		tl.setUsername(d.getString("username"));
+	    tl.setUsername(d.getString("username"));
 	    tl.setPositioncount(1);
 	    if(subject.equals("project")){
+	    	tl.setTitle(d.getString("title"));
+			tl.setDescription(d.getString("description"));
+			tl.setTags((ArrayList<String>)d.get("tags"));
 	    	Document doc = (Document) d.get("info");
 	    	if((ArrayList<String>)doc.get("upvotes") != null){
 	    		tl.setUpvote((ArrayList<String>) doc.get("upvotes"));
@@ -71,8 +71,9 @@ public Tile returnTile(Document d,String source,String subject)
 	    	}
 	    }
 	    else{
-	    	tl.setUpvotecount(d.getLong("upvotecount"));
-	    	tl.setDownvotecount(d.getLong("downvotecount"));
+	    	tl.setTitle(d.getString("question"));
+	    	//tl.setUpvotecount(d.getLong("upvotecount"));
+	    	//tl.setDownvotecount(d.getLong("downvotecount"));
 	    }
 		tl.setViewcount(1);
 		return tl;	
