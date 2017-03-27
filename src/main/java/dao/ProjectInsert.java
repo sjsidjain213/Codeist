@@ -243,26 +243,30 @@ public Acknowledgement down(String username,String title,String user){
 				if(up!=null && up.contains(user)){
 					up.remove(user);
 					 String acknow2 = tc.updateOne(and(eq("username", username),eq("title",title)),new Document("$set",new Document("info.upvotes",up))).toString();	 
+					 tc.updateOne(and(eq("username", username),eq("title",title)),new Document("$set",new Document("upvotecount",up.size())));
 				}
 			down.add(user);
 			String acknow2 = tc.updateOne(and(eq("username", username),eq("title",title)),new Document("$set",new Document("info.downvotes",down))).toString();	 
+			tc.updateOne(and(eq("username", username),eq("title",title)),new Document("$set",new Document("downvotecount",down.size())));
 			//make changes here
 			// new NotificationService().voteNotification(username,title,Notifications.DOWNVOTESPROJECT);
 			 return new GeneralServices().response(acknow2);}
 			else{
 				down.remove(user);
-				String acknow2 = tc.updateOne(and(eq("username", username),eq("title",title)),new Document("$set",new Document("info.downvotes",down))).toString();	 	 
+				String acknow2 = tc.updateOne(and(eq("username", username),eq("title",title)),new Document("$set",new Document("info.downvotes",down))).toString();	 
+				tc.updateOne(and(eq("username", username),eq("title",title)),new Document("$set",new Document("downvotecount",down.size())));
 			}
 		return new GeneralServices().response("already exist");
 		}
 		else{
 			if(up!=null && up.contains(user)){
 				up.remove(user);
-				 String acknow2 = tc.updateOne(and(eq("username", username),eq("title",title)),new Document("$set",new Document("info.upvotes",up))).toString();	 
+				 String acknow2 = tc.updateOne(and(eq("username", username),eq("title",title)),new Document("$set",new Document("info.upvotes",up))).toString();	
+				 tc.updateOne(and(eq("username", username),eq("title",title)),new Document("$set",new Document("upvotecount",up.size())));
 			}
 			down=new ArrayList<String>();
 			down.add(user);
-			 String acknow2 = tc.updateOne(and(eq("username", username),eq("title",title)),new Document("$set",new Document("info.downvotes",down))).toString();	 
+			 String acknow2 = tc.updateOne(and(eq("username", username),eq("title",title)),new Document("$set",new Document("downvotecount",down.size()))).toString();	 
 			//make changes here
 			 // new NotificationService().voteNotification(username,title,Notifications.DOWNVOTESPROJECT);
 			 return new GeneralServices().response(acknow2);
