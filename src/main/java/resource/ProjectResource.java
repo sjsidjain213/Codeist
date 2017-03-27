@@ -29,7 +29,7 @@ import service.SessionService;
 import bean.Project;
 import bean.SearchBean;
 import bean.User;
-@Path("/project")
+@Path("/projects")
 public class ProjectResource {
 
 @POST
@@ -61,22 +61,21 @@ public List<Project> getBriefProject(@Context HttpServletRequest req)
 //return new ProjectInsert().getProjectBrief(username);
 return (new SessionService().sessionVerifier(req))?new ProjectInsert().getProjectBrief(req.getSession().getAttribute("username").toString()):GeneralServices.nullProject();
 }
+//@GET
+//@Path("/retrieveselect/{title}")   //for logged in user
+//@Produces(MediaType.APPLICATION_JSON)
+//public Project getSelectedProject(@Context HttpServletRequest req,@PathParam("title")String title)
+//{
+////return new ProjectInsert().getSelectedProject(req.getSession().getAttribute("username").toString(), title);
+////return new Project();
+//return (new SessionService().sessionVerifier(req))?new ProjectInsert().getSelectedProject(req.getSession().getAttribute("username").toString(), GeneralServices.spaceAdder(title),req):new Project();
+//}
 @GET
-@Path("/retrieveselect/{title}")   //for logged in user
+@Path("/{id}")
 @Produces(MediaType.APPLICATION_JSON)
-public Project getSelectedProject(@Context HttpServletRequest req,@PathParam("title")String title)
+public Project getSelected(@PathParam("id")String id,@Context HttpServletRequest req)
 {
-//return new ProjectInsert().getSelectedProject(req.getSession().getAttribute("username").toString(), title);
-//return new Project();
-return (new SessionService().sessionVerifier(req))?new ProjectInsert().getSelectedProject(req.getSession().getAttribute("username").toString(), GeneralServices.spaceAdder(title),req):new Project();
-
-}
-@GET
-@Path("/retrieveselect/{username}/{title}")
-@Produces(MediaType.APPLICATION_JSON)
-public Project getSelected(@PathParam("username")String username,@PathParam("title")String title,@Context HttpServletRequest req)
-{
-return new ProjectInsert().getSelectedProject(username, GeneralServices.spaceAdder(title),req);
+return new ProjectInsert().getSelectedProject(id,req);
 
 //return new Project();
 }

@@ -124,14 +124,12 @@ return project;
 
 // for retrieving selected project
 @SuppressWarnings("unchecked")
-public Project getSelectedProject(String username,String title,HttpServletRequest req)
+public Project getSelectedProject(String id,HttpServletRequest req)
 {
+	ObjectId id1=new ObjectId(id.toString());
 	Project project=new Project();
-	FindIterable <Document> fi = tc.find(eq("username",username));
-	for(Document d:fi)
-	{
-		if(d.getString("title").equalsIgnoreCase(title))
-		{
+	Document d= tc.find(eq("_id",id1)).first();
+	if(d!=null){
 	   		project.setTitle(d.getString("title"));
 	   		project.setDescription(d.getString("description"));
 	   		project.setTags((ArrayList<String>)d.get("tags")); 
@@ -152,7 +150,6 @@ public Project getSelectedProject(String username,String title,HttpServletReques
 	   		project.setComments(new ProjectInsert().getAllComments(d.getString("username"), d.getString("title")));
 	   		if(req.getSession().getAttribute("username")!=null)
 	   		view(d.getString("username"),d.getString("title"), req.getSession().getAttribute("username").toString());
-		}	
 	}
 	return project;
 }
