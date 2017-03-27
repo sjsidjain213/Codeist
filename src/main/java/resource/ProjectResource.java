@@ -42,9 +42,9 @@ public Project insertProject(Project project,@Context HttpServletRequest req)
 //return (new SessionService().sessionVerifier(req))?new ProjectInsert().insertProject(project,req):new GeneralServices().response(null);
 return	new ProjectInsert().insertProject(project,req);
 }
-
-@POST
-@Path("/update/{id}")
+//to update
+@PUT
+@Path("/{id}")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public Acknowledgement updateProject(Project project,@Context HttpServletRequest req,@PathParam("id")String id)
@@ -52,14 +52,14 @@ public Acknowledgement updateProject(Project project,@Context HttpServletRequest
 //return new ProjectInsert().insertProject(project);
 return (new SessionService().sessionVerifier(req))?new ProjectInsert().updateproject(project,req,id):new GeneralServices().response(null);
 }
-
+//all projects of a user
 @GET
-@Path("/retrieveall")   //logged in user
+@Path("/user/{username}")   
 @Produces(MediaType.APPLICATION_JSON)
-public List<Project> getBriefProject(@Context HttpServletRequest req)
+public List<Project> getBriefProject(@Context HttpServletRequest req,@PathParam("usernmae")String username)
 {
 //return new ProjectInsert().getProjectBrief(username);
-return (new SessionService().sessionVerifier(req))?new ProjectInsert().getProjectBrief(req.getSession().getAttribute("username").toString()):GeneralServices.nullProject();
+return new ProjectInsert().getProjectBrief(username);
 }
 //@GET
 //@Path("/retrieveselect/{title}")   //for logged in user
