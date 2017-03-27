@@ -37,7 +37,7 @@ public Project insertProject(Project project,HttpServletRequest req)
 	    		// .append("username", req.getSession().getAttribute("username"))
 	    		 .append("username", project.getUsername())
 	    		 .append("title",project.getTitle())	
-	    		 .append("date",project.getDate())
+	    		 .append("date",GeneralServices.getCurrentDate())
 	    		 .append("description",project.getDescription())
 	    		 .append("tags",(List<String>)project.getTags())
 	    		 //.append("comments",(ArrayList<Comment>)project.getComments())
@@ -49,8 +49,8 @@ public Project insertProject(Project project,HttpServletRequest req)
 	    		 .append("zip_file",project.getZip_file())
 	    		 .append("images",(List<String>)project.getImages())
 	    		 .append("info", info)
-	    		 .append("upvotecount", 0L)
-	    		 .append("downvotecount", 0L);
+	    		 .append("upvotecount", new Long(0))
+	    		 .append("downvotecount", new Long(0));
 	    		  tc.insertOne(doc);
 	    		  String projectid= tc.find(and(eq("username",project.getUsername()),eq("title",project.getTitle()))).first().get("_id").toString();
 	    		  String url = GeneralServices.urlGenerator(Notifications.PROJECTMODULE, projectid, project.getTitle());
@@ -154,14 +154,14 @@ public Project getSelectedProject(String id,HttpServletRequest req)
 	return project;
 }
 
-public Acknowledgement insertComment(Comment comment,String username,String projectname,HttpServletRequest req)
-{
-	String project_id = tc.find(and(eq("username",username),eq("title",projectname))).first().get("_id").toString();
+public Acknowledgement insertComment(Comment comment,String id,HttpServletRequest req)
+{ObjectId id1=new ObjectId(id.toString());
+	Document project = tc.find(eq("_id",id1)).first();
 Document doc = new Document("username",req.getSession().getAttribute("username"))
                   .append("comment", comment.getComment())
                   .append("date",GeneralServices.getCurrentDate());
-String acknow= tc.updateOne(and(eq("username",username),eq("title",projectname)),new Document("$push",new Document("comments",doc))).toString();
-new NotificationService().commentNotification(username,projectname,project_id,req.getSession().getAttribute("username").toString(),comment.getComment(),Notifications.COMMENT);
+String acknow= tc.updateOne(eq("_id",id1),new Document("$push",new Document("comments",doc))).toString();
+new NotificationService().commentNotification(project.getString("username"),project.getString("title"),id,req.getSession().getAttribute("username").toString(),comment.getComment(),Notifications.COMMENT);
 return new GeneralServices().response(acknow);
 }
 

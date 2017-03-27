@@ -81,24 +81,24 @@ return new ProjectInsert().getSelectedProject(id,req);
 }
 
 @POST
-@Path("/insertcomment/{username}/{title}")	//username:project owner
+@Path("/{id}/comment")	//username:project owner
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public Acknowledgement insertComment(@Context HttpServletRequest req,Comment comment,@PathParam("title")String title,@PathParam("username")String username)
+public Acknowledgement insertComment(@Context HttpServletRequest req,Comment comment,@PathParam("id")String id)
 {
 //return new ProjectInsert().insertComment(comment,username,projectname);
-return (new SessionService().sessionVerifier(req))?new ProjectInsert().insertComment(comment,username,GeneralServices.spaceAdder(title),req):new GeneralServices().response(null);
+return (new SessionService().sessionVerifier(req))?new ProjectInsert().insertComment(comment,id,req):new GeneralServices().response(null);
 
 }
 
-@GET
-@Path("/retrievecomments/{username}/{title}")
-@Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
-public ArrayList<Comment> getComment(@PathParam("title")String title,@PathParam("username")String username)
-{
-	return 	new ProjectInsert().getAllComments(username, GeneralServices.spaceAdder(title));
-}
+//@GET
+//@Path("/retrievecomments/{username}/{title}")
+//@Consumes(MediaType.APPLICATION_JSON)
+//@Produces(MediaType.APPLICATION_JSON)
+//public ArrayList<Comment> getComment(@PathParam("title")String title,@PathParam("username")String username)
+//{
+//	return 	new ProjectInsert().getAllComments(username, GeneralServices.spaceAdder(title));
+//}
 
 //@PUT
 //@Path("/upvote/{action}/{username}/{projecttitle}")
