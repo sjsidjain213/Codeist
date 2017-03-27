@@ -266,7 +266,8 @@ public Acknowledgement down(String username,String title,String user){
 			}
 			down=new ArrayList<String>();
 			down.add(user);
-			 String acknow2 = tc.updateOne(and(eq("username", username),eq("title",title)),new Document("$set",new Document("downvotecount",down.size()))).toString();	 
+			 String acknow2 = tc.updateOne(and(eq("username", username),eq("title",title)),new Document("$set",new Document("info.downvotes",down))).toString();	
+			 tc.updateOne(and(eq("username", username),eq("title",title)),new Document("$set",new Document("downvotecount",down.size())));
 			//make changes here
 			 // new NotificationService().voteNotification(username,title,Notifications.DOWNVOTESPROJECT);
 			 return new GeneralServices().response(acknow2);
