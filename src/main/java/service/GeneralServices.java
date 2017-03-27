@@ -61,9 +61,9 @@ public Tile returnTile(Document d,String source)
 		tl.setUsername(d.getString("username"));
 	    tl.setPositioncount(1);
 		d = (Document) d.get("info");
-		tl.setUpvotes(d.getDouble("upvotes").intValue());
-		tl.setDownvotes(d.getDouble("downvotes").intValue());
-		tl.setViewcount(d.getDouble("viewcount").intValue());
+		tl.setUpvote((ArrayList<String>) d.get("upvotes"));
+		tl.setDownvote((ArrayList<String>) d.get("downvotes"));
+		tl.setViewcount(1);
 	return tl;	
 }
 
