@@ -5,7 +5,19 @@ import java.util.Date;
 
 public class Answer {
 private String username,answer,question;
-
+private long upvotecount,downvotecount;
+public long getUpvotecount() {
+	return upvotecount;
+}
+public void setUpvotecount(long upvotecount) {
+	this.upvotecount = upvotecount;
+}
+public long getDownvotecount() {
+	return downvotecount;
+}
+public void setDownvotecount(long downvotecount) {
+	this.downvotecount = downvotecount;
+}
 private long featured_points;
 ArrayList<String> upvotes,downvotes;
 private Date date = new Date();

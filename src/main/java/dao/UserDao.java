@@ -46,25 +46,46 @@ public class UserDao {
 			 return "unverified";
 		 }
 	  }
+	  public void signUpUser()
+	  {
+		  
+	  }
 	  public Acknowledgement insertUser(User user)
 	  { Document test = tc.find(eq("username",user.getUsername())).first();
 		  if(test==null)
 		  { 
+			  Document contact_information = new Document("phone_no",user.getPhone_no())
+					  .append("email_id",user.getEmail_id())
+					  .append("country", user.getCountry().toLowerCase())
+					  .append("state",user.getState().toLowerCase())
+					  .append("city",user.getCity())
+					  .append("zipcode", user.getZipcode());
+			  
+			  Document history = new Document("tag_view",new ArrayList<String>())
+					              .append("problem_category_view",new ArrayList<String>())
+					              .append("project_view",new ArrayList<String>())
+					              .append("user_view",new ArrayList<String>());
 
-		  Document contact_information = new Document("phone_no",user.getPhone_no())
-				  .append("email_id",user.getEmail_id())
-				  .append("country", user.getCountry().toLowerCase())
-				  .append("state",user.getState().toLowerCase())
-				  .append("city",user.getCity())
-				  .append("zipcode", user.getZipcode());
-		  Document doc = new Document("username",user.getUsername())
+                  Document doc = new Document("username",user.getUsername())
 				  .append("password",GeneralServices.get_SHA_256_SecurePassword(user.getUsername(),user.getPassword()))
 				  .append("name",user.getName())
 				  .append("bio",user.getBio())
-				  .append("date",user.getDate())
-				  //.append("rating",user.getRating())
+				  .append("date",GeneralServices.getCurrentDate())
+				  .append("gender",user.getGender())
+				  .append("category",user.getCategory())
+				  .append("institute",user.getInstitute())
+				  .append("following",new ArrayList<String>())
+				  .append("follower", new ArrayList<String>())
+				  .append("contributing",new ArrayList<String>())
+				  .append("project_id", new ArrayList<String>())
+				  .append("project_bookmark", new ArrayList<String>())
+				  .append("question_bookmark", new ArrayList<String>())
+				  .append("rating",new Long(0))
+				  .append("question_ask", new ArrayList<String>())
+				  .append("question_answer", new ArrayList<String>())
 				  .append("contact_information",contact_information)
-				  .append("favourite_tags",user.getFavourite_tag()); 
+				  .append("history",history)
+				  .append("favourite_tag",user.getFavourite_tag()); 
 		  tc.insertOne(doc);
 		  return new GeneralServices().response("insert");
 		  }

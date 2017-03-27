@@ -10,6 +10,19 @@ public class Question {
 	private ArrayList<String> tags;
 	private long featured_points;
 	private ArrayList<String> upvotes,downvotes;
+	private long upvotecount,downvotecount;
+	public long getUpvotecount() {
+		return upvotecount;
+	}
+	public void setUpvotecount(long upvotecount) {
+		this.upvotecount = upvotecount;
+	}
+	public long getDownvotecount() {
+		return downvotecount;
+	}
+	public void setDownvotecount(long downvotecount) {
+		this.downvotecount = downvotecount;
+	}
 	private ArrayList<Answer> answers = new ArrayList<Answer>();	
 	public String getUrl() {
 		return url;

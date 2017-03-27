@@ -6,8 +6,37 @@ import java.util.Date;
 public class Project{
 	private String username,title,description,readme,license,project_url,_private;
     //private long downvotes, viewcount,upvotes;
-   	private ArrayList<String> images,video_url,zip_file,contributors,tags,downvotes,viewby;
-   	private ArrayList<Comment> comments;
+   	private ArrayList<String> images,video_url,zip_file,contributors,tags,downvotes,viewby,project_link;
+   	public ArrayList<String> getProject_link() {
+		return project_link;
+	}
+
+	public void setProject_link(ArrayList<String> project_link) {
+		this.project_link = project_link;
+	}
+
+
+	public Long getUpvotecount() {
+		return upvotecount;
+	}
+
+
+	public void setUpvotecount(Long upvotecount) {
+		this.upvotecount = upvotecount;
+	}
+
+
+	public Long getDownvotecount() {
+		return downvotecount;
+	}
+
+
+	public void setDownvotecount(Long downvotecount) {
+		this.downvotecount = downvotecount;
+	}
+
+
+	private ArrayList<Comment> comments;
      private Date date = new Date();
      private Long upvotecount,downvotecount;
     ArrayList<String> upvotes;
