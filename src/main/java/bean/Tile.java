@@ -1,13 +1,21 @@
 package bean;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 
 public class Tile{	
 //url for project/question url use of url is mandatory
 //title for project/question title
 //description for project/question description 	
-private String username,title,description,url;
+private String username,title,description,url,subject;
+public String getSubject() {
+	return subject;
+}
+public void setSubject(String subject) {
+	this.subject = subject;
+}
+
 private Date date;
 private ArrayList<String> source,upvote,downvote;
 // upvotecount and downvotecount can be used directly used for sorting on basis of upvote and downvote
@@ -106,11 +114,11 @@ public String toString() {
 	return "Tile [username=" + username + ", title=" + title + ", description=" + description + ", url=" + url
 			+ ", date=" + date + ", source=" + source + ", upvote=" + upvote + ", downvote=" + downvote
 			+ ", upvotecount=" + upvotecount + ", downvotecount=" + downvotecount + ", viewcount=" + viewcount
-			+ ", tags=" + tags + ", positioncount=" + positioncount + ", _id=" + _id + "]";
+			+ ", tags=" + tags + ", positioncount=" + positioncount + ", _id=" + _id + ", subject=" + subject +"]";
 }
 public Tile(String username, String title, String description, String url, Date date, ArrayList<String> source,
 		ArrayList<String> upvote, ArrayList<String> downvote, long upvotecount, long downvotecount, long viewcount,
-		ArrayList<String> tags, int positioncount, Object _id) {
+		ArrayList<String> tags, int positioncount, Object _id, String subject) {
 	super();
 	this.username = username;
 	this.title = title;
@@ -126,9 +134,20 @@ public Tile(String username, String title, String description, String url, Date 
 	this.tags = tags;
 	this.positioncount = positioncount;
 	this._id = _id;
+	this.subject = subject;
 }
 public Tile() {
 	super();
 	// TODO Auto-generated constructor stub
 }
+
+public static Comparator<Tile> homesort = new Comparator<Tile>() {
+
+	public int compare(Tile s1,Tile s2) {
+
+	   int upvote1 = (int)s1.getPositioncount();
+	   int upvote2 = (int)s2.getPositioncount();
+
+	   return upvote2-upvote1;
+  }};
 }

@@ -1,6 +1,7 @@
 package dao;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -15,17 +16,26 @@ import com.mongodb.client.MongoCollection;
 
 import bean.Question;
 import bean.Tile;
+import bean.User;
 import service.DatabaseServices;
 import service.GeneralServices;
 
 public class HomePage {
     HashMap<Object,Tile> hm = new HashMap<Object,Tile>();
  	@SuppressWarnings("unchecked")
-	public ArrayList<Tile> getHistory(String username)
-	{MongoCollection<Document> tc =new DatabaseServices().getDb().getCollection("userdata");
+ 	public ArrayList<Tile> getHistory(String username)
+	{
+ 		//needs to be tested, ClassCastException for long in Tile.java line 84
+ 		MongoCollection<Document> tc =new DatabaseServices().getDb().getCollection("userdata");
 	   
 	   Document doc = tc.find(eq("username",username)).first();
 	   ArrayList<String> alfavtags = (ArrayList<String>) doc.get("favourite_tag");
+	   ArrayList<String> alfollowing = (ArrayList<String>) doc.get("following");
+	   ArrayList<String> alcontributing = (ArrayList<String>) doc.get("contributing");
+	   ArrayList<String> albookmark = (ArrayList<String>) doc.get("project_bookmark");
+	   ArrayList<String> alquesbookmark = (ArrayList<String>) doc.get("question_bookmark");
+	   ArrayList<String> alquesask = (ArrayList<String>) doc.get("question_ask");
+	   ArrayList<String> alquesanswer = (ArrayList<String>) doc.get("question_answer");
        doc = (Document) doc.get("history");
        ArrayList<String> alviewedtags = (ArrayList<String>) doc.get("tag_view");
        ArrayList<String> alvieweduser = (ArrayList<String>) doc.get("user_view");
@@ -35,27 +45,91 @@ public class HomePage {
        FindIterable <Document> docfavtags =  tc.find(in("tags",alfavtags));
        FindIterable <Document> docviewedtags =  tc.find(in("tags",alviewedtags));
        FindIterable <Document> docvieweduser =  tc.find(in("username",alvieweduser));
+       FindIterable <Document> docfollowing =  tc.find(in("username",alfollowing));
        FindIterable <Document> docviewedproject =  tc.find(in("title",alviewedproject));
+       FindIterable <Document> doccontributing = null;
+       for(String s : alcontributing){
+    	   ObjectId id = new ObjectId(s);
+    	   doccontributing = tc.find(in("_id",id));
+       }
+      
+       FindIterable <Document> docbookmark = null;
+       for(String s : albookmark){
+    	   ObjectId id = new ObjectId(s);
+    	   docbookmark = tc.find(in("_id",id));
+    	   
+       }
+       
+       tc =new DatabaseServices().getDb().getCollection("qa");
+       FindIterable <Document> quesfavtags =  tc.find(in("tags",alfavtags));
+       FindIterable <Document> quesviewedtags =  tc.find(in("tags",alviewedtags));
+       FindIterable <Document> quesvieweduser =  tc.find(in("username",alvieweduser));
+       FindIterable <Document> quesfollowing =  tc.find(in("username",alfollowing));
+       FindIterable <Document> quesbookmark = null;
+       for(String s : alquesbookmark){
+    	   ObjectId id = new ObjectId(s);
+    	   quesbookmark = tc.find(in("_id",id));
+       }
+       FindIterable <Document> quesask = null;
+       for(String s : alquesask){
+    	   ObjectId id = new ObjectId(s);
+    	   quesask = tc.find(in("_id",id));
+       }
+       FindIterable <Document> quesanswer = null;
+       for(String s : alquesanswer){
+    	   ObjectId id = new ObjectId(s);
+    	   quesanswer = tc.find(in("_id",id));
+       }
        
       ArrayList<Tile> altl = new ArrayList<Tile>();
       HashSet<Object> hs = new HashSet<Object>(); 
-      getHistory(altl,docfavtags,"favtags");
-      getHistory(altl,docviewedtags,"viewed tags");
-      getHistory(altl,docvieweduser,"vieweduser");
-      getHistory(altl,docviewedproject,"viewedproject");
-       return altl;   
+      if(doccontributing != null)
+    	  getHistory(altl,doccontributing,"contributing","project");
+      if(docbookmark != null)
+    	  getHistory(altl,docbookmark,"project bookmark","project");
+      if(docfavtags != null)
+    	  getHistory(altl,docfavtags,"favtags","project");
+      if(docviewedtags != null)
+    	  getHistory(altl,docviewedtags,"viewed tags","project");
+      if(docvieweduser != null)
+    	  getHistory(altl,docvieweduser,"vieweduser","project");
+      if(docviewedproject != null)
+    	  getHistory(altl,docviewedproject,"viewedproject","project");
+      if(docfollowing != null)
+    	  getHistory(altl,docfollowing,"following","project");
+      if(quesfavtags != null)
+    	  getHistory(altl,quesfavtags,"favtags","question");
+      if(quesviewedtags != null)
+    	  getHistory(altl,quesviewedtags,"viewed tags","question");
+      if(quesvieweduser != null)
+    	  getHistory(altl,quesvieweduser,"vieweduser","question");
+      if(quesfollowing != null)
+    	  getHistory(altl,quesfollowing,"following","question");
+      if(quesbookmark != null)
+    	  getHistory(altl,quesbookmark,"question bookmark","question");
+      if(quesask != null)
+    	  getHistory(altl,quesask,"asked question","question");
+      if(quesanswer != null)
+      getHistory(altl,quesanswer,"answered question","question");
+      
+      if(altl != null)
+    	  Collections.sort(altl, Tile.homesort);
+      System.out.println("alsearch"+altl);
+         return altl;   
 	}
+
  	
 	public void getProjects(String id)
 	{
 		MongoCollection<Document> tc =new DatabaseServices().getDb().getCollection("project");
 		FindIterable<Document> fi =  tc.find().sort(new Document("date",1));
 	}
-	public void getHistory(ArrayList<Tile> altl, FindIterable<Document> fi,String source)
+	public void getHistory(ArrayList<Tile> altl, FindIterable<Document> fi,String source, String subject)
 	{
 		for(Document d:fi)
 	      {	if(!hm.containsKey(d.get("_id")))
-		      	{   Tile tl = new GeneralServices().returnTile(d,source);
+		      	{   
+	    	  		Tile tl = new GeneralServices().returnTile(d,source,subject);
 		      	    hm.put(d.get("_id"),tl);
 		      		altl.add(tl);
 		      	}
@@ -90,5 +164,24 @@ public class HomePage {
 		        System.out.println(ques);
 		}
 		return ques;
+	}
+	
+	public ArrayList<User> topUsers(){
+		MongoCollection<Document> tc =new DatabaseServices().getDb().getCollection("userdata");
+		FindIterable<Document> fi = tc.find();
+		ArrayList<User> userList = new ArrayList<User>();
+		for(Document d : fi){
+			User user = new User();
+			user.setUsername(d.getString("username"));
+			user.setBio(d.getString("bio"));
+			user.setName(d.getString("name"));
+			user.setCategory(d.getString("category"));
+			user.setInstitute(d.getString("institute"));
+			user.setRating(d.getInteger("rating"));
+			userList.add(user);
+		}
+		Collections.sort(userList, User.ratingsort);
+		System.out.println("top users=" +userList);
+		return userList;
 	}
 }

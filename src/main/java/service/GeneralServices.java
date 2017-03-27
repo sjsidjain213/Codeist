@@ -48,23 +48,34 @@ public boolean match(Tag tags,ArrayList<String> tag)
 	return false;
 }
 
-public Tile returnTile(Document d,String source)
+public Tile returnTile(Document d,String source,String subject)
 {
 	Tile tl = new Tile();
 	    tl.set_id(d.get("_id"));
 	    ArrayList<String> altwo = new ArrayList<String>();
 	    altwo.add(source);
 	    tl.setSource(altwo);
-		tl.setTitle(d.getString("title"));
+	    tl.setSubject(subject);
+	    tl.setTitle(d.getString("title"));
 		tl.setDescription(d.getString("description"));
 		tl.setTags((ArrayList<String>)d.get("tags"));
 		tl.setUsername(d.getString("username"));
 	    tl.setPositioncount(1);
-		d = (Document) d.get("info");
-		tl.setUpvote((ArrayList<String>) d.get("upvotes"));
-		tl.setDownvote((ArrayList<String>) d.get("downvotes"));
+	    if(subject.equals("project")){
+	    	Document doc = (Document) d.get("info");
+	    	if((ArrayList<String>)doc.get("upvotes") != null){
+	    		tl.setUpvote((ArrayList<String>) doc.get("upvotes"));
+	    	}
+	    	if(doc.get("downvotes") != null){
+	    		tl.setDownvote((ArrayList<String>) doc.get("downvotes"));
+	    	}
+	    }
+	    else{
+	    	tl.setUpvotecount(d.getLong("upvotecount"));
+	    	tl.setDownvotecount(d.getLong("downvotecount"));
+	    }
 		tl.setViewcount(1);
-	return tl;	
+		return tl;	
 }
 
 public Acknowledgement response(String s)

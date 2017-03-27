@@ -9,6 +9,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import bean.Tile;
+import bean.User;
 import dao.HomePage;
 
 @Path("/homepage")
@@ -20,5 +21,13 @@ public class HomePageResource {
 	public ArrayList<Tile> getUserHistory(@PathParam("username") String username)
 	{
     	return new HomePage().getHistory(username);
+	}
+	
+	@GET
+	@Path("/topuser")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ArrayList<User> getTopUser()
+	{
+    	return new HomePage().topUsers();
 	}
 }
