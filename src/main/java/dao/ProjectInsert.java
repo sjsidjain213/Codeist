@@ -38,7 +38,7 @@ public Acknowledgement insertProject(Project project,HttpServletRequest req)
    ArrayList<String> a=new ArrayList<String>();
    a.add(project.getUsername());
    project.setContributors(a);
-  Acknowledgement ack=new Acknowledgement();
+   Acknowledgement ack=new Acknowledgement();
    if(docexsit==null)
     { 
 	  Document info=new Document().append("upvotes", (ArrayList<String>)project.getUpvotes()).append("downvotes",(ArrayList<String>)project.getDownvotes()).append("viewby",(List<String>)project.getViewby());
@@ -51,7 +51,7 @@ public Acknowledgement insertProject(Project project,HttpServletRequest req)
 	    		 .append("description",project.getDescription())
 	    		 .append("tags",(List<String>)project.getTags())
 	    		 .append("comments",new ArrayList<Comment>())
-	    		 .append("contributors",(List<String>)project.getContributors())
+	    		 .append("contributors",(ArrayList<String>)project.getContributors())
 	    		 .append("readme", project.getReadme())
 	    		 .append("license", project.getLicense())
 	    		 .append("_private", project.get_private())
@@ -67,9 +67,9 @@ public Acknowledgement insertProject(Project project,HttpServletRequest req)
 	    		  String url = GeneralServices.urlGenerator(Notifications.PROJECTMODULE, projectid, project.getTitle());
 	    		  new UserDao().moduleIDAdder(Notifications.PROJECTMODULE,project.getUsername(), projectid);
 	    		  UpdateResult rs=tc.updateOne(and(eq("username",project.getUsername()),eq("title",project.getTitle())),new Document("$set",new Document("project_url",url)));		    		 
-	    		 ack.setUpsertedId(projectid);
-	    		 ack.setMsg(GeneralServices.spaceRemover(project.getTitle()));
-	    		 return ack;
+	    		  ack.setUpsertedId(projectid);
+	    		  ack.setMsg(GeneralServices.spaceRemover(project.getTitle()));
+	    		  return ack;
 	    			}else{
 	                    ack.setMsg("exist");
 	                 	return ack;
@@ -77,23 +77,19 @@ public Acknowledgement insertProject(Project project,HttpServletRequest req)
                     }
     @SuppressWarnings("unchecked")
    public Acknowledgement updateproject(Project project,HttpServletRequest req,String id){
-    	
-	
-	ObjectId oid = new ObjectId(id.toString());
+    ObjectId oid = new ObjectId(id.toString());
 	Document document = tc.find(eq("_id",oid)).first();
-
-	if(document!=null){
-		System.out.println(id);
+      if(document!=null){
 		Document info=(Document) document.get("info");
 		  String title =  new GeneralServices().spaceRemover(project.getTitle());
 		  String url = ""+document.getString("id")+"/"+title;
-	Document doc = new Document()
+	    Document doc = new Document()
    		 .append("username", document.getString("username"))
    		 .append("title",project.getTitle())	
-   		.append("date",document.getDate("date"))
+   		 .append("date",document.getDate("date"))
    		 .append("last_updated",new GeneralServices().getCurrentDate())
    		 .append("description",project.getDescription())
-   		.append("project_url",url)
+   		 .append("project_url",url)
    		 .append("tags",(List<String>)project.getTags())
    		 .append("comments",(ArrayList<Comment>)document.get("comments"))
    		 .append("contributors",document.get("contributors"))
@@ -104,11 +100,8 @@ public Acknowledgement insertProject(Project project,HttpServletRequest req)
    		 .append("zip_file",project.getZip_file())
    		 .append("images",(List<String>)project.getImages())
    		 .append("info",info );
-	Document doccheck = tc.find(and(eq("username",(req.getSession().getAttribute("username")).toString()),eq("title",project.getTitle()))).first();
-	if(doccheck!=null){
 	tc.updateOne(eq("_id",oid),new Document("$set",doc));
 	return new GeneralServices().response("insert");
-	}
 	}
 	return new GeneralServices().response(null);
 }

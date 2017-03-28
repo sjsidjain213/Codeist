@@ -68,7 +68,7 @@ public class UserResource implements ContainerResponseFilter {
 	public Acknowledgement insertUser(User users,@Context HttpServletRequest req)
 	{
 	//return (new SessionService().sessionVerifier(req))?new UserDao().insertUser(users):new GeneralServices().response(null);
-	return new UserDao().insertUser(users);
+	return new UserDao().updateUser(users);
 	}
 	
 	// For Demo Purpose : : User here can access his/her profile ONLY after login 
