@@ -29,6 +29,7 @@ public class QADao {
 		{Document info=new Document().append("upvotes",new ArrayList<String>()).append("downvotes",new ArrayList<String>());
 			Document doc = new Document("username",userfromsession)
 	    		.append("question",question.getQuestion())
+	    		.append("description",question.getDescription())
 	    		.append("date",GeneralServices.getCurrentDate())
 	    		.append("info",info)
 	    		.append("featured_points", question.getFeatured_points());
@@ -62,6 +63,7 @@ public class QADao {
 		Document doc = tc.find(eq("_id",id1)).first();	
 	Question quest = new Question();
 	quest.setUsername(doc.getString("username"));
+	quest.setDescription(doc.getString("description"));
 	quest.setDate(doc.getDate("date"));
 	quest.setTags((ArrayList<String>)doc.get("tags"));
 	quest.setQuestion_url(doc.getString("url"));
