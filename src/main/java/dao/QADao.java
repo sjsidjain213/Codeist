@@ -1,6 +1,7 @@
 package dao;
 
 import org.bson.Document;
+import org.bson.types.ObjectId;
 
 import com.mongodb.client.MongoCollection;
 
@@ -54,9 +55,10 @@ public class QADao {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Question getQuestion(String question)
+	public Question getQuestion(String id)
 	{
-	Document doc = tc.find(eq("question",question)).first();	
+		ObjectId id1=new ObjectId(id.toString());
+		Document doc = tc.find(eq("_id",id1)).first();	
 	Question quest = new Question();
 	quest.setUsername(doc.getString("username"));
 	quest.setDate(doc.getDate("date"));
@@ -101,13 +103,15 @@ public class QADao {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Acknowledgement upQuestion(String username,Question question,String user){
+	public Acknowledgement upQuestion(String id,String username,String user){
+		ObjectId id1=new ObjectId(id.toString());
+		Document d = tc.find(eq("_id",id1)).first();
 		 MongoCollection<Document> tcuserdata = new DatabaseServices().getDb().getCollection("userdata");
 		 long qa_upvote= tcuserdata.find(eq("username",username)).first().getLong("votes.qa_upvote");
 			long qa_downvote= tcuserdata.find(eq("username",username)).first().getLong("votes.qa_downvote");
 			
 		//username ques owner //user who votes
-		Document d = tc.find(and(eq("username",username),eq("question",question.getQuestion()))).first();
+		d = tc.find(eq("_id",id1)).first();
 		Document infodetails=(Document)d.get("info");
 			ArrayList<String> up=(ArrayList<String>)infodetails.get("upvotes");
 			ArrayList<String> down=(ArrayList<String>)infodetails.get("downvotes");
@@ -116,8 +120,8 @@ public class QADao {
 					if(down!=null &&down.contains(user)){
 						// when user had downvoted in past 
 						 down.remove(user);
-						 String acknow2 = tc.updateOne(and(eq("username", username),eq("question",question.getQuestion())),new Document("$set",new Document("info.downvotes",down))).toString();
-						 tc.updateOne(and(eq("username", username),eq("question",question.getQuestion())),new Document("$set",new Document("downvotecount",down.size())));
+						 String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.downvotes",down))).toString();
+						 tc.updateOne(eq("_id",id1),new Document("$set",new Document("downvotecount",down.size())));
 			qa_downvote-=1;
 			 tcuserdata.updateOne(eq("username",username),new Document("$set",new Document("votes.qa_downvote",qa_downvote)));
               		}
@@ -125,42 +129,44 @@ public class QADao {
 				//
 				 qa_upvote+=1;
 				 tcuserdata.updateOne(eq("username",username),new Document("$set",new Document("votes.qa_upvote",qa_upvote)));
-				 String acknow2 = tc.updateOne(and(eq("username", username),eq("question",question.getQuestion())),new Document("$set",new Document("info.upvotes",up))).toString();	 
-				 tc.updateOne(and(eq("username", username),eq("question",question.getQuestion())),new Document("$set",new Document("upvotecount",up.size())));
+				 String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.upvotes",up))).toString();	 
+				 tc.updateOne(eq("_id",id1),new Document("$set",new Document("upvotecount",up.size())));
 				//public void voteNotification(String username,String pqname,String pqid,String commitername,Notifications notify)
-		        String q_id = tc.find(and(eq("username",question.getUsername()),eq("question",question.getQuestion()))).first().get("_id").toString();
+		        String q_id = tc.find(eq("_id",id1)).first().get("_id").toString();
 				   
-				new NotificationService().voteNotification(username,question.getQuestion(),q_id,user,Notifications.UPVOTESQUESTION);
+				//new NotificationService().voteNotification(username,question.getQuestion(),q_id,user,Notifications.UPVOTESQUESTION);
 				 return new GeneralServices().response(acknow2);}
 				else{
 					up.remove(user);
 					//
 					qa_upvote-=1;
 					 tcuserdata.updateOne(eq("username",username),new Document("$set",new Document("votes.qa_upvote",qa_upvote)));
-					String acknow2 = tc.updateOne(and(eq("username", username),eq("question",question.getQuestion())),new Document("$set",new Document("info.upvotes",up))).toString();	 
-					tc.updateOne(and(eq("username", username),eq("question",question.getQuestion())),new Document("$set",new Document("upvotecount",up.size())));
+					String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.upvotes",up))).toString();	 
+					tc.updateOne(eq("_id",id1),new Document("$set",new Document("upvotecount",up.size())));
 				}
 			return new GeneralServices().response("already exist");
 			}
 			else{
 				if(down!=null && down.contains(user)){
 					down.remove(user);
-					 String acknow2 = tc.updateOne(and(eq("username", username),eq("question",question.getQuestion())),new Document("$set",new Document("info.downvotes",down))).toString();	 
-					 tc.updateOne(and(eq("username", username),eq("question",question.getQuestion())),new Document("$set",new Document("downvotecount",down.size())));
+					 String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.downvotes",down))).toString();	 
+					 tc.updateOne(eq("_id",id1),new Document("$set",new Document("downvotecount",down.size())));
 				}
 				up=new ArrayList<String>();
 				up.add(user);
-				 String acknow2 = tc.updateOne(and(eq("username", username),eq("question",question.getQuestion())),new Document("$set",new Document("info.upvotes",up))).toString();	
-				 tc.updateOne(and(eq("username", username),eq("question",question.getQuestion())),new Document("$set",new Document("upvotecount",up.size())));
-				 String q_id = tc.find(and(eq("username",question.getUsername()),eq("question",question.getQuestion()))).first().get("_id").toString();
-				 new NotificationService().voteNotification(username,question.getQuestion(),q_id,user,Notifications.UPVOTESQUESTION);
+				 String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.upvotes",up))).toString();	
+				 tc.updateOne(eq("_id",id1),new Document("$set",new Document("upvotecount",up.size())));
+				 String q_id = tc.find(eq("_id",id1)).first().get("_id").toString();
+				 //new NotificationService().voteNotification(username,question.getQuestion(),q_id,user,Notifications.UPVOTESQUESTION);
 			return new GeneralServices().response(acknow2);
 				
 			}
 	}
 	@SuppressWarnings("unchecked")
-	public Acknowledgement downQuestion(String username,Question question,String user){
-		Document d = tc.find(and(eq("username",username),eq("question",question.getQuestion()))).first();
+	public Acknowledgement downQuestion(String id,String user){
+		ObjectId id1=new ObjectId(id.toString());
+		Document d = tc.find(eq("_id",id1)).first();
+		//Document d = tc.find(and(eq("username",username),eq("question",question.getQuestion()))).first();
 		Document infodetails=(Document)d.get("info");
 			ArrayList<String> up=(ArrayList<String>)infodetails.get("upvotes");
 			ArrayList<String> down=(ArrayList<String>)infodetails.get("downvotes");
@@ -169,35 +175,35 @@ public class QADao {
 				if(!down.contains(user)){
 					if(up!=null && up.contains(user)){
 						up.remove(user);
-						 String acknow2 = tc.updateOne(and(eq("username", username),eq("question",question.getQuestion())),new Document("$set",new Document("info.upvotes",up))).toString();
-						 tc.updateOne(and(eq("username", username),eq("question",question.getQuestion())),new Document("$set",new Document("upvotecount",up.size())));
+						 String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.upvotes",up))).toString();
+						 tc.updateOne(eq("_id",id1),new Document("$set",new Document("upvotecount",up.size())));
 					}
 				down.add(user);
-				String acknow2 = tc.updateOne(and(eq("username", username),eq("question",question.getQuestion())),new Document("$set",new Document("info.downvotes",down))).toString();	 
-				tc.updateOne(and(eq("username", username),eq("question",question.getQuestion())),new Document("$set",new Document("downvotecount",down.size())));
-				 String q_id = tc.find(and(eq("username",question.getUsername()),eq("question",question.getQuestion()))).first().get("_id").toString();
-				 new NotificationService().voteNotification(username,question.getQuestion(),q_id,user,Notifications.DOWNVOTESQUESTION);
+				String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.downvotes",down))).toString();	 
+				tc.updateOne(eq("_id",id1),new Document("$set",new Document("downvotecount",down.size())));
+				 String q_id = tc.find(eq("_id",id1)).first().get("_id").toString();
+				 //new NotificationService().voteNotification(username,question.getQuestion(),q_id,user,Notifications.DOWNVOTESQUESTION);
 				 return new GeneralServices().response(acknow2);}
 				else{
 					down.remove(user);
-					String acknow2 = tc.updateOne(and(eq("username", username),eq("question",question.getQuestion())),new Document("$set",new Document("info.downvotes",down))).toString();
-					tc.updateOne(and(eq("username", username),eq("question",question.getQuestion())),new Document("$set",new Document("downvotecount",down.size())));
+					String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.downvotes",down))).toString();
+					tc.updateOne(eq("_id",id1),new Document("$set",new Document("downvotecount",down.size())));
 				}
 			return new GeneralServices().response("already exist");
 			}
 			else{
 				if(up!=null && up.contains(user)){
 					up.remove(user);
-					 String acknow2 = tc.updateOne(and(eq("username", username),eq("question",question.getQuestion())),new Document("$set",new Document("info.upvotes",up))).toString();
-					 tc.updateOne(and(eq("username", username),eq("question",question.getQuestion())),new Document("$set",new Document("upvotecount",up)));
+					 String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.upvotes",up))).toString();
+					 tc.updateOne(eq("_id",id1),new Document("$set",new Document("upvotecount",up)));
 				}
 				down=new ArrayList<String>();
 				down.add(user);
-				 String acknow2 = tc.updateOne(and(eq("username", username),eq("question",question.getQuestion())),new Document("$set",new Document("info.downvotes",down))).toString();
-				 tc.updateOne(and(eq("username", username),eq("question",question.getQuestion())),new Document("$set",new Document("info.downvotes",down)));
+				 String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.downvotes",down))).toString();
+				 tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.downvotes",down)));
 				 
-				 String q_id = tc.find(and(eq("username",question.getUsername()),eq("question",question.getQuestion()))).first().get("_id").toString();
-				 new NotificationService().voteNotification(username,question.getQuestion(),q_id,user,Notifications.DOWNVOTESQUESTION);
+				 String q_id = tc.find(eq("_id",id1)).first().get("_id").toString();
+				 //new NotificationService().voteNotification(username,question.getQuestion(),q_id,user,Notifications.DOWNVOTESQUESTION);
 				 return new GeneralServices().response(acknow2);
 				
 			}
@@ -205,12 +211,13 @@ public class QADao {
 
 
 	@SuppressWarnings("unchecked")
-	public Acknowledgement upanswer(String username,Answer answer,String user){
+	public Acknowledgement upanswer(String id,Answer answer,String user){
 		//answer  username:whos answer ,question :full question
 		//username whose question
+		ObjectId id1=new ObjectId(id.toString());
+		Document d = tc.find(eq("_id",id1)).first();
 		ArrayList<String> up=null,down=null;
 		int i=0;
-		Document d = tc.find(and(eq("username",username),eq("question",answer.getQuestion()))).first();
 		ArrayList<Document> aldo = (ArrayList<Document>) d.get("answers");
 		for(Document d1:aldo){
 			if(d1.get("username").equals(answer.getUsername())){
@@ -229,45 +236,46 @@ public class QADao {
 				if(!up.contains(user)){
 					if(down!=null &&down.contains(user)){
 						down.remove(user);
-						 String acknow2 = tc.updateOne(and(eq("username", username),eq("question",answer.getQuestion())),new Document("$set",new Document(downs,down))).toString();
-						 tc.updateOne(and(eq("username", username),eq("question",answer.getQuestion())),new Document("$set",new Document(downc,down.size())));
+						 String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document(downs,down))).toString();
+						 tc.updateOne(eq("_id",id1),new Document("$set",new Document(downc,down.size())));
 					}
 				up.add(user);
-				String acknow2 = tc.updateOne(and(eq("username", username),eq("question",answer.getQuestion())),new Document("$set",new Document(ups,up))).toString();
-				tc.updateOne(and(eq("username", username),eq("question",answer.getQuestion())),new Document("$set",new Document(upc,up.size())));
+				String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document(ups,up))).toString();
+				tc.updateOne(eq("_id",id1),new Document("$set",new Document(upc,up.size())));
 		//public void voteNotification(String username,String pqname,String pqid,String commitername,Notifications notify)
-		String q_id = tc.find(and(eq("username",username),eq("question",answer.getQuestion()))).first().get("_id").toString();
+		String q_id = tc.find(eq("_id",id1)).first().get("_id").toString();
 				   
-				new NotificationService().voteNotification(username,answer.getQuestion(),q_id,user,Notifications.UPVOTESANSWER);
+				//new NotificationService().voteNotification(username,answer.getQuestion(),q_id,user,Notifications.UPVOTESANSWER);
 				 return new GeneralServices().response(acknow2);}
 				else{
 					up.remove(user);
-					String acknow2 = tc.updateOne(and(eq("username", username),eq("question",answer.getQuestion())),new Document("$set",new Document(ups,up))).toString();
-					tc.updateOne(and(eq("username", username),eq("question",answer.getQuestion())),new Document("$set",new Document(upc,up.size())));
+					String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document(ups,up))).toString();
+					tc.updateOne(eq("_id",id1),new Document("$set",new Document(upc,up.size())));
 				}
 			return new GeneralServices().response("already exist");
 			}
 			else{
 				if(down!=null && down.contains(user)){
 					down.remove(user);
-					 String acknow2 = tc.updateOne(and(eq("username", username),eq("question",answer.getQuestion())),new Document("$set",new Document(downs,down))).toString();
-					 tc.updateOne(and(eq("username", username),eq("question",answer.getQuestion())),new Document("$set",new Document(downc,down.size())));
+					 String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document(downs,down))).toString();
+					 tc.updateOne(eq("_id",id1),new Document("$set",new Document(downc,down.size())));
 				}
 				up=new ArrayList<String>();
 				up.add(user);
-				 String acknow2 = tc.updateOne(and(eq("username", username),eq("question",answer.getQuestion())),new Document("$set",new Document(ups,up))).toString();	 
-				 tc.updateOne(and(eq("username", username),eq("question",answer.getQuestion())),new Document("$set",new Document(upc,up.size())));
-				 String q_id = tc.find(and(eq("username",username),eq("question",answer.getQuestion()))).first().get("_id").toString();
-				 new NotificationService().voteNotification(username,answer.getQuestion(),q_id,user,Notifications.UPVOTESANSWER);
+				 String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document(ups,up))).toString();	 
+				 tc.updateOne(eq("_id",id1),new Document("$set",new Document(upc,up.size())));
+				 String q_id = tc.find(eq("_id",id1)).first().get("_id").toString();
+				 //new NotificationService().voteNotification(username,answer.getQuestion(),q_id,user,Notifications.UPVOTESANSWER);
 			return new GeneralServices().response(acknow2);
 				
 			}
 	}
 	@SuppressWarnings("unchecked")
-	public Acknowledgement downanswer(String username,Answer answer,String user){
+	public Acknowledgement downanswer(String id,Answer answer,String user){
+		ObjectId id1=new ObjectId(id.toString());
+		Document d = tc.find(eq("_id",id1)).first();
 		ArrayList<String> up=null,down=null;
 		int i=0;
-		Document d = tc.find(and(eq("username",username),eq("question",answer.getQuestion()))).first();
 		ArrayList<Document> aldo = (ArrayList<Document>) d.get("answers");
 		for(Document d1:aldo){
 			if(d1.get("username").equals(answer.getUsername())){
@@ -286,34 +294,34 @@ public class QADao {
 				if(!down.contains(user)){
 					if(up!=null && up.contains(user)){
 						up.remove(user);
-						 String acknow2 = tc.updateOne(and(eq("username", username),eq("question",answer.getQuestion())),new Document("$set",new Document(ups,up))).toString();	 
-						 tc.updateOne(and(eq("username", username),eq("question",answer.getQuestion())),new Document("$set",new Document(upc,up.size())));
+						 String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document(ups,up))).toString();	 
+						 tc.updateOne(eq("_id",id1),new Document("$set",new Document(upc,up.size())));
 					}
 				down.add(user);
-				String acknow2 = tc.updateOne(and(eq("username", username),eq("question",answer.getQuestion())),new Document("$set",new Document(downs,down))).toString();	 
-				tc.updateOne(and(eq("username", username),eq("question",answer.getQuestion())),new Document("$set",new Document(downc,down.size())));
-				 String q_id = tc.find(and(eq("username",username),eq("question",answer.getQuestion()))).first().get("_id").toString();
-				 new NotificationService().voteNotification(username,answer.getQuestion(),q_id,user,Notifications.DOWNVOTESQUESTION);
+				String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document(downs,down))).toString();	 
+				tc.updateOne(eq("_id",id1),new Document("$set",new Document(downc,down.size())));
+				 String q_id = tc.find(eq("_id",id1)).first().get("_id").toString();
+				 //new NotificationService().voteNotification(username,answer.getQuestion(),q_id,user,Notifications.DOWNVOTESQUESTION);
 				 return new GeneralServices().response(acknow2);}
 				else{
 					down.remove(user);
-					String acknow2 = tc.updateOne(and(eq("username", username),eq("question",answer.getQuestion())),new Document("$set",new Document(downs,down))).toString();
-					tc.updateOne(and(eq("username", username),eq("question",answer.getQuestion())),new Document("$set",new Document(downc,down.size())));
+					String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document(downs,down))).toString();
+					tc.updateOne(eq("_id",id1),new Document("$set",new Document(downc,down.size())));
 				}
 			return new GeneralServices().response("already exist");
 			}
 			else{
 				if(up!=null && up.contains(user)){
 					up.remove(user);
-					 String acknow2 = tc.updateOne(and(eq("username", username),eq("question",answer.getQuestion())),new Document("$set",new Document(ups,up))).toString();
-					 tc.updateOne(and(eq("username", username),eq("question",answer.getQuestion())),new Document("$set",new Document(upc,up.size())));
+					 String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document(ups,up))).toString();
+					 tc.updateOne(eq("_id",id1),new Document("$set",new Document(upc,up.size())));
 				}
 				down=new ArrayList<String>();
 				down.add(user);
-				 String acknow2 = tc.updateOne(and(eq("username", username),eq("question",answer.getQuestion())),new Document("$set",new Document(downs,down))).toString();
-				 tc.updateOne(and(eq("username", username),eq("question",answer.getQuestion())),new Document("$set",new Document(downc,down.size())));
-				 String q_id = tc.find(and(eq("username",username),eq("question",answer.getQuestion()))).first().get("_id").toString();
-				 new NotificationService().voteNotification(username,answer.getQuestion(),q_id,user,Notifications.DOWNVOTESQUESTION);
+				 String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document(downs,down))).toString();
+				 tc.updateOne(eq("_id",id1),new Document("$set",new Document(downc,down.size())));
+				 String q_id = tc.find(eq("_id",id1)).first().get("_id").toString();
+				 //new NotificationService().voteNotification(username,answer.getQuestion(),q_id,user,Notifications.DOWNVOTESQUESTION);
 				 return new GeneralServices().response(acknow2);
 				
 			}

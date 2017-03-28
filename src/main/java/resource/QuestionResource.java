@@ -35,10 +35,10 @@ public class QuestionResource {
 		return new QADao().insertAnswer(answer,req);
 	}
 	@GET
-	@Path("/retrieve/{question}")
+	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Question insertAnswer(@PathParam("question")String question)
+	public Question insertAnswer(@PathParam("id")String question)
 	{
 		return new QADao().getQuestion(question);
 	}

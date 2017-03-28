@@ -8,8 +8,8 @@ public class Project{
     //private long downvotes, viewcount,upvotes;
    	private ArrayList<String> images,video_url,zip_file,contributors,tags,downvotes,viewby,project_link;
 	private ArrayList<Comment> comments;
-    private Date date = new Date();
-    private Date last_updated = new Date();
+    private Date date;
+    private Date last_updated ;
     private Long upvotecount,downvotecount;
    ArrayList<String> upvotes;
    
