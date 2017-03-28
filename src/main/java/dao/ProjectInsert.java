@@ -208,9 +208,10 @@ public  Comment deleteComment(String id,String username,String date,HttpServletR
 	ObjectId id1=new ObjectId(id.toString());
 	Document project = tc.find(eq("_id",id1)).first();
 	Comment comment1=new Comment();
+	ArrayList<String> con=(ArrayList<String>) project.get("contributors");
 	ArrayList<Comment> alcomment = new ArrayList<Comment>();
 	ArrayList<Document> al =  (ArrayList<Document>) project.get("comments");
-	if(al!=null){
+	if(al!=null && con.contains(req.getSession().getAttribute("username").toString())){
 		 
 	    for(Document din : al)
 	    {   if(!(din.getString("username").equals("username") && date.equals(din.getDate("date").getTime()))){
