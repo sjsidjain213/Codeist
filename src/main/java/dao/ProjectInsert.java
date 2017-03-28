@@ -81,6 +81,7 @@ public HashMap<String,String> insertProject(Project project,HttpServletRequest r
 	Document doc = new Document()
    		 .append("username", document.getString("username"))
    		 .append("title",project.getTitle())	
+   		.append("date",project.getDate())
    		 .append("last_updated",new GeneralServices().getCurrentDate())
    		 .append("description",project.getDescription())
    		.append("project_url",url)

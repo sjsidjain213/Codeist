@@ -12,7 +12,37 @@ public class User {
     private String username,password,name,bio,phone_no,gender,email_id,country,state,city,message,category,institute;
 	private ArrayList<String> favourite_tag,following,follower,contributing,project_id,project_bookmark,question_bookmark;
 	private ArrayList<String> tag_view, user_view, problem_category_view, project_view,question_ask,question_answer;
-	private long rating,zipcode;
+	private long rating,zipcode,project_upvote,project_downvote,qa_upvote,qa_downvote;
+	public ArrayList<String> getTag_view() {
+		return tag_view;
+	}
+	public void setTag_view(ArrayList<String> tag_view) {
+		this.tag_view = tag_view;
+	}
+	public long getProject_upvote() {
+		return project_upvote;
+	}
+	public void setProject_upvote(long project_upvote) {
+		this.project_upvote = project_upvote;
+	}
+	public long getProject_downvote() {
+		return project_downvote;
+	}
+	public void setProject_downvote(long project_downvote) {
+		this.project_downvote = project_downvote;
+	}
+	public long getQa_upvote() {
+		return qa_upvote;
+	}
+	public void setQa_upvote(long qa_upvote) {
+		this.qa_upvote = qa_upvote;
+	}
+	public long getQa_downvote() {
+		return qa_downvote;
+	}
+	public void setQa_downvote(long qa_downvote) {
+		this.qa_downvote = qa_downvote;
+	}
 	private Date date = new Date();
 	public String getUsername() {
 		return username;
