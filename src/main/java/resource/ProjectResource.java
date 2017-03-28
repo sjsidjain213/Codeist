@@ -50,6 +50,7 @@ return	new ProjectInsert().insertProject(project,req);
 @Produces(MediaType.APPLICATION_JSON)
 public Acknowledgement updateProject(Project project,@Context HttpServletRequest req,@PathParam("id")String id)
 {
+	
 //return new ProjectInsert().insertProject(project);
 return (new SessionService().sessionVerifier(req))?new ProjectInsert().updateproject(project,req,id):new GeneralServices().response(null);
 }
