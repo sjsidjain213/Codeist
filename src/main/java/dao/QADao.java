@@ -215,7 +215,7 @@ public class QADao {
 
 
 	@SuppressWarnings("unchecked")
-	public Acknowledgement upanswer(String id,Answer answer,String user){
+	public Acknowledgement upanswer(String id,String username,String user){
 		//answer  username:whos answer ,question :full question
 		//username whose question
 		ObjectId id1=new ObjectId(id.toString());
@@ -224,7 +224,7 @@ public class QADao {
 		int i=0;
 		ArrayList<Document> aldo = (ArrayList<Document>) d.get("answers");
 		for(Document d1:aldo){
-			if(d1.get("username").equals(answer.getUsername())){
+			if(d1.get("username").equals(username)){
 			    Document infodetails=(Document)d1.get("info");
 				up=(ArrayList<String>)infodetails.get("upvotes");
 				down=(ArrayList<String>)infodetails.get("downvotes");
@@ -232,7 +232,7 @@ public class QADao {
 					}
 			i++;
 		}
-		String username=answer.getUsername();
+		
 		String ups="answers."+i+".info.upvotes";
 		String downs="answers."+i+".info.downvotes";
 		String upc="answers."+i+".upvotecount";
@@ -281,14 +281,14 @@ public class QADao {
 			}
 	}
 	@SuppressWarnings("unchecked")
-	public Acknowledgement downanswer(String id,Answer answer,String user){
+	public Acknowledgement downanswer(String id,String username,String user){
 		ObjectId id1=new ObjectId(id.toString());
 		Document d = tc.find(eq("_id",id1)).first();
 		ArrayList<String> up=null,down=null;
 		int i=0;
 		ArrayList<Document> aldo = (ArrayList<Document>) d.get("answers");
 		for(Document d1:aldo){
-			if(d1.get("username").equals(answer.getUsername())){
+			if(d1.get("username").equals(username)){
 				 Document infodetails=(Document)d1.get("info");
 			up=(ArrayList<String>)infodetails.get("upvotes");
 			 down=(ArrayList<String>)infodetails.get("downvotes");
@@ -296,7 +296,7 @@ public class QADao {
 						}
 				i++;
 			}
-		String username=answer.getUsername();
+		
 		String ups="answers."+i+".info.upvotes";
 		String downs="answers."+i+".info.downvotes";
 		String upc="answers."+i+".upvotecount";
