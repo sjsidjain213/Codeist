@@ -14,6 +14,8 @@ import bean.Project;
 
 import static com.mongodb.client.model.Filters.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -53,6 +55,7 @@ public Acknowledgement insertProject(Project project,HttpServletRequest req)
 	    		 .append("readme", project.getReadme())
 	    		 .append("license", project.getLicense())
 	    		 .append("_private", project.get_private())
+	    		 .append("project_link", (List<String>)project.getProject_link())
 	    		 .append("video_url",project.getVideo_url())
 	    		 .append("zip_file",project.getZip_file())
 	    		 .append("images",(List<String>)project.getImages())
@@ -163,7 +166,7 @@ public Project getSelectedProject(String id,HttpServletRequest req)
 	   		project.setLast_updated(d.getDate("last_updated"));
 	   		project.setTags((ArrayList<String>)d.get("tags")); 
 	   		project.setLicense(d.getString("license"));
-	   		project.setProject_url(d.getString("project_link"));
+	   		project.setProject_link((ArrayList<String>)d.get("project_link"));
 	   		project.setContributors((ArrayList<String>)d.get("contributors"));
 	   		project.setReadme(d.getString("readme"));
 	   		project.set_private(d.getString("_private"));
@@ -199,6 +202,33 @@ return comment;}
 		comment.setComment("error");
 		return comment;
 	}
+}
+
+public  Comment deleteComment(String id,String username,String date,HttpServletRequest req){
+	ObjectId id1=new ObjectId(id.toString());
+	Document project = tc.find(eq("_id",id1)).first();
+	Comment comment1=new Comment();
+	ArrayList<Comment> alcomment = new ArrayList<Comment>();
+	ArrayList<Document> al =  (ArrayList<Document>) project.get("comments");
+	if(al!=null){
+		 
+	    for(Document din : al)
+	    {   if(!(din.getString("username").equals("username") && date.equals(din.getDate("date").getTime()))){
+	    	Comment comment = new Comment();
+			comment.setUsername(din.getString("username"));
+	    	comment.setComment(din.getString("comment"));
+	    	comment.setDate(din.getDate("date"));
+            alcomment.add(comment);
+	    }
+	    else{
+	    	comment1.setComment(din.getString("comment"));
+	    	comment1.setUsername(din.getString("username"));
+	    	comment1.setDate(din.getDate("date"));
+	    }
+	    }
+	    tc.updateOne(eq("_id",id1),new Document("$set",new Document("comments",alcomment)));
+	    }
+	return comment1;
 }
 
 @SuppressWarnings("unchecked")

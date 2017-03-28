@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -101,6 +102,14 @@ return (new SessionService().sessionVerifier(req))?new ProjectInsert().insertCom
 
 }
 
+@DELETE
+@Path("/{id}/comment/{username}/{date}")
+@Produces(MediaType.APPLICATION_JSON)
+public Comment deleteComment(@PathParam("id")String id,@PathParam("username")String username,@PathParam("date")String date,@Context HttpServletRequest req){
+	//return new ProjectInsert().deleteComment(id, username, date);
+	return (new SessionService().sessionVerifier(req))?new ProjectInsert().deleteComment(id, username, date ,req):new Comment();
+	
+}
 
 @PUT
 @Path("/{id}/upvote")
