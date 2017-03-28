@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Project{
-	private String username,title,description,readme,license,project_url,_private,id;
+	private String username,title,description,readme,license,project_url,_private,id,url_title;
     //private long downvotes, viewcount,upvotes;
    	private ArrayList<String> images,video_url,zip_file,contributors,tags,downvotes,viewby,project_link;
 	private ArrayList<Comment> comments;
@@ -13,6 +13,12 @@ public class Project{
     private Long upvotecount,downvotecount;
    ArrayList<String> upvotes;
    
+public String getUrl_title() {
+	return url_title;
+}
+public void setUrl_title(String url_title) {
+	this.url_title = url_title;
+}
 public String getId() {
 	return id;
 }

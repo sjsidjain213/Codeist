@@ -161,6 +161,7 @@ public Project getSelectedProject(String id,HttpServletRequest req)
 			project.setId(d.get("_id").toString());
 			project.setUsername(d.getString("username"));
 		   	project.setTitle(d.getString("title"));
+		   	project.setUrl_title(GeneralServices.spaceRemover(d.getString("title")));
 	   		project.setDescription(d.getString("description"));
 	   		project.setDate(d.getDate("date"));
 	   		project.setLast_updated(d.getDate("last_updated"));
