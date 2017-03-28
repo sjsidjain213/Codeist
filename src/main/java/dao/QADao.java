@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 public class QADao {
 	
 	MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("testqa");
+	MongoCollection<Document> tcuser = new DatabaseServices().getDb().getCollection("testuserdata");
     public Acknowledgement insertQuestion(Question question, HttpServletRequest req)
 	{   String userfromsession = req.getSession().getAttribute("username").toString();
 	    Document doc2 = tc.find(and(eq("username",userfromsession),eq("question",question.getQuestion()))).first();
@@ -106,9 +107,7 @@ public class QADao {
 	public Acknowledgement upQuestion(String id,String username,String user){
 		ObjectId id1=new ObjectId(id.toString());
 		Document d = tc.find(eq("_id",id1)).first();
-		 MongoCollection<Document> tcuserdata = new DatabaseServices().getDb().getCollection("userdata");
-		 long qa_upvote= tcuserdata.find(eq("username",username)).first().getLong("votes.qa_upvote");
-			long qa_downvote= tcuserdata.find(eq("username",username)).first().getLong("votes.qa_downvote");
+		 
 			
 		//username ques owner //user who votes
 		d = tc.find(eq("_id",id1)).first();
@@ -122,13 +121,9 @@ public class QADao {
 						 down.remove(user);
 						 String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.downvotes",down))).toString();
 						 tc.updateOne(eq("_id",id1),new Document("$set",new Document("downvotecount",down.size())));
-			qa_downvote-=1;
-			 tcuserdata.updateOne(eq("username",username),new Document("$set",new Document("votes.qa_downvote",qa_downvote)));
-              		}
+			 		}
 				 up.add(user);
 				//
-				 qa_upvote+=1;
-				 tcuserdata.updateOne(eq("username",username),new Document("$set",new Document("votes.qa_upvote",qa_upvote)));
 				 String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.upvotes",up))).toString();	 
 				 tc.updateOne(eq("_id",id1),new Document("$set",new Document("upvotecount",up.size())));
 				//public void voteNotification(String username,String pqname,String pqid,String commitername,Notifications notify)
@@ -139,8 +134,6 @@ public class QADao {
 				else{
 					up.remove(user);
 					//
-					qa_upvote-=1;
-					 tcuserdata.updateOne(eq("username",username),new Document("$set",new Document("votes.qa_upvote",qa_upvote)));
 					String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.upvotes",up))).toString();	 
 					tc.updateOne(eq("_id",id1),new Document("$set",new Document("upvotecount",up.size())));
 				}
