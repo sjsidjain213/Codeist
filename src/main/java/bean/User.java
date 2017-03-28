@@ -243,7 +243,7 @@ public class User {
 		// TODO Auto-generated constructor stub
 	}
 	 
-	public static Comparator<User> ratingsort = new Comparator<User>() {
+	/*public static Comparator<User> ratingsort = new Comparator<User>() {
 
 		public int compare(User s1,User s2) {
 
@@ -251,6 +251,6 @@ public class User {
 		   int rating2 = (int)s2.getRating();
 
 		   return rating2-rating1;
-	  }};
+	  }};*/
 	
     }

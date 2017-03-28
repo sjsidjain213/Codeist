@@ -26,7 +26,7 @@ public class HomePage {
  	public ArrayList<Tile> getHistory(String username)
 	{
  		//needs to be tested, ClassCastException for long in Tile.java line 84
- 		MongoCollection<Document> tc =new DatabaseServices().getDb().getCollection("userdata");
+ 	   MongoCollection<Document> tc =new DatabaseServices().getDb().getCollection("userdata");
 	   
 	   Document doc = tc.find(eq("username",username)).first();
 	   ArrayList<String> alfavtags = (ArrayList<String>) doc.get("favourite_tag");
@@ -57,8 +57,7 @@ public class HomePage {
        for(String s : albookmark){
     	   ObjectId id = new ObjectId(s);
     	   docbookmark = tc.find(in("_id",id));
-    	   
-       }
+    	}
        
        tc =new DatabaseServices().getDb().getCollection("qa");
        FindIterable <Document> quesfavtags =  tc.find(in("tags",alfavtags));
@@ -70,8 +69,10 @@ public class HomePage {
     	   ObjectId id = new ObjectId(s);
     	   quesbookmark = tc.find(in("_id",id));
        }
+       
        FindIterable <Document> quesask = null;
        for(String s : alquesask){
+    	   System.out.println(s+"###############################################################");
     	   ObjectId id = new ObjectId(s);
     	   quesask = tc.find(in("_id",id));
        }
@@ -148,7 +149,7 @@ public class HomePage {
 	public static ArrayList<Tile> trendingQuestion()
 	{
 // test pending
-		MongoCollection<Document> tc =new DatabaseServices().getDb().getCollection("question");
+		MongoCollection<Document> tc =new DatabaseServices().getDb().getCollection("qa");
 		FindIterable <Document> fi =tc.find().sort(new Document("date",-1).append("upvotecount", -1).append("downvotecount",1));
 		ArrayList<Tile> ques = new ArrayList<Tile>();
 		for(Document d:fi)
@@ -166,9 +167,29 @@ public class HomePage {
 		return ques;
 	}
 	
+	public static ArrayList<Tile> trendingProject()
+	{
+// test pending
+		MongoCollection<Document> tc =new DatabaseServices().getDb().getCollection("project");
+		FindIterable <Document> fi =tc.find().sort(new Document("date",-1).append("upvotecount", -1).append("downvotecount",1));
+		ArrayList<Tile> project = new ArrayList<Tile>();
+		for(Document d:fi)
+		{Tile doc = new Tile();
+		        doc.setUsername(d.getString("username"));
+		        doc.setTitle(d.getString("title"));
+		        doc.setUpvotecount(d.getLong("upvotecount"));
+		        doc.setDownvotecount(d.getLong("downvotecount"));
+		        // description might throw error check database 
+		        doc.setDescription(d.getString("description"));
+		        doc.setUrl(d.getString("project_url"));
+		        project.add(doc);
+		        System.out.println(project);
+		}
+		return project;
+	}
 	public ArrayList<User> topUsers(){
 		MongoCollection<Document> tc =new DatabaseServices().getDb().getCollection("userdata");
-		FindIterable<Document> fi = tc.find();
+		FindIterable<Document> fi = tc.find().sort(new Document("rating",-1));
 		ArrayList<User> userList = new ArrayList<User>();
 		for(Document d : fi){
 			User user = new User();
@@ -180,8 +201,6 @@ public class HomePage {
 			user.setRating(d.getInteger("rating"));
 			userList.add(user);
 		}
-		Collections.sort(userList, User.ratingsort);
-		System.out.println("top users=" +userList);
 		return userList;
 	}
 }

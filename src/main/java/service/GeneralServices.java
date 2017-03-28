@@ -1,9 +1,19 @@
 package service;
+import java.awt.image.BufferedImage;
+import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+
+import javax.imageio.ImageIO;
 
 import org.bson.Document;
 
@@ -229,5 +239,22 @@ hm.put("module",module);
 hm.put("id", id);
 return hm;
 }
+public void update(String base)
+{
+	BufferedImage image = null;
+	byte[] imageByte;
 
+	byte[] imageBytes = javax.xml.bind.DatatypeConverter.parseBase64Binary(base);
+	// write the image to a file
+	try (BufferedOutputStream bw = new BufferedOutputStream(new FileOutputStream("C:/Users/dell 1/Documents/Advance java/img.png"))) {
+		bw.write(imageBytes);
+// no need to close it.
+		//bw.close();
+		System.out.println("Done");
+
+	} catch (IOException e) {
+
+		e.printStackTrace();
+
+	}}
 }
