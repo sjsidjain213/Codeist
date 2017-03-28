@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Project{
-	private String username,title,description,readme,license,project_url,_private;
+	private String username,title,description,readme,license,project_url,_private,id;
     //private long downvotes, viewcount,upvotes;
    	private ArrayList<String> images,video_url,zip_file,contributors,tags,downvotes,viewby,project_link;
 	private ArrayList<Comment> comments;
@@ -13,6 +13,12 @@ public class Project{
     private Long upvotecount,downvotecount;
    ArrayList<String> upvotes;
    
+public String getId() {
+	return id;
+}
+public void setId(String id) {
+	this.id = id;
+}
 public Date getLast_updated() {
 	return last_updated;
 }

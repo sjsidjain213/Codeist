@@ -8,7 +8,7 @@ public class Question {
 	private String username,question,question_url,description;
 	private Date date = new Date();
 	private ArrayList<String> tags;
-	private long featured_points,qa_upvote,qa_downvote;
+	private long featured_points;
 	private ArrayList<String> upvotes,downvotes;
 	private long upvotecount,downvotecount;
 	private ArrayList<Answer> answers = new ArrayList<Answer>();
@@ -54,18 +54,7 @@ public class Question {
 	public void setFeatured_points(long featured_points) {
 		this.featured_points = featured_points;
 	}
-	public long getQa_upvote() {
-		return qa_upvote;
-	}
-	public void setQa_upvote(long qa_upvote) {
-		this.qa_upvote = qa_upvote;
-	}
-	public long getQa_downvote() {
-		return qa_downvote;
-	}
-	public void setQa_downvote(long qa_downvote) {
-		this.qa_downvote = qa_downvote;
-	}
+	
 	public ArrayList<String> getUpvotes() {
 		return upvotes;
 	}
@@ -96,17 +85,11 @@ public class Question {
 	public void setAnswers(ArrayList<Answer> answers) {
 		this.answers = answers;
 	}
-	@Override
-	public String toString() {
-		return "Question [username=" + username + ", question=" + question + ", question_url=" + question_url
-				+ ", description=" + description + ", date=" + date + ", tags=" + tags + ", featured_points="
-				+ featured_points + ", qa_upvote=" + qa_upvote + ", qa_downvote=" + qa_downvote + ", upvotes=" + upvotes
-				+ ", downvotes=" + downvotes + ", upvotecount=" + upvotecount + ", downvotecount=" + downvotecount
-				+ ", answers=" + answers + "]";
-	}
+	
+	
 	public Question(String username, String question, String question_url, String description, Date date,
-			ArrayList<String> tags, long featured_points, long qa_upvote, long qa_downvote, ArrayList<String> upvotes,
-			ArrayList<String> downvotes, long upvotecount, long downvotecount, ArrayList<Answer> answers) {
+			ArrayList<String> tags, long featured_points, ArrayList<String> upvotes, ArrayList<String> downvotes,
+			long upvotecount, long downvotecount, ArrayList<Answer> answers) {
 		super();
 		this.username = username;
 		this.question = question;
@@ -115,8 +98,6 @@ public class Question {
 		this.date = date;
 		this.tags = tags;
 		this.featured_points = featured_points;
-		this.qa_upvote = qa_upvote;
-		this.qa_downvote = qa_downvote;
 		this.upvotes = upvotes;
 		this.downvotes = downvotes;
 		this.upvotecount = upvotecount;
@@ -126,6 +107,13 @@ public class Question {
 	public Question() {
 		super();
 		// TODO Auto-generated constructor stub
+	}
+	@Override
+	public String toString() {
+		return "Question [username=" + username + ", question=" + question + ", question_url=" + question_url
+				+ ", description=" + description + ", date=" + date + ", tags=" + tags + ", featured_points="
+				+ featured_points + ", upvotes=" + upvotes + ", downvotes=" + downvotes + ", upvotecount=" + upvotecount
+				+ ", downvotecount=" + downvotecount + ", answers=" + answers + "]";
 	}
 
 }

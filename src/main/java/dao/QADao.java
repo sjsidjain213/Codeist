@@ -14,6 +14,7 @@ import service.GeneralServices;
 import service.NotificationService;
 import static com.mongodb.client.model.Filters.*;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.management.Notification;
 import javax.servlet.http.HttpServletRequest;
@@ -30,6 +31,7 @@ public class QADao {
 			Document doc = new Document("username",userfromsession)
 	    		.append("question",question.getQuestion())
 	    		.append("description",question.getDescription())
+	    		.append("tags",(List<String>)question.getTags())
 	    		.append("date",GeneralServices.getCurrentDate())
 	    		.append("info",info)
 	    		.append("featured_points", question.getFeatured_points());

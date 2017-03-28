@@ -146,6 +146,9 @@ public class UserDao {
               user.setBio(d.getString("bio"));
               user.setName(d.getString("name"));
               user.setUsername(d.getString("username"));
+              user.setGender(d.getString("gender"));
+              user.setCategory(d.getString("category"));
+              user.setInstitute(d.getString("institute"));
     	      user.setContributing((ArrayList<String>)d.get("contributing"));
     	      user.setFollower((ArrayList<String>)d.get("followers"));
     	      user.setFollowing((ArrayList<String>)d.get("following"));
@@ -174,9 +177,13 @@ public class UserDao {
       public Acknowledgement updateUserDetails(User user,String username)
       {   System.out.println(user.getBio()+"this is bip");
     	  Document outdoc = new Document("name",user.getName())
+    			  .append("gender", user.getGender())
+    			  .append("category",user.getCategory())
+    			  .append("institute", user.getInstitute())
         		  .append("followers",user.getFollower())
         		  .append("following",user.getFollowing())
         		  .append("favourite_tags",user.getFavourite_tag())
+        		  
         		  .append("contributing",user.getContributing())
         		  .append("bio",user.getBio());
                    tc.updateOne(eq("username", user.getUsername()),new Document("$set",outdoc));   	
@@ -229,5 +236,11 @@ public class UserDao {
       currentrating = currentrating+changerating;
       if(currentrating<0)
       tc.updateOne(eq("username",username),new Document("$set",new Document("rating",currentrating)));
+      }
+      
+      public Long rating(String username){
+    	  Document document=tc.find(eq("username",username)).first();
+    	  Long l=(document.getLong("project_upvote")*20)+(document.getLong("project_downvote")*(-10))+(document.getLong("qa_upvote")*10)+(document.getLong("qa_upvote")*(-5));
+		return l;
       }
 }
