@@ -217,13 +217,7 @@ public static String linkEncryptCreator(String encrypt1,String encrypt2)
 return x;
 }
 
-public void changeRating(String string_id,Notifications notify,String action)
-{
-	ObjectId object_id = new ObjectId(string_id);
-	MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection(notify.getMsg());
-    tc.find(eq("_id",object_id));
-	
-}
+
 
 public static String urlGenerator(Notifications notify,String id,String name)
 {

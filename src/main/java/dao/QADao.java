@@ -101,7 +101,11 @@ public class QADao {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Acknowledgement upques(String username,Question question,String user){
+	public Acknowledgement upQuestion(String username,Question question,String user){
+		 MongoCollection<Document> tcuserdata = new DatabaseServices().getDb().getCollection("userdata");
+		 long qa_upvote= tcuserdata.find(eq("username",username)).first().getLong("votes.qa_upvote");
+			long qa_downvote= tcuserdata.find(eq("username",username)).first().getLong("votes.qa_downvote");
+			
 		//username ques owner //user who votes
 		Document d = tc.find(and(eq("username",username),eq("question",question.getQuestion()))).first();
 		Document infodetails=(Document)d.get("info");
@@ -110,20 +114,30 @@ public class QADao {
 			if(up!=null){
 				if(!up.contains(user)){
 					if(down!=null &&down.contains(user)){
-						down.remove(user);
+						// when user had downvoted in past 
+						 down.remove(user);
 						 String acknow2 = tc.updateOne(and(eq("username", username),eq("question",question.getQuestion())),new Document("$set",new Document("info.downvotes",down))).toString();
 						 tc.updateOne(and(eq("username", username),eq("question",question.getQuestion())),new Document("$set",new Document("downvotecount",down.size())));
-					}
-				up.add(user);
-				String acknow2 = tc.updateOne(and(eq("username", username),eq("question",question.getQuestion())),new Document("$set",new Document("info.upvotes",up))).toString();	 
-				tc.updateOne(and(eq("username", username),eq("question",question.getQuestion())),new Document("$set",new Document("upvotecount",up.size())));
+			qa_downvote-=1;
+			 tcuserdata.updateOne(eq("username",username),new Document("$set",new Document("votes.qa_downvote",qa_downvote)));
+              		}
+				 up.add(user);
+				//
+				 qa_upvote+=1;
+				 tcuserdata.updateOne(eq("username",username),new Document("$set",new Document("votes.qa_upvote",qa_upvote)));
+				 String acknow2 = tc.updateOne(and(eq("username", username),eq("question",question.getQuestion())),new Document("$set",new Document("info.upvotes",up))).toString();	 
+				 tc.updateOne(and(eq("username", username),eq("question",question.getQuestion())),new Document("$set",new Document("upvotecount",up.size())));
 				//public void voteNotification(String username,String pqname,String pqid,String commitername,Notifications notify)
-		String q_id = tc.find(and(eq("username",question.getUsername()),eq("question",question.getQuestion()))).first().get("_id").toString();
+		        String q_id = tc.find(and(eq("username",question.getUsername()),eq("question",question.getQuestion()))).first().get("_id").toString();
 				   
 				new NotificationService().voteNotification(username,question.getQuestion(),q_id,user,Notifications.UPVOTESQUESTION);
 				 return new GeneralServices().response(acknow2);}
 				else{
 					up.remove(user);
+					//
+					qa_upvote-=1;
+					 tcuserdata.updateOne(eq("username",username),new Document("$set",new Document("votes.qa_upvote",qa_upvote)));
+					
 					String acknow2 = tc.updateOne(and(eq("username", username),eq("question",question.getQuestion())),new Document("$set",new Document("info.upvotes",up))).toString();	 
 					tc.updateOne(and(eq("username", username),eq("question",question.getQuestion())),new Document("$set",new Document("upvotecount",up.size())));
 				}
@@ -146,7 +160,7 @@ public class QADao {
 			}
 	}
 	@SuppressWarnings("unchecked")
-	public Acknowledgement downques(String username,Question question,String user){
+	public Acknowledgement downQuestion(String username,Question question,String user){
 		Document d = tc.find(and(eq("username",username),eq("question",question.getQuestion()))).first();
 		Document infodetails=(Document)d.get("info");
 			ArrayList<String> up=(ArrayList<String>)infodetails.get("upvotes");
