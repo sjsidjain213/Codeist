@@ -1,7 +1,22 @@
 package bean;
 
 public class MultiUse {
-private String username,message;
+private String username,message,emailid;
+
+public String getEmailid() {
+	return emailid;
+}
+
+public MultiUse(String username, String message, String emailid) {
+	super();
+	this.username = username;
+	this.message = message;
+	this.emailid = emailid;
+}
+
+public void setEmailid(String emailid) {
+	this.emailid = emailid;
+}
 
 public String getMessage() {
 	return message;
@@ -23,7 +38,7 @@ public MultiUse(String username) {
 
 @Override
 public String toString() {
-	return "MultiUse [username=" + username + ", message=" + message + "]";
+	return "MultiUse [username=" + username + ", message=" + message + ", emailid=" + emailid + "]";
 }
 
 public String getUsername() {

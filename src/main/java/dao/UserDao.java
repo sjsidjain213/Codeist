@@ -3,6 +3,7 @@ package dao;
 import org.bson.Document;
 
 import bean.Acknowledgement;
+import bean.MultiUse;
 import bean.Notifications;
 import bean.Project;
 import bean.Signup;
@@ -21,6 +22,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.function.Consumer;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -243,4 +245,17 @@ public class UserDao {
     	  Long l=(document.getLong("project_upvote")*20)+(document.getLong("project_downvote")*(-10))+(document.getLong("qa_upvote")*10)+(document.getLong("qa_upvote")*(-5));
 		return l;
       }
+      
+      public ArrayList<MultiUse> getAllUser()
+      {
+    	 FindIterable <Document> fi =  tc.find();
+        ArrayList <MultiUse> alluser =  new ArrayList<MultiUse>();
+    	 for(Document doc : fi)
+        {	 MultiUse use = new MultiUse();
+             use.setUsername(doc.getString("username"));
+             use.setEmailid(doc.getString("email_id"));  	
+        alluser.add(use);
+        }
+    	 return alluser;
+    	}
 }
