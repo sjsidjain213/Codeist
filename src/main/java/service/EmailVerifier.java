@@ -49,13 +49,13 @@ String resp = link.substring(0,link.indexOf("*"));
 if(resp.equals("y")){
 	String contributorname = link.substring(1,link.indexOf("|"));
 	String projectid=link.substring((link.indexOf("|")+1),link.length());
-    new UserDao().contributorVerifier(resp,contributorname,projectid);
+   // new UserDao().contributorVerifier(resp,contributorname,projectid);
 System.out.println(contributorname+"::"+projectid);
 }
 else{
 	String contributorname = link.substring(1,link.indexOf("|"));
 	String projectid=link.substring((link.indexOf("|")+1),link.length());
-    new UserDao().contributorVerifier(resp,contributorname,projectid);
+  // new UserDao().contributorVerifier(resp,contributorname,projectid);
 }
 /*
 System.out.println(dat);

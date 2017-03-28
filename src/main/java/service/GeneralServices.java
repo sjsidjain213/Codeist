@@ -258,15 +258,15 @@ public void signup(Signup signup)
 	    new UserDao().signupUser(name, password, email, date);
         SendEmail.SendSimple(email,hashed1, hashed2);
 }
-public void contributor(String projectid,ArrayList<String> alcontributor)
-{
-	ArrayList<String> emailid = new UserDao().getContributorEmailid(alcontributor);
-	for(int i=0;i<alcontributor.size();i++)
-	{	String hashed1 = linkEncryptCreator("y*"+alcontributor.get(i),projectid);
-	    String hashed2 = linkEncryptCreator("n*"+alcontributor.get(i),projectid);
-        
-	SendEmail.SendContributor(emailid.get(i),hashed1,hashed2);
-	}
+//public void contributor(String projectid,ArrayList<String> alcontributor)
+//{
+//	ArrayList<String> emailid = new UserDao().getContributorEmailid(alcontributor);
+//	for(int i=0;i<alcontributor.size();i++)
+//	{	String hashed1 = linkEncryptCreator("y*"+alcontributor.get(i),projectid);
+//	    String hashed2 = linkEncryptCreator("n*"+alcontributor.get(i),projectid);
+//        
+//	SendEmail.SendContributor(emailid.get(i),hashed1,hashed2);
+//	}
      
 }
-}
+
