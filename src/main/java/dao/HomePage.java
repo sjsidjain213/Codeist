@@ -336,7 +336,7 @@ public class HomePage {
 	}
 	public ArrayList<User> topUsers(){
 		MongoCollection<Document> tc =new DatabaseServices().getDb().getCollection("userdata");
-		FindIterable<Document> fi = tc.find().sort(new Document("rating",-1));
+		FindIterable<Document> fi = tc.find().sort(new Document("rating",-1)).limit(100);
 		ArrayList<User> userList = new ArrayList<User>();
 		for(Document d : fi){
 			User user = new User();
