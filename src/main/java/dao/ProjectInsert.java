@@ -26,7 +26,8 @@ import service.GeneralServices;
 import service.NotificationService;
 public class ProjectInsert
 {
-	MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("testproject");
+	MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("testproject"); 
+	MongoCollection <Document> tcuser=new DatabaseServices().getDb().getCollection("testuserdata");
 	
 //inserting a new project to database
 public Acknowledgement insertProject(Project project,HttpServletRequest req)
@@ -211,10 +212,12 @@ public Acknowledgement up(String id,String user){
 					down.remove(user);
 					 String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.downvotes",down))).toString();
 					 tc.updateOne(eq("_id",id1),new Document("$set",new Document("downvotecount",down.size())));
+					 tcuser.updateOne(eq("_id",id1),new Document("$dec",new Document("project_downvote",1)));
 				}
 			up.add(user);
 			String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.upvotes",up))).toString();	
 			tc.updateOne(eq("_id",id1),new Document("$set",new Document("upvotecount",up.size())));
+			tcuser.updateOne(eq("_id",id1),new Document("$inc",new Document("project_upvote",1)));
 			//changes make in other too
 			//new NotificationService().voteNotification(username,title,p_id,user,Notifications.UPVOTESQUESTION);
            	 return new GeneralServices().response(acknow2);}
@@ -222,6 +225,7 @@ public Acknowledgement up(String id,String user){
 				up.remove(user);
 				String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.upvotes",up))).toString();	 	 
 				tc.updateOne(eq("_id",id1),new Document("$set",new Document("upvotecount",up.size())));
+				tcuser.updateOne(eq("_id",id1),new Document("$dec",new Document("project_upvote",1)));
 			}
 		return new GeneralServices().response("already exist");
 		}
@@ -230,11 +234,13 @@ public Acknowledgement up(String id,String user){
 				down.remove(user);
 				 String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.downvotes",down))).toString();
 				 tc.updateOne(eq("_id",id1),new Document("$set",new Document("downvotecount",down.size())));
+				 tcuser.updateOne(eq("_id",id1),new Document("$dec",new Document("project_downvote",1)));
 			}
 			up=new ArrayList<String>();
 			up.add(user);
 			 String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.upvotes",up))).toString();
 			 tc.updateOne(eq("_id",id1),new Document("$set",new Document("upvotecount",up.size())));
+			 tcuser.updateOne(eq("_id",id1),new Document("$inc",new Document("project_upvote",1)));
 		//make chnages here
 			 //	 new NotificationService().voteNotification(username,title,Notifications.UPVOTESPROJECT);
 			 return new GeneralServices().response(acknow2);
@@ -256,10 +262,12 @@ public Acknowledgement down(String id,String user){
 					up.remove(user);
 					 String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.upvotes",up))).toString();	 
 					 tc.updateOne(eq("_id",id1),new Document("$set",new Document("upvotecount",up.size())));
+					 tcuser.updateOne(eq("_id",id1),new Document("$dec",new Document("project_upvote",1)));
 				}
 			down.add(user);
 			String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.downvotes",down))).toString();	 
 			tc.updateOne(eq("_id",id1),new Document("$set",new Document("downvotecount",down.size())));
+			tcuser.updateOne(eq("_id",id1),new Document("$inc",new Document("project_downvote",1)));
 			//make changes here
 			// new NotificationService().voteNotification(username,title,Notifications.DOWNVOTESPROJECT);
 			 return new GeneralServices().response(acknow2);}
@@ -267,6 +275,7 @@ public Acknowledgement down(String id,String user){
 				down.remove(user);
 				String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.downvotes",down))).toString();	 
 				tc.updateOne(eq("_id",id1),new Document("$set",new Document("downvotecount",down.size())));
+				tcuser.updateOne(eq("_id",id1),new Document("$dec",new Document("project_downvote",1)));
 			}
 		return new GeneralServices().response("already exist");
 		}
@@ -275,11 +284,13 @@ public Acknowledgement down(String id,String user){
 				up.remove(user);
 				 String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.upvotes",up))).toString();	
 				 tc.updateOne(eq("_id",id1),new Document("$set",new Document("upvotecount",up.size())));
+				 tcuser.updateOne(eq("_id",id1),new Document("$dec",new Document("project_upvote",1)));
 			}
 			down=new ArrayList<String>();
 			down.add(user);
 			 String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.downvotes",down))).toString();	
 			 tc.updateOne(eq("_id",id1),new Document("$set",new Document("downvotecount",down.size())));
+			 tcuser.updateOne(eq("_id",id1),new Document("$inc",new Document("project_downvote",1)));
 			//make changes here
 			 // new NotificationService().voteNotification(username,title,Notifications.DOWNVOTESPROJECT);
 			 return new GeneralServices().response(acknow2);
