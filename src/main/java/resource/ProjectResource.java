@@ -64,14 +64,7 @@ public List<Project> getBriefProject(@Context HttpServletRequest req,@PathParam(
 return new ProjectInsert().getProjectBrief(username);
 }
 
-@GET
-@Path("/user/titles/{username}")   
-@Produces(MediaType.APPLICATION_JSON)
-public List<String> gettitles(@Context HttpServletRequest req,@PathParam("username")String username)
-{
-//return new ProjectInsert().getProjectBrief(username);
-return new ProjectInsert().gettitles(username);
-}
+
 //@GET
 //@Path("/retrieveselect/{title}")   //for logged in user
 //@Produces(MediaType.APPLICATION_JSON)
