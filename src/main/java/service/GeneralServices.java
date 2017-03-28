@@ -1,5 +1,6 @@
 package service;
 import java.awt.image.BufferedImage;
+import static com.mongodb.client.model.Filters.*;
 import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
@@ -16,9 +17,11 @@ import java.util.*;
 import javax.imageio.ImageIO;
 
 import org.bson.Document;
+import org.bson.types.ObjectId;
 
 import com.mongodb.Block;
 import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
 
 import bean.Acknowledgement;
 import bean.Notifications;
@@ -214,8 +217,11 @@ public static String linkEncryptCreator(String encrypt1,String encrypt2)
 return x;
 }
 
-public void changeRating()
+public void changeRating(String string_id,Notifications notify,String action)
 {
+	ObjectId object_id = new ObjectId(string_id);
+	MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection(notify.getMsg());
+    tc.find(eq("_id",object_id));
 	
 }
 
