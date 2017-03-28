@@ -29,10 +29,10 @@ public class ProjectInsert
 	MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("testproject");
 	
 //inserting a new project to database
-public HashMap<String,String> insertProject(Project project,HttpServletRequest req)
+public Acknowledgement insertProject(Project project,HttpServletRequest req)
 {  //String userfromsession = req.getSession().getAttribute("username").toString();
    Document docexsit = tc.find(and(eq("username",project.getUsername()),eq("title",project.getTitle()))).first();
-   HashMap<String,String> ack=new HashMap<String,String>();
+  Acknowledgement ack=new Acknowledgement();
    if(docexsit==null)
     { Document info=new Document().append("upvotes", (ArrayList<String>)project.getUpvotes()).append("downvotes",(ArrayList<String>)project.getDownvotes()).append("viewby",(List<String>)project.getViewby());
       Document doc = new Document()
@@ -59,11 +59,11 @@ public HashMap<String,String> insertProject(Project project,HttpServletRequest r
 	    		  String url = GeneralServices.urlGenerator(Notifications.PROJECTMODULE, projectid, project.getTitle());
 	    		  new UserDao().moduleIDAdder(Notifications.PROJECTMODULE,project.getUsername(), projectid);
 	    		  UpdateResult rs=tc.updateOne(and(eq("username",project.getUsername()),eq("title",project.getTitle())),new Document("$set",new Document("project_url",url)));		    		 
-	    		 ack.put("id", projectid);
-	    		 ack.put("title", GeneralServices.spaceRemover(project.getTitle()));
-	    			return ack;
+	    		 ack.setUpsertedId(projectid);
+	    		 ack.setMsg(GeneralServices.spaceRemover(project.getTitle()));
+	    		 return ack;
 	    			}else{
-	                    ack.put("id","0");
+	                    ack.setMsg("exist");
 	                 	return ack;
                        }
                     }
@@ -122,6 +122,18 @@ public List<Project> getProjectBrief(String username)
   }
 return project;
 }
+
+public List<String> gettitles(String username)
+{
+  List<String> project = new ArrayList<String>();
+  FindIterable <Document> fi = tc.find(eq("username",username));
+  for(Document d: fi)
+  {
+    	project.add(d.getString("title")); 
+  }
+return project;
+}
+
 
 // for retrieving selected project
 @SuppressWarnings("unchecked")
