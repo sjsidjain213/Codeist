@@ -138,9 +138,9 @@ public List<Project> getProjectBrief(String username)
 return project;
 }
 
-public List<String> gettitles(String username)
+public ArrayList<String> getAllTitles(String username)
 {
-  List<String> project = new ArrayList<String>();
+  ArrayList<String> project = new ArrayList<String>();
   FindIterable <Document> fi = tc.find(eq("username",username));
   for(Document d: fi)
   {
@@ -379,4 +379,8 @@ public Acknowledgement view(String username,String title,String user){
 		}
 }
 
+/*public ArrayList<MultiUse> getAllUserProject()
+{
+	tc.
+}*/
 }

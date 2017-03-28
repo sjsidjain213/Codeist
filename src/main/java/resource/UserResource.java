@@ -106,6 +106,21 @@ public class UserResource implements ContainerResponseFilter {
 	{	return new EmailVerifier().contributor(hash1,response);
 	}
 	
+	// user list and project list
+	@GET
+	@Path("/alluser")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public ArrayList<MultiUse> getAllUser(@PathParam("hash1") String hash1,@Context HttpServletResponse response)
+	{	 return new UserDao().getAllUser();
+	}
+	
+	//
+	@GET
+	@Path("/project/allTitle")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public ArrayList<String> getAllUserProjects(@Context HttpServletRequest req)
+	{	 return new ProjectInsert().getAllTitles(req.getSession().getAttribute("username").toString());
+	}
 	/*
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
