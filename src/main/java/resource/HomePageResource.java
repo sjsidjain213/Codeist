@@ -18,20 +18,28 @@ import service.GeneralServices;
 @Path("/homepage")
 public class HomePageResource {
 
-	@GET
+	/*@GET
 	@Path("/history/{username}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ArrayList<Tile> getUserHistory(@PathParam("username") String username)
 	{
     	return new HomePage().getHistory(username);
+	}*/
+	
+	@GET
+	@Path("/project/{username}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ArrayList<Tile> getProjects(@PathParam("username") String username)
+	{
+		return new HomePage().getProjects(username);
 	}
 	
 	@GET
-	@Path("/question-forum")
+	@Path("/question-forum/{username}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ArrayList<Tile> getQuestion(@PathParam("username") String username)
 	{
-    	return new HomePage().trendingQuestion();
+		return new HomePage().getQuestions(username);
 	}
 	
 	/*@GET

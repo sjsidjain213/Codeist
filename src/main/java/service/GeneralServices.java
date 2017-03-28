@@ -66,7 +66,8 @@ public Tile returnTile(Document d,String source,String subject)
 	Tile tl = new Tile();
 	    tl.set_id(d.get("_id"));
 	    ArrayList<String> altwo = new ArrayList<String>();
-	    altwo.add(source);
+	    if(altwo.size() < 1)
+	    	altwo.add("interesting");
 	    tl.setSource(altwo);
 	    tl.setSubject(subject);
 	    tl.setUsername(d.getString("username"));
@@ -85,8 +86,8 @@ public Tile returnTile(Document d,String source,String subject)
 	    }
 	    else{
 	    	tl.setTitle(d.getString("question"));
-	    	//tl.setUpvotecount(d.getLong("upvotecount"));
-	    	//tl.setDownvotecount(d.getLong("downvotecount"));
+	    	tl.setUpvotecount(d.getLong("upvotecount"));
+	    	tl.setDownvotecount(d.getLong("downvotecount"));
 	    }
 		tl.setViewcount(1);
 		return tl;	
