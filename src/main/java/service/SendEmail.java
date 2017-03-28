@@ -22,6 +22,10 @@ public static void main(String args[])
 {//SendSimple();
 System.out.println();	
 }
+/*public void SendEmail(String email,)
+{
+
+}*/
     public static ClientResponse SendSimple(String email,String hash1,String hash2) {
 
         Client client = ClientBuilder.newClient();

@@ -72,7 +72,6 @@ public Acknowledgement insertProject(Project project,HttpServletRequest req)
    public Acknowledgement updateproject(Project project,HttpServletRequest req,String id){
     	
 	
-	System.out.println(id);
 	ObjectId oid = new ObjectId(id.toString());
 	Document document = tc.find(eq("_id",oid)).first();
 
@@ -98,8 +97,11 @@ public Acknowledgement insertProject(Project project,HttpServletRequest req)
    		 .append("zip_file",project.getZip_file())
    		 .append("images",(List<String>)project.getImages())
    		 .append("info",info );
+	Document doccheck = tc.find(and(eq("username",(req.getSession().getAttribute("username")).toString()),eq("title",project.getTitle()))).first();
+	if(doccheck!=null){
 	tc.updateOne(eq("_id",oid),new Document("$set",doc));
 	return new GeneralServices().response("insert");
+	}
 	}
 	return new GeneralServices().response(null);
 }

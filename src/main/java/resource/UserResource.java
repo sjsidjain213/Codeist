@@ -46,10 +46,10 @@ public class UserResource implements ContainerResponseFilter {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/login")
-	public ArrayList<NotificationBean> login(@Context HttpServletRequest req,User user)
+	public MultiUse login(@Context HttpServletRequest req,@Context HttpServletResponse res,User user)
 	{
 		new DatabaseServices();
-		return new SessionService().sessionCreate(req,user.getUsername(),user.getPassword());
+		return new SessionService().sessionCreate(req,res,user.getUsername(),user.getPassword());
 	}
 	
 	@POST
@@ -75,10 +75,10 @@ public class UserResource implements ContainerResponseFilter {
 	// for login user session is required to create session use method login for session creation
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/profile")
-	public User getUserDetails(@Context HttpServletRequest req)
+	@Path("/profile/{username}")
+	public User getUserDetails(@Context HttpServletRequest req,@PathParam("username") String username)
 	{
-	return (new SessionService().sessionVerifier(req))?new UserDao().getUserDetails(req.getSession().getAttribute("username").toString()):new User();
+	return new UserDao().getUserDetails(username);
 	}
 	
 	@PUT
