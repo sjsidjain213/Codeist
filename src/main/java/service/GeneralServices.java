@@ -214,7 +214,7 @@ public static String linkEncryptCreator(String encrypt1,String encrypt2)
 return x;
 }
 
-public void chnageRating()
+public void changeRating()
 {
 	
 }
