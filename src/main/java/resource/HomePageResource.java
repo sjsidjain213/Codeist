@@ -1,5 +1,6 @@
 package resource;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.ws.rs.GET;
@@ -14,6 +15,7 @@ import bean.User;
 import bean.test;
 import dao.HomePage;
 import service.GeneralServices;
+import service.objectupload;
 
 @Path("/homepage")
 public class HomePageResource {
@@ -63,6 +65,11 @@ public class HomePageResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public void img(test test)
 	{
-    	new GeneralServices().update(test.getImg());
+    	try {
+			new objectupload().upload(test.getImg());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

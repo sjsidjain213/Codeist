@@ -246,11 +246,12 @@ public void update(String base)
 	byte[] imageByte;
 
 	byte[] imageBytes = javax.xml.bind.DatatypeConverter.parseBase64Binary(base);
-	// write the image to a file
+	 
+	//write the image to a file
 	try (BufferedOutputStream bw = new BufferedOutputStream(new FileOutputStream("C:/Users/dell 1/Documents/Advance java/img.png"))) {
 		bw.write(imageBytes);
-// no need to close it.
-		//bw.close();
+    //no need to close it.
+	//bw.close();
 		System.out.println("Done");
 
 	} catch (IOException e) {

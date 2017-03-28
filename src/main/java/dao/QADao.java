@@ -137,7 +137,6 @@ public class QADao {
 					//
 					qa_upvote-=1;
 					 tcuserdata.updateOne(eq("username",username),new Document("$set",new Document("votes.qa_upvote",qa_upvote)));
-					
 					String acknow2 = tc.updateOne(and(eq("username", username),eq("question",question.getQuestion())),new Document("$set",new Document("info.upvotes",up))).toString();	 
 					tc.updateOne(and(eq("username", username),eq("question",question.getQuestion())),new Document("$set",new Document("upvotecount",up.size())));
 				}
