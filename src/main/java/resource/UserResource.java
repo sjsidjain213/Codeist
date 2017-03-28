@@ -116,10 +116,10 @@ public class UserResource implements ContainerResponseFilter {
 	
 	//
 	@GET
-	@Path("/project/{username}/allTitle")
+	@Path("/project/allTitle")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public ArrayList<String> getAllUserProjects(@PathParam("username") String username,@Context HttpServletResponse response)
-	{	 return new ProjectInsert().getAllTitles(username);
+	public ArrayList<String> getAllUserProjects(@Context HttpServletRequest req)
+	{	 return new ProjectInsert().getAllTitles(req.getSession().getAttribute("username").toString());
 	}
 	/*
 	@GET
