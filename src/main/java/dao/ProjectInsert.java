@@ -71,7 +71,7 @@ public Acknowledgement insertProject(Project project,HttpServletRequest req)
     @SuppressWarnings("unchecked")
    public Acknowledgement updateproject(Project project,HttpServletRequest req,String id){
     	
-	
+	System.out.println("in update");
 	ObjectId oid = new ObjectId(id.toString());
 	Document document = tc.find(eq("_id",oid)).first();
 
@@ -83,7 +83,7 @@ public Acknowledgement insertProject(Project project,HttpServletRequest req)
 	Document doc = new Document()
    		 .append("username", document.getString("username"))
    		 .append("title",project.getTitle())	
-   		.append("date",project.getDate())
+   		.append("date",document.get("date"))
    		 .append("last_updated",new GeneralServices().getCurrentDate())
    		 .append("description",project.getDescription())
    		.append("project_url",url)
@@ -97,8 +97,9 @@ public Acknowledgement insertProject(Project project,HttpServletRequest req)
    		 .append("zip_file",project.getZip_file())
    		 .append("images",(List<String>)project.getImages())
    		 .append("info",info );
-	Document doccheck = tc.find(and(eq("username",(req.getSession().getAttribute("username")).toString()),eq("title",project.getTitle()))).first();
+	Document doccheck = tc.find(and(or(eq("username",req.getSession().getAttribute("username").toString()),in("contributors",req.getSession().getAttribute("username").toString())),eq("_id",oid))).first();
 	if(doccheck!=null){
+		System.out.println("+++++"+doccheck);
 	tc.updateOne(eq("_id",oid),new Document("$set",doc));
 	return new GeneralServices().response("insert");
 	}

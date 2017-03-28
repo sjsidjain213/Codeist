@@ -99,7 +99,12 @@ public class UserResource implements ContainerResponseFilter {
 	      cres.getHeaders().add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
 	      cres.getHeaders().add("Access-Control-Max-Age", "1209600");
 	}
-	
+	@GET
+	@Path("/contributorverifier/{hash1}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String contributor(@PathParam("hash1") String hash1,@Context HttpServletResponse response)
+	{	return new EmailVerifier().contributor(hash1,response);
+	}
 	
 	/*
 	@GET
