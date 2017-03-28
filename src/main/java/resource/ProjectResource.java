@@ -37,7 +37,7 @@ public class ProjectResource {
 @Path("/insert")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public HashMap<String,String> insertProject(Project project,@Context HttpServletRequest req)
+public Acknowledgement insertProject(Project project,@Context HttpServletRequest req)
 {
 //return new ProjectInsert().insertProject(project);
 //return (new SessionService().sessionVerifier(req))?new ProjectInsert().insertProject(project,req):new GeneralServices().response(null);
@@ -57,10 +57,19 @@ return (new SessionService().sessionVerifier(req))?new ProjectInsert().updatepro
 @GET
 @Path("/user/{username}")   
 @Produces(MediaType.APPLICATION_JSON)
-public List<Project> getBriefProject(@Context HttpServletRequest req,@PathParam("usernmae")String username)
+public List<Project> getBriefProject(@Context HttpServletRequest req,@PathParam("username")String username)
 {
 //return new ProjectInsert().getProjectBrief(username);
 return new ProjectInsert().getProjectBrief(username);
+}
+
+@GET
+@Path("/user/titles/{username}")   
+@Produces(MediaType.APPLICATION_JSON)
+public List<String> gettitles(@Context HttpServletRequest req,@PathParam("username")String username)
+{
+//return new ProjectInsert().getProjectBrief(username);
+return new ProjectInsert().gettitles(username);
 }
 //@GET
 //@Path("/retrieveselect/{title}")   //for logged in user

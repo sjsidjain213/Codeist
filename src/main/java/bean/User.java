@@ -218,25 +218,15 @@ public class User {
 	public void setDate(Date date) {
 		this.date = date;
 	}
-	@Override
-	public String toString() {
-		return "User [username=" + username + ", password=" + password + ", name=" + name + ", bio=" + bio
-				+ ", phone_no=" + phone_no + ", gender=" + gender + ", email_id=" + email_id + ", country=" + country
-				+ ", state=" + state + ", city=" + city + ", message=" + message + ", category=" + category
-				+ ", institute=" + institute + ", favourite_tag=" + favourite_tag + ", following=" + following
-				+ ", follower=" + follower + ", contributing=" + contributing + ", project_id=" + project_id
-				+ ", project_bookmark=" + project_bookmark + ", question_bookmark=" + question_bookmark + ", tags_view="
-				+ tag_view + ", user_view=" + user_view + ", problem_category_view=" + problem_category_view
-				+ ", project_view=" + project_view + ", question_ask=" + question_ask + ", question_answer="
-				+ question_answer + ", rating=" + rating + ", zipcode=" + zipcode + ", date=" + date + "]";
-	}
+	
 	public User(String username, String password, String name, String bio, String phone_no, String gender,
 			String email_id, String country, String state, String city, String message, String category,
 			String institute, ArrayList<String> favourite_tag, ArrayList<String> following, ArrayList<String> follower,
 			ArrayList<String> contributing, ArrayList<String> project_id, ArrayList<String> project_bookmark,
-			ArrayList<String> question_bookmark, ArrayList<String> tags_view, ArrayList<String> user_view,
+			ArrayList<String> question_bookmark, ArrayList<String> tag_view, ArrayList<String> user_view,
 			ArrayList<String> problem_category_view, ArrayList<String> project_view, ArrayList<String> question_ask,
-			ArrayList<String> question_answer, long rating, long zipcode, Date date) {
+			ArrayList<String> question_answer, long rating, long zipcode, long project_upvote, long project_downvote,
+			long qa_upvote, long qa_downvote, Date date) {
 		super();
 		this.username = username;
 		this.password = password;
@@ -258,7 +248,7 @@ public class User {
 		this.project_id = project_id;
 		this.project_bookmark = project_bookmark;
 		this.question_bookmark = question_bookmark;
-		this.tag_view = tags_view;
+		this.tag_view = tag_view;
 		this.user_view = user_view;
 		this.problem_category_view = problem_category_view;
 		this.project_view = project_view;
@@ -266,8 +256,26 @@ public class User {
 		this.question_answer = question_answer;
 		this.rating = rating;
 		this.zipcode = zipcode;
+		this.project_upvote = project_upvote;
+		this.project_downvote = project_downvote;
+		this.qa_upvote = qa_upvote;
+		this.qa_downvote = qa_downvote;
 		this.date = date;
 	}
+	@Override
+	public String toString() {
+		return "User [username=" + username + ", password=" + password + ", name=" + name + ", bio=" + bio
+				+ ", phone_no=" + phone_no + ", gender=" + gender + ", email_id=" + email_id + ", country=" + country
+				+ ", state=" + state + ", city=" + city + ", message=" + message + ", category=" + category
+				+ ", institute=" + institute + ", favourite_tag=" + favourite_tag + ", following=" + following
+				+ ", follower=" + follower + ", contributing=" + contributing + ", project_id=" + project_id
+				+ ", project_bookmark=" + project_bookmark + ", question_bookmark=" + question_bookmark + ", tags_view="
+				+ tag_view + ", user_view=" + user_view + ", problem_category_view=" + problem_category_view
+				+ ", project_view=" + project_view + ", question_ask=" + question_ask + ", question_answer="
+				+ question_answer + ", rating=" + rating + ", zipcode=" + zipcode + ", date=" + date + "]";
+	}
+	
+	
 	public User() {
 		super();
 		// TODO Auto-generated constructor stub
