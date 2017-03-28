@@ -182,22 +182,6 @@ public static Date getCurrentDate()
 	}
 return date;
 }
-//**********************************
-public void signup(Signup signup)
-{
-	String name = signup.getName();
-	String email = signup.getEmailid();
-	String password = signup.getPassword();
-	password = GeneralServices.get_SHA_256_SecurePassword(name,password);
-	Date date = GeneralServices.getCurrentDate();
-		
-	   long dateepoch = date.getTime();
-	    String hashed1 = linkEncryptCreator(name,String.valueOf(dateepoch));
-	    String hashed2 = linkEncryptCreator(email,String.valueOf(dateepoch));
-        //enter for verification
-	    new UserDao().signupUser(name, password, email, date);
-        SendEmail.SendSimple(email,hashed1, hashed2);
-}
 public static String linkDecrypter(byte[] _bytes)
 {
     String file_string = "";
@@ -259,4 +243,30 @@ public void update(String base)
 		e.printStackTrace();
 
 	}}
+public void signup(Signup signup)
+{
+	String name = signup.getName();
+	String email = signup.getEmailid();
+	String password = signup.getPassword();
+	password = GeneralServices.get_SHA_256_SecurePassword(name,password);
+	Date date = GeneralServices.getCurrentDate();
+		
+	   long dateepoch = date.getTime();
+	    String hashed1 = linkEncryptCreator(name,String.valueOf(dateepoch));
+	    String hashed2 = linkEncryptCreator(email,String.valueOf(dateepoch));
+        //enter for verification
+	    new UserDao().signupUser(name, password, email, date);
+        SendEmail.SendSimple(email,hashed1, hashed2);
+}
+public void contributor(String projectid,ArrayList<String> alcontributor)
+{
+	ArrayList<String> emailid = new UserDao().getContributorEmailid(alcontributor);
+	for(int i=0;i<alcontributor.size();i++)
+	{	String hashed1 = linkEncryptCreator("y*"+alcontributor.get(i),projectid);
+	    String hashed2 = linkEncryptCreator("n*"+alcontributor.get(i),projectid);
+        
+	SendEmail.SendContributor(emailid.get(i),hashed1,hashed2);
+	}
+     
+}
 }
