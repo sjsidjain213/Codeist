@@ -50,7 +50,6 @@ return	new ProjectInsert().insertProject(project,req);
 @Produces(MediaType.APPLICATION_JSON)
 public Acknowledgement updateProject(Project project,@Context HttpServletRequest req,@PathParam("id")String id)
 {
-	
 //return new ProjectInsert().insertProject(project);
 return (new SessionService().sessionVerifier(req))?new ProjectInsert().updateproject(project,req,id):new GeneralServices().response(null);
 }
@@ -95,10 +94,10 @@ return new ProjectInsert().getSelectedProject(id,req);
 @Path("/{id}/comment")	//username:project owner
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public Acknowledgement insertComment(@Context HttpServletRequest req,Comment comment,@PathParam("id")String id)
+public Comment insertComment(@Context HttpServletRequest req,Comment comment,@PathParam("id")String id)
 {
 //return new ProjectInsert().insertComment(comment,username,projectname);
-return (new SessionService().sessionVerifier(req))?new ProjectInsert().insertComment(comment,id,req):new GeneralServices().response(null);
+return (new SessionService().sessionVerifier(req))?new ProjectInsert().insertComment(comment,id,req):new Comment();
 
 }
 

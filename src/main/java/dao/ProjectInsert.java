@@ -33,9 +33,13 @@ public class ProjectInsert
 public Acknowledgement insertProject(Project project,HttpServletRequest req)
 {  //String userfromsession = req.getSession().getAttribute("username").toString();
    Document docexsit = tc.find(and(eq("username",project.getUsername()),eq("title",project.getTitle()))).first();
+   ArrayList<String> a=new ArrayList<String>();
+   a.add(project.getUsername());
+   project.setContributors(a);
   Acknowledgement ack=new Acknowledgement();
    if(docexsit==null)
-    { Document info=new Document().append("upvotes", (ArrayList<String>)project.getUpvotes()).append("downvotes",(ArrayList<String>)project.getDownvotes()).append("viewby",(List<String>)project.getViewby());
+    { 
+	  Document info=new Document().append("upvotes", (ArrayList<String>)project.getUpvotes()).append("downvotes",(ArrayList<String>)project.getDownvotes()).append("viewby",(List<String>)project.getViewby());
       Document doc = new Document()
 	    		// .append("username", req.getSession().getAttribute("username"))
 	    		 .append("username", project.getUsername())
@@ -44,7 +48,7 @@ public Acknowledgement insertProject(Project project,HttpServletRequest req)
 	    		 .append("last_updated",GeneralServices.getCurrentDate())
 	    		 .append("description",project.getDescription())
 	    		 .append("tags",(List<String>)project.getTags())
-	    		 //.append("comments",(ArrayList<Comment>)project.getComments())
+	    		 .append("comments",new ArrayList<Comment>())
 	    		 .append("contributors",(List<String>)project.getContributors())
 	    		 .append("readme", project.getReadme())
 	    		 .append("license", project.getLicense())
@@ -71,7 +75,7 @@ public Acknowledgement insertProject(Project project,HttpServletRequest req)
     @SuppressWarnings("unchecked")
    public Acknowledgement updateproject(Project project,HttpServletRequest req,String id){
     	
-	System.out.println("in update");
+	
 	ObjectId oid = new ObjectId(id.toString());
 	Document document = tc.find(eq("_id",oid)).first();
 
@@ -83,7 +87,7 @@ public Acknowledgement insertProject(Project project,HttpServletRequest req)
 	Document doc = new Document()
    		 .append("username", document.getString("username"))
    		 .append("title",project.getTitle())	
-   		.append("date",document.get("date"))
+   		.append("date",document.getDate("date"))
    		 .append("last_updated",new GeneralServices().getCurrentDate())
    		 .append("description",project.getDescription())
    		.append("project_url",url)
@@ -97,9 +101,8 @@ public Acknowledgement insertProject(Project project,HttpServletRequest req)
    		 .append("zip_file",project.getZip_file())
    		 .append("images",(List<String>)project.getImages())
    		 .append("info",info );
-	Document doccheck = tc.find(and(or(eq("username",req.getSession().getAttribute("username").toString()),in("contributors",req.getSession().getAttribute("username").toString())),eq("_id",oid))).first();
+	Document doccheck = tc.find(and(eq("username",(req.getSession().getAttribute("username")).toString()),eq("title",project.getTitle()))).first();
 	if(doccheck!=null){
-		System.out.println("+++++"+doccheck);
 	tc.updateOne(eq("_id",oid),new Document("$set",doc));
 	return new GeneralServices().response("insert");
 	}
@@ -119,11 +122,14 @@ public List<Project> getProjectBrief(String username)
   {
 	  Document d1=(Document)d.get("info");
          pro= new Project();
+         pro.setId(d.get("_id").toString());
     	 pro.setTitle(d.getString("title"));   
          pro.setDescription(d.getString("description"));
          pro.setUpvotes((ArrayList<String>)d1.get("upvotes"));
          pro.setDownvotes((ArrayList<String>)d1.get("downvotes"));
+         pro.setImages((ArrayList<String>) d.get("images"));
          pro.setProject_url(d.getString("project_url"));
+         pro.setComments(new ProjectInsert().getAllComments(d.getString("username"), d.getString("title")));
          project.add(pro); 
   }
 return project;
@@ -149,9 +155,12 @@ public Project getSelectedProject(String id,HttpServletRequest req)
 	Project project=new Project();
 	Document d= tc.find(eq("_id",id1)).first();
 	if(d!=null){
+			project.setId(d.get("_id").toString());
 			project.setUsername(d.getString("username"));
 		   	project.setTitle(d.getString("title"));
 	   		project.setDescription(d.getString("description"));
+	   		project.setDate(d.getDate("date"));
+	   		project.setLast_updated(d.getDate("last_updated"));
 	   		project.setTags((ArrayList<String>)d.get("tags")); 
 	   		project.setLicense(d.getString("license"));
 	   		project.setProject_url(d.getString("project_link"));
@@ -174,15 +183,22 @@ public Project getSelectedProject(String id,HttpServletRequest req)
 	return project;
 }
 
-public Acknowledgement insertComment(Comment comment,String id,HttpServletRequest req)
+public Comment insertComment(Comment comment,String id,HttpServletRequest req)
 {ObjectId id1=new ObjectId(id.toString());
 	Document project = tc.find(eq("_id",id1)).first();
-Document doc = new Document("username",req.getSession().getAttribute("username"))
+	try{
+Document doc = new Document("username",req.getSession().getAttribute("username").toString())
                   .append("comment", comment.getComment())
                   .append("date",GeneralServices.getCurrentDate());
+comment.setUsername(req.getSession().getAttribute("username").toString());
+comment.setDate(doc.getDate("date"));
 String acknow= tc.updateOne(eq("_id",id1),new Document("$push",new Document("comments",doc))).toString();
 new NotificationService().commentNotification(project.getString("username"),project.getString("title"),id,req.getSession().getAttribute("username").toString(),comment.getComment(),Notifications.COMMENT);
-return new GeneralServices().response(acknow);
+return comment;}
+	catch(Exception e){
+		comment.setComment("error");
+		return comment;
+	}
 }
 
 @SuppressWarnings("unchecked")
