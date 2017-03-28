@@ -34,13 +34,13 @@ public class HomePageResource {
     	return new HomePage().trendingQuestion();
 	}
 	
-	@GET
+	/*@GET
 	@Path("/project-forum")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ArrayList<Tile> getProject(@PathParam("username") String username)
 	{
-    	return new HomePage().trendingProject();
-	}
+    	return new HomePage().trendingProject(new ArrayList());
+	}*/
 	
 	
 	@GET

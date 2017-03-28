@@ -23,24 +23,53 @@ import service.GeneralServices;
 public class HomePage {
     HashMap<Object,Tile> hm = new HashMap<Object,Tile>();
  	@SuppressWarnings("unchecked")
+ 	public ArrayList<Tile> getProjects()
+ 	{ArrayList<Tile> project = new ArrayList<Tile>();
+ 	      project =  getTrendingProject(project);
+ 		  project = getInterestProject(project);
+ 	return project;
+ 	}
+ 	public ArrayList<Tile> getInterestProject(ArrayList<Tile> project)
+ 	{ //project
+	      //id
+ 	 MongoCollection<Document> tc =new DatabaseServices().getDb().getCollection("userdata");
+ 	 Document doc = tc.find(eq("username","")).first();
+ 	     
+ 	 ArrayList<String> alcontributing = (ArrayList<String>) doc.get("contributing");
+	   ArrayList<String> albookmark = (ArrayList<String>) doc.get("project_bookmark");
+	   ArrayList<String> alviewedproject = (ArrayList<String>) doc.get("project_view");
+       // in tags
+	   doc = (Document) doc.get("history");
+     ArrayList<String> alviewedtags = (ArrayList<String>) doc.get("tag_view");
+     ArrayList<String> alfavtags = (ArrayList<String>) doc.get("favourite_tag");
+     ArrayList<String> alfollowing = (ArrayList<String>) doc.get("following");
+	  
+ 		
+ 		return project;
+ 	}
  	public ArrayList<Tile> getHistory(String username)
 	{
  		//needs to be tested, ClassCastException for long in Tile.java line 84
  	   MongoCollection<Document> tc =new DatabaseServices().getDb().getCollection("userdata");
 	   
 	   Document doc = tc.find(eq("username",username)).first();
-	   ArrayList<String> alfavtags = (ArrayList<String>) doc.get("favourite_tag");
-	   ArrayList<String> alfollowing = (ArrayList<String>) doc.get("following");
-	   ArrayList<String> alcontributing = (ArrayList<String>) doc.get("contributing");
-	   ArrayList<String> albookmark = (ArrayList<String>) doc.get("project_bookmark");
 	   ArrayList<String> alquesbookmark = (ArrayList<String>) doc.get("question_bookmark");
 	   ArrayList<String> alquesask = (ArrayList<String>) doc.get("question_ask");
 	   ArrayList<String> alquesanswer = (ArrayList<String>) doc.get("question_answer");
-       doc = (Document) doc.get("history");
+       
+	   //project
+	      //id
+	   ArrayList<String> alcontributing = (ArrayList<String>) doc.get("contributing");
+	   ArrayList<String> albookmark = (ArrayList<String>) doc.get("project_bookmark");
+	   ArrayList<String> alviewedproject = (ArrayList<String>) doc.get("project_view");
+         // in tags
+	   doc = (Document) doc.get("history");
        ArrayList<String> alviewedtags = (ArrayList<String>) doc.get("tag_view");
+       ArrayList<String> alfavtags = (ArrayList<String>) doc.get("favourite_tag");
+       ArrayList<String> alfollowing = (ArrayList<String>) doc.get("following");
+ 	  
        ArrayList<String> alvieweduser = (ArrayList<String>) doc.get("user_view");
-       ArrayList<String> alviewedproject = (ArrayList<String>) doc.get("project_view");
-
+       
        tc =new DatabaseServices().getDb().getCollection("project");
        FindIterable <Document> docfavtags =  tc.find(in("tags",alfavtags));
        FindIterable <Document> docviewedtags =  tc.find(in("tags",alviewedtags));
@@ -167,7 +196,7 @@ public class HomePage {
 		return ques;
 	}
 	
-	public static ArrayList<Tile> trendingProject()
+	public static ArrayList<Tile> getTrendingProject(ArrayList<Tile> projects)
 	{
 // test pending
 		MongoCollection<Document> tc =new DatabaseServices().getDb().getCollection("project");
