@@ -91,108 +91,25 @@ return (new SessionService().sessionVerifier(req))?new ProjectInsert().insertCom
 
 }
 
-//@GET
-//@Path("/retrievecomments/{username}/{title}")
-//@Consumes(MediaType.APPLICATION_JSON)
-//@Produces(MediaType.APPLICATION_JSON)
-//public ArrayList<Comment> getComment(@PathParam("title")String title,@PathParam("username")String username)
-//{
-//	return 	new ProjectInsert().getAllComments(username, GeneralServices.spaceAdder(title));
-//}
 
-//@PUT
-//@Path("/upvote/{action}/{username}/{projecttitle}")
-//@Consumes(MediaType.APPLICATION_JSON)
-//@Produces(MediaType.APPLICATION_JSON)
-//public Acknowledgement changeUpvotes(@PathParam("action")String action,@PathParam("username")String username,@PathParam("projecttitle")String projecttitle,@Context HttpServletRequest req)
-//{
-//return new ProjectInsert().changeUpvotes(action,username,projecttitle,req);
-//}
-//
-//@PUT
-//@Path("/downvote/{action}/{projecttitle}")
-//@Consumes(MediaType.APPLICATION_JSON)
-//public Acknowledgement changeDownvotes(@PathParam("action")String action,@PathParam("projecttitle")String projecttitle,@Context HttpServletRequest req)
-//{
-// return	new ProjectInsert().changeDownvotes(action,projecttitle,req);
-//}
-
-
-
-
-
-/**/
-//@GET
-//@Path("/projectupvotes/{username}/{title}")
-//@Produces(MediaType.APPLICATION_JSON)
-//public Project fetchProjectUpvotes(@PathParam("username")String username, @PathParam("title")String title)
-//{
-//return new ProjectInsert().getProjectUpvotes(username, title);
-//}
-//
-//@GET
-//@Path("/projectdownvotes/{username}/{title}")
-//@Produces(MediaType.APPLICATION_JSON)
-//public Project fetchProjectDownvotes(@PathParam("username")String username, @PathParam("title")String title)
-//{
-//return new ProjectInsert().getProjectDownvotes(username, title);
-//}
-//
-//@GET
-//@Path("/projectviewcount/{username}/{title}")
-//@Produces(MediaType.APPLICATION_JSON)
-//public Project fetchProjectViewcount(@PathParam("username")String username, @PathParam("title")String title)
-//{
-//return new ProjectInsert().getProjectViewcount(username, title);
-//}
-//
-//@POST
-//@Path("/insertupvotes/{username}/{title}")
-//@Produces(MediaType.APPLICATION_JSON)
-//@Consumes(MediaType.APPLICATION_JSON)
-//public Acknowledgement insertProjectUpvotes(Project project,@PathParam("username")String username, @PathParam("title")String title)
-//{
-//return new ProjectInsert().setProjectUpvotes(project, username, title);
-//}
-//
-//@POST
-//@Path("/insertdownvotes/{username}/{title}")
-//@Produces(MediaType.APPLICATION_JSON)
-//@Consumes(MediaType.APPLICATION_JSON)
-//public Acknowledgement insertProjectDownvotes(Project project,@PathParam("username")String username, @PathParam("title")String title)
-//{
-//return new ProjectInsert().setProjectDownvotes(project, username, title);
-//}
-//
-//@POST
-//@Path("/insertviewcount/{username}/{title}")
-//@Produces(MediaType.APPLICATION_JSON)
-//@Consumes(MediaType.APPLICATION_JSON)
-//public Acknowledgement insertProjectViewcount(Project project,@PathParam("username")String username, @PathParam("title")String title)
-//{
-//return new ProjectInsert().setProjectViewcount(project, username, title);
-//}
-//
-//
-//--------------------------------------
 @PUT
-@Path("/upvote/{username}/{title}")
+@Path("/{id}/upvote")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public Acknowledgement up(@PathParam("username")String username,@PathParam("title")String title,@Context HttpServletRequest req)
+public Acknowledgement up(@PathParam("id")String id,@Context HttpServletRequest req)
 {
 //return new ProjectInsert().up(username,title,req.getSession().getAttribute("username").toString());
-return (new SessionService().sessionVerifier(req))?new ProjectInsert().up(username,GeneralServices.spaceAdder(title),req.getSession().getAttribute("username").toString()):new GeneralServices().response(null);
+return (new SessionService().sessionVerifier(req))?new ProjectInsert().up(id,req.getSession().getAttribute("username").toString()):new GeneralServices().response(null);
 }
 
 @PUT
-@Path("/downvote/{username}/{title}")
+@Path("/{id}/downvote")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public Acknowledgement down(@PathParam("username")String username,@PathParam("title")String title,@Context HttpServletRequest req)
+public Acknowledgement down(@PathParam("id")String id,@Context HttpServletRequest req)
 {
 //return new ProjectInsert().down(username,title,req.getSession().getAttribute("username").toString());
-return (new SessionService().sessionVerifier(req))?new ProjectInsert().down(username,GeneralServices.spaceAdder(title),req.getSession().getAttribute("username").toString()):new GeneralServices().response(null);
+return (new SessionService().sessionVerifier(req))?new ProjectInsert().down(id,req.getSession().getAttribute("username").toString()):new GeneralServices().response(null);
 }
 }
 
