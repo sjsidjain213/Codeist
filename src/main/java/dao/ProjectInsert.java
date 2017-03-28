@@ -16,6 +16,7 @@ import static com.mongodb.client.model.Filters.*;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,9 +29,10 @@ public class ProjectInsert
 	MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("testproject");
 	
 //inserting a new project to database
-public Project insertProject(Project project,HttpServletRequest req)
+public HashMap<String,String> insertProject(Project project,HttpServletRequest req)
 {  //String userfromsession = req.getSession().getAttribute("username").toString();
    Document docexsit = tc.find(and(eq("username",project.getUsername()),eq("title",project.getTitle()))).first();
+   HashMap<String,String> ack=new HashMap<String,String>();
    if(docexsit==null)
     { Document info=new Document().append("upvotes", (ArrayList<String>)project.getUpvotes()).append("downvotes",(ArrayList<String>)project.getDownvotes()).append("viewby",(List<String>)project.getViewby());
       Document doc = new Document()
@@ -38,6 +40,7 @@ public Project insertProject(Project project,HttpServletRequest req)
 	    		 .append("username", project.getUsername())
 	    		 .append("title",project.getTitle())	
 	    		 .append("date",GeneralServices.getCurrentDate())
+	    		 .append("last_updated",GeneralServices.getCurrentDate())
 	    		 .append("description",project.getDescription())
 	    		 .append("tags",(List<String>)project.getTags())
 	    		 //.append("comments",(ArrayList<Comment>)project.getComments())
@@ -56,15 +59,12 @@ public Project insertProject(Project project,HttpServletRequest req)
 	    		  String url = GeneralServices.urlGenerator(Notifications.PROJECTMODULE, projectid, project.getTitle());
 	    		  new UserDao().moduleIDAdder(Notifications.PROJECTMODULE,project.getUsername(), projectid);
 	    		  UpdateResult rs=tc.updateOne(and(eq("username",project.getUsername()),eq("title",project.getTitle())),new Document("$set",new Document("project_url",url)));		    		 
-	    		  Acknowledgement acknow = new Acknowledgement();
-	    		    acknow.setModifiedCount("1");
-	    		    acknow.setMatchedCount("0");
-	    			return project;
+	    		 ack.put("id", projectid);
+	    		 ack.put("title", GeneralServices.spaceRemover(project.getTitle()));
+	    			return ack;
 	    			}else{
-	                    Acknowledgement acknow = new Acknowledgement();
-           	            acknow.setModifiedCount("0");
-	                    acknow.setMatchedCount("1");
-	                 	return project;
+	                    ack.put("id","0");
+	                 	return ack;
                        }
                     }
     @SuppressWarnings("unchecked")
@@ -81,7 +81,7 @@ public Project insertProject(Project project,HttpServletRequest req)
 	Document doc = new Document()
    		 .append("username", document.getString("username"))
    		 .append("title",project.getTitle())	
-   		 .append("date",new GeneralServices().getCurrentDate())
+   		 .append("last_updated",new GeneralServices().getCurrentDate())
    		 .append("description",project.getDescription())
    		.append("project_url",url)
    		 .append("tags",(List<String>)project.getTags())
@@ -130,11 +130,12 @@ public Project getSelectedProject(String id,HttpServletRequest req)
 	Project project=new Project();
 	Document d= tc.find(eq("_id",id1)).first();
 	if(d!=null){
-	   		project.setTitle(d.getString("title"));
+			project.setUsername(d.getString("username"));
+		   	project.setTitle(d.getString("title"));
 	   		project.setDescription(d.getString("description"));
 	   		project.setTags((ArrayList<String>)d.get("tags")); 
 	   		project.setLicense(d.getString("license"));
-	   		project.setProject_url(d.getString("project_url"));
+	   		project.setProject_url(d.getString("project_link"));
 	   		project.setContributors((ArrayList<String>)d.get("contributors"));
 	   		project.setReadme(d.getString("readme"));
 	   		project.set_private(d.getString("_private"));

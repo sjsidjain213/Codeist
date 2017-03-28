@@ -9,8 +9,16 @@ public class Project{
    	private ArrayList<String> images,video_url,zip_file,contributors,tags,downvotes,viewby,project_link;
 	private ArrayList<Comment> comments;
     private Date date = new Date();
+    private Date last_updated = new Date();
     private Long upvotecount,downvotecount;
    ArrayList<String> upvotes;
+   
+public Date getLast_updated() {
+	return last_updated;
+}
+public void setLast_updated(Date last_updated) {
+	this.last_updated = last_updated;
+}
 public String getUsername() {
 	return username;
 }

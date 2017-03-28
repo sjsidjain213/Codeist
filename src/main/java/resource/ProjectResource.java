@@ -2,6 +2,7 @@ package resource;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class ProjectResource {
 @Path("/insert")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public Project insertProject(Project project,@Context HttpServletRequest req)
+public HashMap<String,String> insertProject(Project project,@Context HttpServletRequest req)
 {
 //return new ProjectInsert().insertProject(project);
 //return (new SessionService().sessionVerifier(req))?new ProjectInsert().insertProject(project,req):new GeneralServices().response(null);
