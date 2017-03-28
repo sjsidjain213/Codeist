@@ -104,10 +104,10 @@ public class QADao {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Acknowledgement upQuestion(String id,String username,String user){
+	public Acknowledgement upQuestion(String id,String user){
 		ObjectId id1=new ObjectId(id.toString());
 		Document d = tc.find(eq("_id",id1)).first();
-		 
+		String username=d.getString("username");
 			
 		//username ques owner //user who votes
 		d = tc.find(eq("_id",id1)).first();
@@ -121,11 +121,13 @@ public class QADao {
 						 down.remove(user);
 						 String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.downvotes",down))).toString();
 						 tc.updateOne(eq("_id",id1),new Document("$set",new Document("downvotecount",down.size())));
+						 tcuser.updateOne(eq("username",username),new Document("$dec",new Document("qa_downvote",1)));
 			 		}
 				 up.add(user);
 				//
 				 String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.upvotes",up))).toString();	 
 				 tc.updateOne(eq("_id",id1),new Document("$set",new Document("upvotecount",up.size())));
+				 tcuser.updateOne(eq("username",username),new Document("$inc",new Document("qa_upvote",1)));
 				//public void voteNotification(String username,String pqname,String pqid,String commitername,Notifications notify)
 		        String q_id = tc.find(eq("_id",id1)).first().get("_id").toString();
 				   
@@ -136,6 +138,7 @@ public class QADao {
 					//
 					String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.upvotes",up))).toString();	 
 					tc.updateOne(eq("_id",id1),new Document("$set",new Document("upvotecount",up.size())));
+					tcuser.updateOne(eq("username",username),new Document("$dec",new Document("qa_upvote",1)));
 				}
 			return new GeneralServices().response("already exist");
 			}
@@ -144,6 +147,7 @@ public class QADao {
 					down.remove(user);
 					 String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.downvotes",down))).toString();	 
 					 tc.updateOne(eq("_id",id1),new Document("$set",new Document("downvotecount",down.size())));
+					 tcuser.updateOne(eq("username",username),new Document("$dec",new Document("qa_downvote",1)));
 				}
 				up=new ArrayList<String>();
 				up.add(user);
