@@ -9,7 +9,13 @@ import javax.xml.bind.annotation.XmlRootElement;
     @XmlRootElement
 public class User {
 	@XmlElement
-    private String username,password,name,bio,phone_no,gender,email_id,country,state,city,message,category,institute;
+    private String username,password,name,bio,phone_no,gender,email_id,country,state,city,message,category,institute,profile_url;
+	public String getProfile_url() {
+		return profile_url;
+	}
+	public void setProfile_url(String profile_url) {
+		this.profile_url = profile_url;
+	}
 	private ArrayList<String> favourite_tag,following,follower,contributing,project_id,project_bookmark,question_bookmark;
 	private ArrayList<String> tag_view, user_view, problem_category_view, project_view,question_ask,question_answer;
 	private long rating,zipcode,project_upvote,project_downvote,qa_upvote,qa_downvote;

@@ -72,6 +72,7 @@ public class UserDao {
 					  .append("name",name)
 					  .append("bio","")
 					  .append("date",date)
+					  .append("profile_url","")
 					  .append("gender","")
 					  .append("category","")
 					  .append("institute","")
@@ -95,7 +96,7 @@ public class UserDao {
       MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("unverifieduserdata");
 	  tc.deleteOne(doc);
 	  }
-	  public Acknowledgement insertUser(User user)
+	  public Acknowledgement updateUser(User user)
 	  { Document test = tc.find(eq("username",user.getUsername())).first();
 		  if(test==null)
 		  { 
@@ -106,17 +107,21 @@ public class UserDao {
 					  .append("city",user.getCity())
 					  .append("zipcode", user.getZipcode());
 			  
-			  Document history = new Document("tag_view",new ArrayList<String>())
+		    	  Document history = new Document("tag_view",new ArrayList<String>())
 					              .append("problem_category_view",new ArrayList<String>())
 					              .append("project_view",new ArrayList<String>())
 					              .append("user_view",new ArrayList<String>());
-
+String profile_url="";
+if(user.getProfile_url()!=""){profile_url=user.getProfile_url();}
+profile_url = (user.getGender().equals("m")&&user.getProfile_url()=="")?"https://s3-us-west-2.amazonaws.com/codeist/male_user.png":"https://s3-us-west-2.amazonaws.com/codeist/female_user.png"; 	  
+		    	  
                   Document doc = new Document("username",user.getUsername())
 				  .append("password",GeneralServices.get_SHA_256_SecurePassword(user.getUsername(),user.getPassword()))
 				  .append("name",user.getName())
 				  .append("bio",user.getBio())
 				  .append("date",GeneralServices.getCurrentDate())
 				  .append("gender",user.getGender())
+			      .append("profile_url",profile_url)
 				  .append("category",user.getCategory())
 				  .append("institute",user.getInstitute())
 				  .append("following",new ArrayList<String>())

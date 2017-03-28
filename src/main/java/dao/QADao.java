@@ -23,11 +23,13 @@ public class QADao {
 	
 	MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("testqa");
 	MongoCollection<Document> tcuser = new DatabaseServices().getDb().getCollection("testuserdata");
-    public Acknowledgement insertQuestion(Question question, HttpServletRequest req)
+
+	public Acknowledgement insertQuestion(Question question, HttpServletRequest req)
 	{   String userfromsession = req.getSession().getAttribute("username").toString();
 	    Document doc2 = tc.find(and(eq("username",userfromsession),eq("question",question.getQuestion()))).first();
 		if(doc2==null)
-		{Document info=new Document().append("upvotes",new ArrayList<String>()).append("downvotes",new ArrayList<String>());
+		{
+			Document info=new Document().append("upvotes",new ArrayList<String>()).append("downvotes",new ArrayList<String>());
 			Document doc = new Document("username",userfromsession)
 	    		.append("question",question.getQuestion())
 	    		.append("description",question.getDescription())
@@ -62,20 +64,20 @@ public class QADao {
 	public Question getQuestion(String id)
 	{
 		ObjectId id1=new ObjectId(id.toString());
-		Document doc = tc.find(eq("_id",id1)).first();	
-	Question quest = new Question();
+		Document doc = tc.find(eq("_id",id1)).first();
+		ArrayList<Answer> alansw = new ArrayList<Answer>();
+	if(doc!=null)
+	{Question quest = new Question();
 	quest.setUsername(doc.getString("username"));
 	quest.setDescription(doc.getString("description"));
 	quest.setDate(doc.getDate("date"));
 	quest.setTags((ArrayList<String>)doc.get("tags"));
 	quest.setQuestion_url(doc.getString("url"));
 	Document document=(Document) doc.get("info");
-	
 	quest.setDownvotes((ArrayList<String>)document.get("downvotes"));
 	quest.setUpvotes((ArrayList<String>)document.get("upvotes"));
 	quest.setFeatured_points(doc.getLong("featured_points"));
-	ArrayList<Answer> alansw = new ArrayList<Answer>();
-	ArrayList<Document> aldo = (ArrayList<Document>) doc.get("answers");
+    ArrayList<Document> aldo = (ArrayList<Document>) doc.get("answers");
 	for(Document d:aldo)
 	{	Answer answer =  new Answer();
 		answer.setUsername(d.getString("username"));
@@ -89,6 +91,12 @@ public class QADao {
 	}
 	quest.setAnswers(alansw);
 	return quest;
+	}
+	else{
+		Question question = new Question();
+		question.setDescription("Question Id do not exsit");
+		return question;
+	}
 	}
 	
 	public Acknowledgement insertAnswer(Answer answer,HttpServletRequest req)
