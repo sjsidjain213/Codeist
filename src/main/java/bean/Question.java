@@ -6,7 +6,7 @@ import java.util.Date;
 public class Question {
 
 	private String username,question,question_url,description;
-	private Date date = new Date();
+	private long date;
 	private ArrayList<String> tags;
 	private long featured_points;
 	private ArrayList<String> upvotes,downvotes;
@@ -36,10 +36,10 @@ public class Question {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public Date getDate() {
+	public long getDate() {
 		return date;
 	}
-	public void setDate(Date date) {
+	public void setDate(long date) {
 		this.date = date;
 	}
 	public ArrayList<String> getTags() {
@@ -87,7 +87,7 @@ public class Question {
 	}
 	
 	
-	public Question(String username, String question, String question_url, String description, Date date,
+	public Question(String username, String question, String question_url, String description, long date,
 			ArrayList<String> tags, long featured_points, ArrayList<String> upvotes, ArrayList<String> downvotes,
 			long upvotecount, long downvotecount, ArrayList<Answer> answers) {
 		super();
