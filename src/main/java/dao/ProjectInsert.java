@@ -273,6 +273,7 @@ public ArrayList<String> up(String id,String user){
 			tcuser.updateOne(eq("username",username),new Document("$inc",new Document("project_upvote",1)));
 			//changes make in other too
 			//new NotificationService().voteNotification(username,title,p_id,user,Notifications.UPVOTESQUESTION);
+			//new NotificationService().projectUpvoteNotification(project.getUsername(), req.getSession().getAttribute("username").toString(),id,project.getTitle());
            	 return up;}
 			else{
 				up.remove(user);
@@ -280,6 +281,7 @@ public ArrayList<String> up(String id,String user){
 				tc.updateOne(eq("_id",id1),new Document("$set",new Document("upvotecount",up.size())));
 				tcuser.updateOne(eq("username",username),new Document("$inc",new Document("project_upvote",-1)));
 			}
+			//new NotificationService().projectUpvoteNotification(project.getUsername(), req.getSession().getAttribute("username").toString(),id,project.getTitle());
 		return up;
 		}
 		else{
@@ -296,6 +298,7 @@ public ArrayList<String> up(String id,String user){
 			 tcuser.updateOne(eq("username",username),new Document("$inc",new Document("project_upvote",1)));
 		//make chnages here
 			 //	 new NotificationService().voteNotification(username,title,Notifications.UPVOTESPROJECT);
+			 //new NotificationService().projectUpvoteNotification(project.getUsername(), req.getSession().getAttribute("username").toString(),id,project.getTitle());
 			 return up;
 			
 		}
@@ -324,6 +327,7 @@ public ArrayList<String> down(String id,String user){
 			tcuser.updateOne(eq("username",username),new Document("$inc",new Document("project_downvote",1)));
 			//make changes here
 			// new NotificationService().voteNotification(username,title,Notifications.DOWNVOTESPROJECT);
+			//new NotificationService().projectDownvoteNotification(project.getUsername(), req.getSession().getAttribute("username").toString(),id,project.getTitle());
 			 return down;}
 			else{
 				down.remove(user);
@@ -331,6 +335,7 @@ public ArrayList<String> down(String id,String user){
 				tc.updateOne(eq("_id",id1),new Document("$set",new Document("downvotecount",down.size())));
 				tcuser.updateOne(eq("username",username),new Document("$inc",new Document("project_downvote",-1)));
 			}
+			//new NotificationService().projectDownvoteNotification(project.getUsername(), req.getSession().getAttribute("username").toString(),id,project.getTitle());
 		return down;
 		}
 		else{
@@ -347,6 +352,7 @@ public ArrayList<String> down(String id,String user){
 			 tcuser.updateOne(eq("username",username),new Document("$inc",new Document("project_downvote",1)));
 			//make changes here
 			 // new NotificationService().voteNotification(username,title,Notifications.DOWNVOTESPROJECT);
+			// new NotificationService().projectDownvoteNotification(project.getUsername(), req.getSession().getAttribute("username").toString(),id,project.getTitle());
 			 return down;
 			
 		}

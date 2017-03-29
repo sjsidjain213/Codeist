@@ -35,6 +35,24 @@ public class NotificationService {
      tc.updateOne(eq("username",receiver),new Document("$addToSet",new Document("notifications",doc)));
  	}
     /*************************END******************************/
+    public void projectUpvoteNotification(String receiver,String commiter,String project_id, String project_name)
+    {
+    project_name = GeneralServices.spaceRemover(project_name);
+    String suffixurl = "/project/"+project_id;
+    String commitermessage = commiter+"has upvoted project name : "+project_name;
+    //(String commitername,String commitermessage,Notifications notify,String url)
+     Document doc = notificationMessage(commiter,commitermessage,Notifications.UPVOTESPROJECT,suffixurl);
+     tc.updateOne(eq("username",receiver),new Document("$addToSet",new Document("notifications",doc)));
+ 	}
+    public void projectDownvotevoteNotification(String receiver,String commiter,String project_id, String project_name)
+    {
+    project_name = GeneralServices.spaceRemover(project_name);
+    String suffixurl = "/project/"+project_id;
+    String commitermessage = commiter+"has downvoted project name : "+project_name;
+    //(String commitername,String commitermessage,Notifications notify,String url)
+     Document doc = notificationMessage(commiter,commitermessage,Notifications.DOWNVOTESPROJECT,suffixurl);
+     tc.updateOne(eq("username",receiver),new Document("$addToSet",new Document("notifications",doc)));
+ 	}
     public void commentNotification(String username,String projectname,String project_id,String commitername,String commitermsg,Notifications notify)
 	{   projectname = new GeneralServices().spaceRemover(projectname);
         String suffixurl= "/projects/"+project_id;
