@@ -187,15 +187,17 @@ public Comment insertComment(Comment comment,String id,HttpServletRequest req)
                   .append("date",GeneralServices.getCurrentDate().getTime());
 	
 comment.setUsername("pulkit");//req.getSession().getAttribute("username").toString());
-//comment.setDate(doc.getDate("date"));
+comment.setDate(doc.getLong("date"));
 String acknow= tc.updateOne(eq("_id",id1),new Document("$push",new Document("comments",doc))).toString();
 //new NotificationService().commentNotification(project.getString("username"),project.getString("title"),id,req.getSession().getAttribute("username").toString(),comment.getComment(),Notifications.COMMENT);
-new NotificationService().commentNotification(project.getString("username"),project.getString("title"),id,"pulkit",comment.getComment(),Notifications.COMMENT);
+//new NotificationService().commentNotification(project.getString("username"),project.getString("title"),id,"pulkit",comment.getComment(),Notifications.COMMENT);
 
 return comment;}
 	catch(Exception e){
-		comment.setComment("error");
-		return comment;
+		e.printStackTrace();
+		Comment a=new Comment();
+		a.setComment("error");
+		return a;
 	}
 }
 
@@ -205,13 +207,18 @@ public  Comment deleteComment(String project_id,Comment comment){
     long dateLong	= Long.valueOf(comment.getDate());
 	Comment comment1=new Comment();
 //	ArrayList<String> con=(ArrayList<String>) project.get("contributors");
-    
+    try{
 	Document doc = new Document("username",comment.getUsername())
       .append("comment", comment.getComment())
       .append("date", dateLong);
 System.out.println(doc);
 	tc.updateOne(eq("_id",id1), new Document("$pull",new Document("comments",doc)));
-return comment;
+return comment;}
+    catch(Exception e){
+    	Comment a=new Comment();
+		a.setComment("error");
+    	return a;
+    }
 }
 
 @SuppressWarnings("unchecked")
