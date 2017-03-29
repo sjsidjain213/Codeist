@@ -324,9 +324,14 @@ public class HomePage {
 		        doc.setId(d.get("_id").toString());
 		       // doc.setUpvotecount(d.getLong("upvotecount"));
 		       // doc.setDownvotecount(d.getLong("downvotecount"));
-		        doc.setUpvotes((ArrayList<String>)d.get("upvotes"));
-		        doc.setDownvotes((ArrayList<String>)d.get("downvotes"));
-		        doc.setUrl_title(GeneralServices.spaceAdder(d.getString("title")));
+		        Document innerdoc = (Document)d.get("info");
+		   		if(innerdoc!=null){
+		   		doc.setUpvotes((ArrayList<String>)innerdoc.get("upvotes"));
+		   		doc.setDownvotes((ArrayList<String>)innerdoc.get("downvotes"));
+		   		
+		   		}
+		        
+		        doc.setUrl_title(GeneralServices.spaceRemover(d.getString("title")));
 		        // description might throw error check database 
 		        doc.setDescription(d.getString("description"));
 		        doc.setUrl(d.getString("project_url"));

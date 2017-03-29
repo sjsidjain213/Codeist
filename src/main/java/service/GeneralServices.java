@@ -74,6 +74,7 @@ public Tile returnTile(Document d,String source,String subject)
 	    tl.setPositioncount(1);
 	    if(subject.equals("project")){
 	    	tl.setTitle(d.getString("title"));
+	    	tl.setUrl_title(GeneralServices.spaceRemover(d.getString("title")));
 			tl.setDescription(d.getString("description"));
 			tl.setTags((ArrayList<String>)d.get("tags"));
 	    	Document doc = (Document) d.get("info");
@@ -83,6 +84,7 @@ public Tile returnTile(Document d,String source,String subject)
 	    	if(doc.get("downvotes") != null){
 	    		tl.setDownvotes((ArrayList<String>) doc.get("downvotes"));
 	    	}
+	    
 	    }
 	    else{
 	    	tl.setTitle(d.getString("question"));

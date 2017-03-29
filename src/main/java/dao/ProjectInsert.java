@@ -23,8 +23,8 @@ import service.GeneralServices;
 import service.NotificationService;
 public class ProjectInsert
 {
-	MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("testproject"); 
-	MongoCollection <Document> tcuser=new DatabaseServices().getDb().getCollection("testuserdata");
+	MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("project"); 
+	MongoCollection <Document> tcuser=new DatabaseServices().getDb().getCollection("userdata");
 	
 //inserting a new project to database
 public Acknowledgement insertProject(Project project,HttpServletRequest req)
