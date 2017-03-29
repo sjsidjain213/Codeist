@@ -6,6 +6,12 @@ public class Comment {
 private String username,comment;
 private Date date;
 private long dat;
+public long getDat() {
+	return dat;
+}
+public void setDat(long dat) {
+	this.dat = dat;
+}
 public Comment() {
 	super();
 	// TODO Auto-generated constructor stub
