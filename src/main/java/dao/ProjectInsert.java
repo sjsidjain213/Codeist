@@ -13,12 +13,7 @@ import bean.Notifications;
 import bean.Project;
 
 import static com.mongodb.client.model.Filters.*;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -46,7 +41,7 @@ public Acknowledgement insertProject(Project project,HttpServletRequest req)
 	    		// .append("username", req.getSession().getAttribute("username"))
 	    		 .append("username", project.getUsername())
 	    		 .append("title",project.getTitle())	
-	    		 .append("date",GeneralServices.getCurrentDate())
+	    		 .append("date",GeneralServices.getCurrentDate().getTime()) //
 	    		 .append("last_updated",GeneralServices.getCurrentDate())
 	    		 .append("description",project.getDescription())
 	    		 .append("tags",(List<String>)project.getTags())
@@ -87,8 +82,7 @@ public Acknowledgement insertProject(Project project,HttpServletRequest req)
 	    Document doc = new Document()
    		 .append("username", document.getString("username"))
    		 .append("title",project.getTitle())	
-   		 .append("date",document.getDate("date"))
-   		 .append("last_updated",new GeneralServices().getCurrentDate())
+   		 .append("last_updated",new GeneralServices().getCurrentDate().getTime())
    		 .append("description",project.getDescription())
    		 .append("project_url",url)
    		 .append("project_link", (List<String>)project.getProject_link())
@@ -158,8 +152,8 @@ public Project getSelectedProject(String id,HttpServletRequest req)
 		   	project.setTitle(d.getString("title"));
 		   	project.setUrl_title(GeneralServices.spaceRemover(d.getString("title")));
 	   		project.setDescription(d.getString("description"));
-	   		project.setDate(d.getDate("date"));
-	   		project.setLast_updated(d.getDate("last_updated"));
+	   		project.setDate(d.getLong("date"));
+	   		project.setLast_updated(d.getLong("last_updated"));
 	   		project.setTags((ArrayList<String>)d.get("tags")); 
 	   		project.setLicense(d.getString("license"));
 	   		project.setProject_link((ArrayList<String>)d.get("project_link"));

@@ -8,29 +8,9 @@ public class Project{
     //private long downvotes, viewcount,upvotes;
    	private ArrayList<String> images,video_url,zip_file,contributors,tags,downvotes,viewby,project_link;
 	private ArrayList<Comment> comments;
-    private Date date;
-    private Date last_updated ;
+    private Long date,last_updated ;
     private Long upvotecount,downvotecount;
    ArrayList<String> upvotes;
-   
-public String getUrl_title() {
-	return url_title;
-}
-public void setUrl_title(String url_title) {
-	this.url_title = url_title;
-}
-public String getId() {
-	return id;
-}
-public void setId(String id) {
-	this.id = id;
-}
-public Date getLast_updated() {
-	return last_updated;
-}
-public void setLast_updated(Date last_updated) {
-	this.last_updated = last_updated;
-}
 public String getUsername() {
 	return username;
 }
@@ -72,6 +52,18 @@ public String get_private() {
 }
 public void set_private(String _private) {
 	this._private = _private;
+}
+public String getId() {
+	return id;
+}
+public void setId(String id) {
+	this.id = id;
+}
+public String getUrl_title() {
+	return url_title;
+}
+public void setUrl_title(String url_title) {
+	this.url_title = url_title;
 }
 public ArrayList<String> getImages() {
 	return images;
@@ -127,11 +119,17 @@ public ArrayList<Comment> getComments() {
 public void setComments(ArrayList<Comment> comments) {
 	this.comments = comments;
 }
-public Date getDate() {
+public Long getDate() {
 	return date;
 }
-public void setDate(Date date) {
+public void setDate(Long date) {
 	this.date = date;
+}
+public Long getLast_updated() {
+	return last_updated;
+}
+public void setLast_updated(Long last_updated) {
+	this.last_updated = last_updated;
 }
 public Long getUpvotecount() {
 	return upvotecount;
@@ -154,17 +152,18 @@ public void setUpvotes(ArrayList<String> upvotes) {
 @Override
 public String toString() {
 	return "Project [username=" + username + ", title=" + title + ", description=" + description + ", readme=" + readme
-			+ ", license=" + license + ", project_url=" + project_url + ", _private=" + _private + ", images=" + images
-			+ ", video_url=" + video_url + ", zip_file=" + zip_file + ", contributors=" + contributors + ", tags="
-			+ tags + ", downvotes=" + downvotes + ", viewby=" + viewby + ", project_link=" + project_link
-			+ ", comments=" + comments + ", date=" + date + ", upvotecount=" + upvotecount + ", downvotecount="
-			+ downvotecount + ", upvotes=" + upvotes + "]";
+			+ ", license=" + license + ", project_url=" + project_url + ", _private=" + _private + ", id=" + id
+			+ ", url_title=" + url_title + ", images=" + images + ", video_url=" + video_url + ", zip_file=" + zip_file
+			+ ", contributors=" + contributors + ", tags=" + tags + ", downvotes=" + downvotes + ", viewby=" + viewby
+			+ ", project_link=" + project_link + ", comments=" + comments + ", date=" + date + ", last_updated="
+			+ last_updated + ", upvotecount=" + upvotecount + ", downvotecount=" + downvotecount + ", upvotes="
+			+ upvotes + "]";
 }
 public Project(String username, String title, String description, String readme, String license, String project_url,
-		String _private, ArrayList<String> images, ArrayList<String> video_url, ArrayList<String> zip_file,
-		ArrayList<String> contributors, ArrayList<String> tags, ArrayList<String> downvotes, ArrayList<String> viewby,
-		ArrayList<String> project_link, ArrayList<Comment> comments, Date date, Long upvotecount, Long downvotecount,
-		ArrayList<String> upvotes) {
+		String _private, String id, String url_title, ArrayList<String> images, ArrayList<String> video_url,
+		ArrayList<String> zip_file, ArrayList<String> contributors, ArrayList<String> tags, ArrayList<String> downvotes,
+		ArrayList<String> viewby, ArrayList<String> project_link, ArrayList<Comment> comments, Long date,
+		Long last_updated, Long upvotecount, Long downvotecount, ArrayList<String> upvotes) {
 	super();
 	this.username = username;
 	this.title = title;
@@ -173,6 +172,8 @@ public Project(String username, String title, String description, String readme,
 	this.license = license;
 	this.project_url = project_url;
 	this._private = _private;
+	this.id = id;
+	this.url_title = url_title;
 	this.images = images;
 	this.video_url = video_url;
 	this.zip_file = zip_file;
@@ -183,6 +184,7 @@ public Project(String username, String title, String description, String readme,
 	this.project_link = project_link;
 	this.comments = comments;
 	this.date = date;
+	this.last_updated = last_updated;
 	this.upvotecount = upvotecount;
 	this.downvotecount = downvotecount;
 	this.upvotes = upvotes;
@@ -191,5 +193,4 @@ public Project() {
 	super();
 	// TODO Auto-generated constructor stub
 }
-   
-}
+   }
