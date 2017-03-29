@@ -324,8 +324,8 @@ public class HomePage {
 		        doc.setId(d.get("_id").toString());
 		       // doc.setUpvotecount(d.getLong("upvotecount"));
 		       // doc.setDownvotecount(d.getLong("downvotecount"));
-		        doc.setUpvotes((ArrayList<String>)d.get("upvotes"));
-		        doc.setDownvotes((ArrayList<String>)d.get("downvotes"));
+		        doc.setUpvotes((ArrayList<String>)d.get("info.upvotes"));
+		        doc.setDownvotes((ArrayList<String>)d.get("info.downvotes"));
 		        doc.setUrl_title(GeneralServices.spaceAdder(d.getString("title")));
 		        // description might throw error check database 
 		        doc.setDescription(d.getString("description"));
