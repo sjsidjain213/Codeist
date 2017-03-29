@@ -92,16 +92,14 @@ public Comment insertComment(@Context HttpServletRequest req,Comment comment,@Pa
 {
 return new ProjectInsert().insertComment(comment,id,req);
 //return (new SessionService().sessionVerifier(req))?new ProjectInsert().insertComment(comment,id,req):new Comment();
-
 }
 
-@DELETE
-@Path("/{id}/comment/{username}/{date}")
+@POST
+@Path("/{id}/comment/delete")
 @Produces(MediaType.APPLICATION_JSON)
-public Comment deleteComment(@PathParam("id")String id,@PathParam("username")String username,@PathParam("date")String date,@Context HttpServletRequest req){
-	return new ProjectInsert().deleteComment(id, username, date,req);
+public Comment deleteComment(@PathParam("id")String id,Comment comment){
+	return new ProjectInsert().deleteComment(id,comment);
 	//return (new SessionService().sessionVerifier(req))?new ProjectInsert().deleteComment(id, username, date ,req):new Comment();
-	
 }
 
 @PUT

@@ -3,28 +3,14 @@ package bean;
 import java.util.Date;
 
 public class Comment {
-private String username,comment;
-private Date date;
-private long dat;
-public long getDat() {
-	return dat;
+private String username,comment,project_id;
+private long date;
+
+public String getProject_id() {
+	return project_id;
 }
-public void setDat(long dat) {
-	this.dat = dat;
-}
-public Comment() {
-	super();
-	// TODO Auto-generated constructor stub
-}
-public Comment(String username, String comment, Date date) {
-	super();
-	this.username = username;
-	this.comment = comment;
-	this.date = date;
-}
-@Override
-public String toString() {
-	return "Comment [username=" + username + ", comment=" + comment + ", date=" + date + "]";
+public void setProject_id(String project_id) {
+	this.project_id = project_id;
 }
 public String getUsername() {
 	return username;
@@ -38,12 +24,26 @@ public String getComment() {
 public void setComment(String comment) {
 	this.comment = comment;
 }
-public Date getDate() {
+public long getDate() {
 	return date;
 }
-public void setDate(Date date) {
+public void setDate(long date) {
 	this.date = date;
 }
-
+@Override
+public String toString() {
+	return "Comment [username=" + username + ", comment=" + comment + ", project_id=" + project_id + ", date=" + date
+			+ "]";
+}
+public Comment(String username, String comment, long date) {
+	super();
+	this.username = username;
+	this.comment = comment;
+	this.date = date;
+}
+public Comment() {
+	super();
+	// TODO Auto-generated constructor stub
+}
 
 }

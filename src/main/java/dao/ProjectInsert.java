@@ -183,8 +183,9 @@ public Project getSelectedProject(String id,HttpServletRequest req)
 }
 
 public Comment insertComment(Comment comment,String id,HttpServletRequest req)
-{ObjectId id1=new ObjectId(id.toString());
+{   ObjectId id1=new ObjectId(id.toString());
 	Document project = tc.find(eq("_id",id1)).first();
+	System.out.println(project);
 	try{
 //Document doc = new Document("username",req.getSession().getAttribute("username").toString())
 		Document doc = new Document("username","pulkit")
@@ -204,32 +205,19 @@ return comment;}
 	}
 }
 
-public  Comment deleteComment(String id,String username,String date,HttpServletRequest req){
-	ObjectId id1=new ObjectId(id.toString());
-	Document project = tc.find(eq("_id",id1)).first();
-	System.out.println(project+"lnlk");
+public  Comment deleteComment(String project_id,Comment comment){
+	
+	ObjectId id1=new ObjectId(project_id);
+    long dateLong	= Long.valueOf(comment.getDate());
 	Comment comment1=new Comment();
 //	ArrayList<String> con=(ArrayList<String>) project.get("contributors");
-	ArrayList<Comment> alcomment = new ArrayList<Comment>();
-	ArrayList<Document> al =  (ArrayList<Document>) project.get("comments");
-	if(al!=null ){
-		 
-	    for(Document din : al)
-	    {   if(!(din.getString("username").equals("username") && date.equals(din.getDate("date").getTime()))){
-	    	Comment comment = new Comment();
-			comment.setUsername(din.getString("username"));
-	    	comment.setComment(din.getString("comment"));
-	    	comment.setDate(din.getDate("date"));
-            alcomment.add(comment);
-	    }
-	    else{
-	    	comment1.setUsername(din.getString("username"));
-	    	comment1.setDate(din.getDate("date"));
-	    }
-	    }
-	    tc.updateOne(eq("_id",id),new Document("$set",new Document("comments",alcomment)));
-	    }
-	return comment1;
+    
+	Document doc = new Document("username",comment.getUsername())
+      .append("comment", comment.getComment())
+      .append("date", dateLong);
+System.out.println(doc);
+	tc.updateOne(eq("_id",id1), new Document("$pull",new Document("comments",doc)));
+return comment;
 }
 
 @SuppressWarnings("unchecked")
@@ -242,7 +230,7 @@ public ArrayList<Comment> getAllComments(String username,String projectname)
 		    {   Comment comment = new Comment();
 				comment.setUsername(din.getString("username"));
 		    	comment.setComment(din.getString("comment"));
-		    	comment.setDate(din.getDate("date"));
+		    	comment.setDate(din.getLong("date"));
 	            alcomment.add(comment);
 		    }		
     	    }
