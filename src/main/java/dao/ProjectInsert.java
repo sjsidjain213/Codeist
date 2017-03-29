@@ -24,7 +24,7 @@ import service.NotificationService;
 public class ProjectInsert
 {
 	MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("project"); 
-	MongoCollection <Document> tcuser=new DatabaseServices().getDb().getCollection("userdata");
+	MongoCollection <Document> tcuser=new DatabaseServices().getDb().getCollection("testuserdata");
 	
 //inserting a new project to database
 public Acknowledgement insertProject(Project project,HttpServletRequest req)
@@ -215,6 +215,7 @@ System.out.println(doc);
 	tc.updateOne(eq("_id",id1), new Document("$pull",new Document("comments",doc)));
 return comment;}
     catch(Exception e){
+    	e.printStackTrace();
     	Comment a=new Comment();
 		a.setComment("error");
     	return a;
