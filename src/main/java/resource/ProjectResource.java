@@ -90,8 +90,8 @@ return new ProjectInsert().getSelectedProject(id,req);
 @Consumes(MediaType.APPLICATION_JSON)
 public Comment insertComment(@Context HttpServletRequest req,Comment comment,@PathParam("id")String id)
 {
-//return new ProjectInsert().insertComment(comment,username,projectname);
-return (new SessionService().sessionVerifier(req))?new ProjectInsert().insertComment(comment,id,req):new Comment();
+return new ProjectInsert().insertComment(comment,id,req);
+//return (new SessionService().sessionVerifier(req))?new ProjectInsert().insertComment(comment,id,req):new Comment();
 
 }
 
@@ -110,8 +110,8 @@ public Comment deleteComment(@PathParam("id")String id,@PathParam("username")Str
 @Produces(MediaType.APPLICATION_JSON)
 public ArrayList<String> up(@PathParam("id")String id,@Context HttpServletRequest req)
 {
-//return new ProjectInsert().up(username,title,req.getSession().getAttribute("username").toString());
-return (new SessionService().sessionVerifier(req))?new ProjectInsert().up(id,req.getSession().getAttribute("username").toString()):new ArrayList<String>();
+return new ProjectInsert().up(id,"utkarsh");
+//return (new SessionService().sessionVerifier(req))?new ProjectInsert().up(id,req.getSession().getAttribute("username").toString()):new ArrayList<String>();
 }
 
 @PUT
@@ -120,8 +120,8 @@ return (new SessionService().sessionVerifier(req))?new ProjectInsert().up(id,req
 @Produces(MediaType.APPLICATION_JSON)
 public ArrayList<String> down(@PathParam("id")String id,@Context HttpServletRequest req)
 {
-//return new ProjectInsert().down(username,title,req.getSession().getAttribute("username").toString());
-return (new SessionService().sessionVerifier(req))?new ProjectInsert().down(id,req.getSession().getAttribute("username").toString()):new ArrayList<String>();
+return new ProjectInsert().down(id,"utkarsh");
+//return (new SessionService().sessionVerifier(req))?new ProjectInsert().down(id,req.getSession().getAttribute("username").toString()):new ArrayList<String>();
 }
 }
 

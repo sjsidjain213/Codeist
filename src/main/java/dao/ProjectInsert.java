@@ -186,13 +186,17 @@ public Comment insertComment(Comment comment,String id,HttpServletRequest req)
 {ObjectId id1=new ObjectId(id.toString());
 	Document project = tc.find(eq("_id",id1)).first();
 	try{
-Document doc = new Document("username",req.getSession().getAttribute("username").toString())
+//Document doc = new Document("username",req.getSession().getAttribute("username").toString())
+		Document doc = new Document("username","pulkit")
                   .append("comment", comment.getComment())
-                  .append("date",GeneralServices.getCurrentDate());
-comment.setUsername(req.getSession().getAttribute("username").toString());
-comment.setDate(doc.getDate("date"));
+                  .append("date",GeneralServices.getCurrentDate().getTime());
+		Date d=new Date();
+comment.setUsername("pulkit");//req.getSession().getAttribute("username").toString());
+//comment.setDate(doc.getDate("date"));
 String acknow= tc.updateOne(eq("_id",id1),new Document("$push",new Document("comments",doc))).toString();
-new NotificationService().commentNotification(project.getString("username"),project.getString("title"),id,req.getSession().getAttribute("username").toString(),comment.getComment(),Notifications.COMMENT);
+//new NotificationService().commentNotification(project.getString("username"),project.getString("title"),id,req.getSession().getAttribute("username").toString(),comment.getComment(),Notifications.COMMENT);
+new NotificationService().commentNotification(project.getString("username"),project.getString("title"),id,"pulkit",comment.getComment(),Notifications.COMMENT);
+
 return comment;}
 	catch(Exception e){
 		comment.setComment("error");

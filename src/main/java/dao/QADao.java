@@ -25,7 +25,7 @@ public class QADao {
 	MongoCollection<Document> tcuser = new DatabaseServices().getDb().getCollection("testuserdata");
 
 	public Acknowledgement insertQuestion(Question question, HttpServletRequest req)
-	{   String userfromsession = req.getSession().getAttribute("username").toString();
+	{   String userfromsession ="hsharma";// req.getSession().getAttribute("username").toString();
 	    Document doc2 = tc.find(and(eq("username",userfromsession),eq("question",question.getQuestion()))).first();
 		if(doc2==null)
 		{
@@ -101,7 +101,7 @@ public class QADao {
 	
 	public Acknowledgement insertAnswer(Answer answer,HttpServletRequest req)
 	{   Document info=new Document().append("upvotes",new ArrayList<String>()).append("downvotes",new ArrayList<String>());	
-    	String userfromsession = req.getSession().getAttribute("username").toString();
+    	String userfromsession ="pulkit"; //req.getSession().getAttribute("username").toString();
 	    String q_id = tc.find(and(eq("username",answer.getUsername()),eq("question",answer.getQuestion()))).first().get("_id").toString();
 	    Document doc = new Document("username",userfromsession)
 	    		.append("answer",answer.getAnswer())
@@ -111,7 +111,7 @@ public class QADao {
         String acknow =tc.updateOne(eq("question",answer.getQuestion()),new Document("$push",new Document("answers",doc))).toString();
         Acknowledgement acknowledge = new GeneralServices().response(acknow);
         //answer.getUsername is owner of question
-        new NotificationService().answerNotification(answer.getUsername(),answer.getQuestion(),q_id,req.getSession().getAttribute("username").toString(),answer.getAnswer(),Notifications.QUESTIONSOLVED);
+        new NotificationService().answerNotification(answer.getUsername(),answer.getQuestion(),q_id,userfromsession,answer.getAnswer(),Notifications.QUESTIONSOLVED);
         return acknowledge;
 	}
 	
@@ -228,8 +228,8 @@ public class QADao {
 
 	@SuppressWarnings("unchecked")
 	public ArrayList<String> upanswer(String id,String username,String user){
-		//answer  username:whos answer ,question :full question
-		//username whose question
+		//username:whos answer
+		//user upvote user
 		ObjectId id1=new ObjectId(id.toString());
 		Document d = tc.find(eq("_id",id1)).first();
 		ArrayList<String> up=null,down=null;

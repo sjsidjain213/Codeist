@@ -55,8 +55,8 @@ public class QuestionResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public ArrayList<String> upquestion(@PathParam("id")String id,@Context HttpServletRequest req)
 	{
-	//return new ProjectInsert().up(username,title,req.getSession().getAttribute("username").toString());
-	return (new SessionService().sessionVerifier(req))?new QADao().upQuestion(id,req.getSession().getAttribute("username").toString()):new ArrayList<String>();
+	return new QADao().upQuestion(id,"utkarsh");
+	//return (new SessionService().sessionVerifier(req))?new QADao().upQuestion(id,req.getSession().getAttribute("username").toString()):new ArrayList<String>();
 	}
 	@PUT
 	@Path("/{id}/downvote")
@@ -64,17 +64,17 @@ public class QuestionResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public ArrayList<String> downquestion(@PathParam("id")String id,@Context HttpServletRequest req)
 	{
-	//return new ProjectInsert().up(username,title,req.getSession().getAttribute("username").toString());
-	return (new SessionService().sessionVerifier(req))?new QADao().downQuestion(id,req.getSession().getAttribute("username").toString()):new ArrayList<String>();
-	}
+	return new QADao().downQuestion(id,"utkarsh");
+	//return (new SessionService().sessionVerifier(req))?new QADao().downQuestion(id,req.getSession().getAttribute("username").toString()):new ArrayList<String>();
+}
 	@PUT
 	@Path("/{id}/{username}/upvote")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public ArrayList<String> upanswer(@PathParam("id")String id,@PathParam("username")String username,@Context HttpServletRequest req)
 	{
-	//return new ProjectInsert().up(username,title,req.getSession().getAttribute("username").toString());
-	return (new SessionService().sessionVerifier(req))?new QADao().upanswer(id,username,req.getSession().getAttribute("username").toString()):new ArrayList<String>();
+	return new QADao().upanswer(id,username,"utkarsh");
+	//return (new SessionService().sessionVerifier(req))?new QADao().upanswer(id,username,req.getSession().getAttribute("username").toString()):new ArrayList<String>();
 	}
 	@PUT
 	@Path("/{id}/{username}/downvote")
@@ -82,8 +82,8 @@ public class QuestionResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public ArrayList<String> downanswer(@PathParam("id")String id,@PathParam("username")String username,@Context HttpServletRequest req)
 	{
-	//return new ProjectInsert().up(username,title,req.getSession().getAttribute("username").toString());
-	return (new SessionService().sessionVerifier(req))?new QADao().downanswer(id,username,req.getSession().getAttribute("username").toString()):new ArrayList<String>();
+	return new QADao().downanswer(id,username,"utkarsh");
+	//return (new SessionService().sessionVerifier(req))?new QADao().downanswer(id,username,req.getSession().getAttribute("username").toString()):new ArrayList<String>();
 	}
 
 

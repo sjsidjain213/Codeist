@@ -5,6 +5,7 @@ import java.util.Date;
 public class Comment {
 private String username,comment;
 private Date date;
+private long dat;
 public Comment() {
 	super();
 	// TODO Auto-generated constructor stub
