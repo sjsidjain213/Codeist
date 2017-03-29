@@ -260,6 +260,10 @@ public void signup(Signup signup)
 	    new UserDao().signupUser(name, password, email, date);
         SendEmail.SendSimple(email,hashed1, hashed2);
 }
+
+public Long datetoepoch(Date date){
+	return date.getTime();
+}
 //public void contributor(String projectid,ArrayList<String> alcontributor)
 //{
 //	ArrayList<String> emailid = new UserDao().getContributorEmailid(alcontributor);
