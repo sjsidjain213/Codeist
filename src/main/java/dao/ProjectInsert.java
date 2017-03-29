@@ -78,6 +78,7 @@ public Acknowledgement insertProject(Project project,HttpServletRequest req)
     @SuppressWarnings("unchecked")
    public Acknowledgement updateproject(Project project,HttpServletRequest req,String id){
     ObjectId oid = new ObjectId(id.toString());
+    //Document doccheck = tc.find(and(or(eq("username",req.getSession().getAttribute("username").toString()),in("contributors",req.getSession().getAttribute("username").toString())),eq("_id",oid))).first();
 	Document document = tc.find(eq("_id",oid)).first();
       if(document!=null){
 		Document info=(Document) document.get("info");
@@ -244,7 +245,7 @@ public ArrayList<Comment> getAllComments(String username,String projectname)
 }
 
 @SuppressWarnings("unchecked")
-public Acknowledgement up(String id,String user){
+public ArrayList<String> up(String id,String user){
 	ObjectId id1=new ObjectId(id.toString());
 	Document d = tc.find(eq("_id",id1)).first();
 	String username=d.getString("username");
@@ -267,14 +268,14 @@ public Acknowledgement up(String id,String user){
 			tcuser.updateOne(eq("username",username),new Document("$inc",new Document("project_upvote",1)));
 			//changes make in other too
 			//new NotificationService().voteNotification(username,title,p_id,user,Notifications.UPVOTESQUESTION);
-           	 return new GeneralServices().response(acknow2);}
+           	 return up;}
 			else{
 				up.remove(user);
 				String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.upvotes",up))).toString();	 	 
 				tc.updateOne(eq("_id",id1),new Document("$set",new Document("upvotecount",up.size())));
 				tcuser.updateOne(eq("username",username),new Document("$inc",new Document("project_upvote",-1)));
 			}
-		return new GeneralServices().response("already exist");
+		return up;
 		}
 		else{
 			if(down!=null && down.contains(user)){
@@ -290,13 +291,13 @@ public Acknowledgement up(String id,String user){
 			 tcuser.updateOne(eq("username",username),new Document("$inc",new Document("project_upvote",1)));
 		//make chnages here
 			 //	 new NotificationService().voteNotification(username,title,Notifications.UPVOTESPROJECT);
-			 return new GeneralServices().response(acknow2);
+			 return up;
 			
 		}
 }
 
 @SuppressWarnings("unchecked")
-public Acknowledgement down(String id,String user){
+public ArrayList<String> down(String id,String user){
 	ObjectId id1=new ObjectId(id.toString());
 	Document d = tc.find(eq("_id",id1)).first();
 	String username=d.getString("username");
@@ -318,14 +319,14 @@ public Acknowledgement down(String id,String user){
 			tcuser.updateOne(eq("username",username),new Document("$inc",new Document("project_downvote",1)));
 			//make changes here
 			// new NotificationService().voteNotification(username,title,Notifications.DOWNVOTESPROJECT);
-			 return new GeneralServices().response(acknow2);}
+			 return down;}
 			else{
 				down.remove(user);
 				String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.downvotes",down))).toString();	 
 				tc.updateOne(eq("_id",id1),new Document("$set",new Document("downvotecount",down.size())));
 				tcuser.updateOne(eq("username",username),new Document("$inc",new Document("project_downvote",-1)));
 			}
-		return new GeneralServices().response("already exist");
+		return down;
 		}
 		else{
 			if(up!=null && up.contains(user)){
@@ -341,7 +342,7 @@ public Acknowledgement down(String id,String user){
 			 tcuser.updateOne(eq("username",username),new Document("$inc",new Document("project_downvote",1)));
 			//make changes here
 			 // new NotificationService().voteNotification(username,title,Notifications.DOWNVOTESPROJECT);
-			 return new GeneralServices().response(acknow2);
+			 return down;
 			
 		}
 }

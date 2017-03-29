@@ -108,20 +108,20 @@ public Comment deleteComment(@PathParam("id")String id,@PathParam("username")Str
 @Path("/{id}/upvote")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public Acknowledgement up(@PathParam("id")String id,@Context HttpServletRequest req)
+public ArrayList<String> up(@PathParam("id")String id,@Context HttpServletRequest req)
 {
 //return new ProjectInsert().up(username,title,req.getSession().getAttribute("username").toString());
-return (new SessionService().sessionVerifier(req))?new ProjectInsert().up(id,req.getSession().getAttribute("username").toString()):new GeneralServices().response(null);
+return (new SessionService().sessionVerifier(req))?new ProjectInsert().up(id,req.getSession().getAttribute("username").toString()):new ArrayList<String>();
 }
 
 @PUT
 @Path("/{id}/downvote")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public Acknowledgement down(@PathParam("id")String id,@Context HttpServletRequest req)
+public ArrayList<String> down(@PathParam("id")String id,@Context HttpServletRequest req)
 {
 //return new ProjectInsert().down(username,title,req.getSession().getAttribute("username").toString());
-return (new SessionService().sessionVerifier(req))?new ProjectInsert().down(id,req.getSession().getAttribute("username").toString()):new GeneralServices().response(null);
+return (new SessionService().sessionVerifier(req))?new ProjectInsert().down(id,req.getSession().getAttribute("username").toString()):new ArrayList<String>();
 }
 }
 

@@ -116,7 +116,7 @@ public class QADao {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Acknowledgement upQuestion(String id,String user){
+	public ArrayList<String> upQuestion(String id,String user){
 		ObjectId id1=new ObjectId(id.toString());
 		Document d = tc.find(eq("_id",id1)).first();
 		String username=d.getString("username");
@@ -144,7 +144,7 @@ public class QADao {
 		        String q_id = tc.find(eq("_id",id1)).first().get("_id").toString();
 				   
 				//new NotificationService().voteNotification(username,question.getQuestion(),q_id,user,Notifications.UPVOTESQUESTION);
-				 return new GeneralServices().response(acknow2);}
+				 return up;}
 				else{
 					up.remove(user);
 					//
@@ -152,7 +152,7 @@ public class QADao {
 					tc.updateOne(eq("_id",id1),new Document("$set",new Document("upvotecount",up.size())));
 					tcuser.updateOne(eq("username",username),new Document("$inc",new Document("qa_upvote",-1)));
 				}
-			return new GeneralServices().response("already exist");
+			return up;
 			}
 			else{
 				if(down!=null && down.contains(user)){
@@ -168,12 +168,12 @@ public class QADao {
 				 tcuser.updateOne(eq("username",username),new Document("$inc",new Document("qa_upvote",1)));
 				 //String q_id = tc.find(eq("_id",id1)).first().get("_id").toString();
 				 //new NotificationService().voteNotification(username,question.getQuestion(),q_id,user,Notifications.UPVOTESQUESTION);
-			return new GeneralServices().response(acknow2);
+			return up;
 				
 			}
 	}
 	@SuppressWarnings("unchecked")
-	public Acknowledgement downQuestion(String id,String user){
+	public ArrayList<String> downQuestion(String id,String user){
 		ObjectId id1=new ObjectId(id.toString());
 		Document d = tc.find(eq("_id",id1)).first();
 		String username=d.getString("username");
@@ -196,14 +196,14 @@ public class QADao {
 				 tcuser.updateOne(eq("username",username),new Document("$inc",new Document("qa_downvote",1)));
 				 String q_id = tc.find(eq("_id",id1)).first().get("_id").toString();
 				 //new NotificationService().voteNotification(username,question.getQuestion(),q_id,user,Notifications.DOWNVOTESQUESTION);
-				 return new GeneralServices().response(acknow2);}
+				 return down;}
 				else{
 					down.remove(user);
 					String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.downvotes",down))).toString();
 					tc.updateOne(eq("_id",id1),new Document("$set",new Document("downvotecount",down.size())));
 					 tcuser.updateOne(eq("username",username),new Document("$inc",new Document("qa_downvote",-1)));
 				}
-			return new GeneralServices().response("already exist");
+			return down;
 			}
 			else{
 				if(up!=null && up.contains(user)){
@@ -220,14 +220,14 @@ public class QADao {
 				 
 				 //String q_id = tc.find(eq("_id",id1)).first().get("_id").toString();
 				 //new NotificationService().voteNotification(username,question.getQuestion(),q_id,user,Notifications.DOWNVOTESQUESTION);
-				 return new GeneralServices().response(acknow2);
+				 return down;
 				
 			}
 	}
 
 
 	@SuppressWarnings("unchecked")
-	public Acknowledgement upanswer(String id,String username,String user){
+	public ArrayList<String> upanswer(String id,String username,String user){
 		//answer  username:whos answer ,question :full question
 		//username whose question
 		ObjectId id1=new ObjectId(id.toString());
@@ -265,14 +265,14 @@ public class QADao {
 		String q_id = tc.find(eq("_id",id1)).first().get("_id").toString();
 				   
 				//new NotificationService().voteNotification(username,answer.getQuestion(),q_id,user,Notifications.UPVOTESANSWER);
-				 return new GeneralServices().response(acknow2);}
+				 return up;}
 				else{
 					up.remove(user);
 					String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document(ups,up))).toString();
 					tc.updateOne(eq("_id",id1),new Document("$set",new Document(upc,up.size())));
 					 tcuser.updateOne(eq("username",username),new Document("$inc",new Document("qa_upvote",-1)));
 				}
-			return new GeneralServices().response("already exist");
+			return up;
 			}
 			else{
 				if(down!=null && down.contains(user)){
@@ -288,12 +288,12 @@ public class QADao {
 				 tcuser.updateOne(eq("username",username),new Document("$inc",new Document("qa_upvote",1)));
 				 String q_id = tc.find(eq("_id",id1)).first().get("_id").toString();
 				 //new NotificationService().voteNotification(username,answer.getQuestion(),q_id,user,Notifications.UPVOTESANSWER);
-			return new GeneralServices().response(acknow2);
+			return up;
 				
 			}
 	}
 	@SuppressWarnings("unchecked")
-	public Acknowledgement downanswer(String id,String username,String user){
+	public ArrayList<String> downanswer(String id,String username,String user){
 		ObjectId id1=new ObjectId(id.toString());
 		Document d = tc.find(eq("_id",id1)).first();
 		ArrayList<String> up=null,down=null;
@@ -327,14 +327,14 @@ public class QADao {
 				tcuser.updateOne(eq("username",username),new Document("$inc",new Document("qa_downvote",1)));
 				 String q_id = tc.find(eq("_id",id1)).first().get("_id").toString();
 				 //new NotificationService().voteNotification(username,answer.getQuestion(),q_id,user,Notifications.DOWNVOTESQUESTION);
-				 return new GeneralServices().response(acknow2);}
+				 return down;}
 				else{
 					down.remove(user);
 					String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document(downs,down))).toString();
 					tc.updateOne(eq("_id",id1),new Document("$set",new Document(downc,down.size())));
 					tcuser.updateOne(eq("username",username),new Document("$inc",new Document("qa_downvote",-1)));
 				}
-			return new GeneralServices().response("already exist");
+			return down;
 			}
 			else{
 				if(up!=null && up.contains(user)){
@@ -350,7 +350,7 @@ public class QADao {
 				 tcuser.updateOne(eq("username",username),new Document("$inc",new Document("qa_downvote",1)));
 				 String q_id = tc.find(eq("_id",id1)).first().get("_id").toString();
 				 //new NotificationService().voteNotification(username,answer.getQuestion(),q_id,user,Notifications.DOWNVOTESQUESTION);
-				 return new GeneralServices().response(acknow2);
+				 return down;
 				
 			}
 	}

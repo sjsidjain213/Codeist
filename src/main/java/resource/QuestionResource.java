@@ -1,5 +1,7 @@
 package resource;
 
+import java.util.ArrayList;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -51,37 +53,37 @@ public class QuestionResource {
 	@Path("/{id}/upvote")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Acknowledgement upquestion(@PathParam("id")String id,@Context HttpServletRequest req)
+	public ArrayList<String> upquestion(@PathParam("id")String id,@Context HttpServletRequest req)
 	{
 	//return new ProjectInsert().up(username,title,req.getSession().getAttribute("username").toString());
-	return (new SessionService().sessionVerifier(req))?new QADao().upQuestion(id,req.getSession().getAttribute("username").toString()):new GeneralServices().response(null);
+	return (new SessionService().sessionVerifier(req))?new QADao().upQuestion(id,req.getSession().getAttribute("username").toString()):new ArrayList<String>();
 	}
 	@PUT
 	@Path("/{id}/downvote")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Acknowledgement downquestion(@PathParam("id")String id,@Context HttpServletRequest req)
+	public ArrayList<String> downquestion(@PathParam("id")String id,@Context HttpServletRequest req)
 	{
 	//return new ProjectInsert().up(username,title,req.getSession().getAttribute("username").toString());
-	return (new SessionService().sessionVerifier(req))?new QADao().downQuestion(id,req.getSession().getAttribute("username").toString()):new GeneralServices().response(null);
+	return (new SessionService().sessionVerifier(req))?new QADao().downQuestion(id,req.getSession().getAttribute("username").toString()):new ArrayList<String>();
 	}
 	@PUT
 	@Path("/{id}/{username}/upvote")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Acknowledgement upanswer(@PathParam("id")String id,@PathParam("username")String username,@Context HttpServletRequest req)
+	public ArrayList<String> upanswer(@PathParam("id")String id,@PathParam("username")String username,@Context HttpServletRequest req)
 	{
 	//return new ProjectInsert().up(username,title,req.getSession().getAttribute("username").toString());
-	return (new SessionService().sessionVerifier(req))?new QADao().upanswer(id,username,req.getSession().getAttribute("username").toString()):new GeneralServices().response(null);
+	return (new SessionService().sessionVerifier(req))?new QADao().upanswer(id,username,req.getSession().getAttribute("username").toString()):new ArrayList<String>();
 	}
 	@PUT
 	@Path("/{id}/{username}/downvote")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Acknowledgement downanswer(@PathParam("id")String id,@PathParam("username")String username,@Context HttpServletRequest req)
+	public ArrayList<String> downanswer(@PathParam("id")String id,@PathParam("username")String username,@Context HttpServletRequest req)
 	{
 	//return new ProjectInsert().up(username,title,req.getSession().getAttribute("username").toString());
-	return (new SessionService().sessionVerifier(req))?new QADao().downanswer(id,username,req.getSession().getAttribute("username").toString()):new GeneralServices().response(null);
+	return (new SessionService().sessionVerifier(req))?new QADao().downanswer(id,username,req.getSession().getAttribute("username").toString()):new ArrayList<String>();
 	}
 
 
