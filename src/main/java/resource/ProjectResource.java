@@ -51,8 +51,8 @@ return	new ProjectInsert().insertProject(project,req);
 @Produces(MediaType.APPLICATION_JSON)
 public Acknowledgement updateProject(Project project,@Context HttpServletRequest req,@PathParam("id")String id)
 {
-//return new ProjectInsert().insertProject(project);
-return (new SessionService().sessionVerifier(req))?new ProjectInsert().updateproject(project,req,id):new GeneralServices().response(null);
+return new ProjectInsert().updateproject(project,req,id);
+//return (new SessionService().sessionVerifier(req))?new ProjectInsert().updateproject(project,req,id):new GeneralServices().response(null);
 }
 //all projects of a user
 @GET
@@ -99,8 +99,8 @@ return (new SessionService().sessionVerifier(req))?new ProjectInsert().insertCom
 @Path("/{id}/comment/{username}/{date}")
 @Produces(MediaType.APPLICATION_JSON)
 public Comment deleteComment(@PathParam("id")String id,@PathParam("username")String username,@PathParam("date")String date,@Context HttpServletRequest req){
-	//return new ProjectInsert().deleteComment(id, username, date);
-	return (new SessionService().sessionVerifier(req))?new ProjectInsert().deleteComment(id, username, date ,req):new Comment();
+	return new ProjectInsert().deleteComment(id, username, date,req);
+	//return (new SessionService().sessionVerifier(req))?new ProjectInsert().deleteComment(id, username, date ,req):new Comment();
 	
 }
 

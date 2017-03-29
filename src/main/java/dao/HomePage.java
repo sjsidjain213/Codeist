@@ -320,6 +320,7 @@ public class HomePage {
 		{Tile doc = new Tile();
 		        doc.setUsername(d.getString("username"));
 		        doc.setTitle(d.getString("title"));
+		        doc.setId(d.get("_id").toString());
 		        doc.setUpvotecount(d.getLong("upvotecount"));
 		        doc.setDownvotecount(d.getLong("downvotecount"));
 		        // description might throw error check database 

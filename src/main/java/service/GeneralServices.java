@@ -64,7 +64,7 @@ public boolean match(Tag tags,ArrayList<String> tag)
 public Tile returnTile(Document d,String source,String subject)
 {
 	Tile tl = new Tile();
-	    tl.set_id(d.get("_id"));
+	    tl.setId(d.get("_id").toString());
 	    ArrayList<String> altwo = new ArrayList<String>();
 	    if(altwo.size() < 1)
 	    	altwo.add("interesting");
@@ -101,7 +101,8 @@ public Acknowledgement response(String s)
 	       ac2.setMatchedCount("1");
 	       ac2.setModifiedCount("1");
 	       ac2.setUpsertedId("0");
-	    return ac2;
+	    ac2.setMessage("success");
+	       return ac2;
 	}
 	
 	else if(s!=null&&s.equals("already exist"))
@@ -109,7 +110,8 @@ public Acknowledgement response(String s)
     ac2.setMatchedCount("2");
     ac2.setModifiedCount("1");
     ac2.setUpsertedId("0");
- return ac2;
+    ac2.setMessage("success");
+    return ac2;
 	}
 	else if(s!=null)
 	{ Acknowledgement ac2 = new Acknowledgement();
@@ -124,7 +126,7 @@ public Acknowledgement response(String s)
 		ac2.setMatchedCount("0");
 		ac2.setModifiedCount("0");
 		ac2.setUpsertedId("0");
-		ac2.setMsg("user is not logged in");
+		ac2.setMessage("user is not logged in");
 		return ac2;
 	}
 }

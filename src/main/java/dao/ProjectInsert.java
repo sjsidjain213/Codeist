@@ -68,10 +68,10 @@ public Acknowledgement insertProject(Project project,HttpServletRequest req)
 	    		  new UserDao().moduleIDAdder(Notifications.PROJECTMODULE,project.getUsername(), projectid);
 	    		  UpdateResult rs=tc.updateOne(and(eq("username",project.getUsername()),eq("title",project.getTitle())),new Document("$set",new Document("project_url",url)));		    		 
 	    		  ack.setUpsertedId(projectid);
-	    		  ack.setMsg(GeneralServices.spaceRemover(project.getTitle()));
+	    		  ack.setMessage(GeneralServices.spaceRemover(project.getTitle()));
 	    		  return ack;
 	    			}else{
-	                    ack.setMsg("exist");
+	                    ack.setMessage("exist");
 	                 	return ack;
                        }
                     }
@@ -201,11 +201,12 @@ return comment;}
 public  Comment deleteComment(String id,String username,String date,HttpServletRequest req){
 	ObjectId id1=new ObjectId(id.toString());
 	Document project = tc.find(eq("_id",id1)).first();
+	System.out.println(project+"lnlk");
 	Comment comment1=new Comment();
-	ArrayList<String> con=(ArrayList<String>) project.get("contributors");
+//	ArrayList<String> con=(ArrayList<String>) project.get("contributors");
 	ArrayList<Comment> alcomment = new ArrayList<Comment>();
 	ArrayList<Document> al =  (ArrayList<Document>) project.get("comments");
-	if(al!=null && con.contains(req.getSession().getAttribute("username").toString())){
+	if(al!=null ){
 		 
 	    for(Document din : al)
 	    {   if(!(din.getString("username").equals("username") && date.equals(din.getDate("date").getTime()))){
@@ -216,12 +217,11 @@ public  Comment deleteComment(String id,String username,String date,HttpServletR
             alcomment.add(comment);
 	    }
 	    else{
-	    	comment1.setComment(din.getString("comment"));
 	    	comment1.setUsername(din.getString("username"));
 	    	comment1.setDate(din.getDate("date"));
 	    }
 	    }
-	    tc.updateOne(eq("_id",id1),new Document("$set",new Document("comments",alcomment)));
+	    tc.updateOne(eq("_id",id),new Document("$set",new Document("comments",alcomment)));
 	    }
 	return comment1;
 }

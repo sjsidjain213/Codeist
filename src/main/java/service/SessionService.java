@@ -61,12 +61,12 @@ MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("use
 		{req.getSession().removeAttribute("username");
 	    req.getSession().removeAttribute("s_id");
 	    Acknowledgement acknow = new Acknowledgement();
-        acknow.setMsg(Notifications.USERLOGGEDOUT.getMsg());
+        acknow.setMessage(Notifications.USERLOGGEDOUT.getMsg());
 	    return acknow; 
 		}
 	else{
 		 Acknowledgement acknow = new Acknowledgement();
-	        acknow.setMsg(Notifications.SESSIONDONOTEXSIT.getMsg());
+	        acknow.setMessage(Notifications.SESSIONDONOTEXSIT.getMsg());
 		    return acknow; 
 	}
 	

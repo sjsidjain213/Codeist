@@ -9,6 +9,14 @@ public class Tile{
 //title for project/question title
 //description for project/question description 	
 private String username,title,description,url,subject;
+private int positioncount;
+private String id;
+
+private Date date;
+private ArrayList<String> source,upvote,downvote;
+// upvotecount and downvotecount can be used directly used for sorting on basis of upvote and downvote
+private long upvotecount,downvotecount,viewcount;
+private ArrayList<String> tags= new ArrayList<String>();
 public String getSubject() {
 	return subject;
 }
@@ -16,15 +24,7 @@ public void setSubject(String subject) {
 	this.subject = subject;
 }
 
-private Date date;
-private ArrayList<String> source,upvote,downvote;
-// upvotecount and downvotecount can be used directly used for sorting on basis of upvote and downvote
-private long upvotecount,downvotecount,viewcount;
-private ArrayList<String> tags= new ArrayList<String>();
-
 //match count can also be used with position count
-private int positioncount;
-private Object _id;
 public String getUsername() {
 	return username;
 }
@@ -103,22 +103,17 @@ public int getPositioncount() {
 public void setPositioncount(int positioncount) {
 	this.positioncount = positioncount;
 }
-public Object get_id() {
-	return _id;
-}
-public void set_id(Object _id) {
-	this._id = _id;
-}
+
 @Override
 public String toString() {
 	return "Tile [username=" + username + ", title=" + title + ", description=" + description + ", url=" + url
-			+ ", date=" + date + ", source=" + source + ", upvote=" + upvote + ", downvote=" + downvote
-			+ ", upvotecount=" + upvotecount + ", downvotecount=" + downvotecount + ", viewcount=" + viewcount
-			+ ", tags=" + tags + ", positioncount=" + positioncount + ", _id=" + _id + ", subject=" + subject +"]";
+			+ ", subject=" + subject + ", positioncount=" + positioncount + ", id=" + id + ", date=" + date
+			+ ", source=" + source + ", upvote=" + upvote + ", downvote=" + downvote + ", upvotecount=" + upvotecount
+			+ ", downvotecount=" + downvotecount + ", viewcount=" + viewcount + ", tags=" + tags + "]";
 }
 public Tile(String username, String title, String description, String url, Date date, ArrayList<String> source,
 		ArrayList<String> upvote, ArrayList<String> downvote, long upvotecount, long downvotecount, long viewcount,
-		ArrayList<String> tags, int positioncount, Object _id, String subject) {
+		ArrayList<String> tags, int positioncount, Object id, String subject) {
 	super();
 	this.username = username;
 	this.title = title;
@@ -133,8 +128,19 @@ public Tile(String username, String title, String description, String url, Date 
 	this.viewcount = viewcount;
 	this.tags = tags;
 	this.positioncount = positioncount;
-	this._id = _id;
 	this.subject = subject;
+}
+public String getId() {
+	return id;
+}
+public void setId(String id) {
+	this.id = id;
+}
+public static Comparator<Tile> getHomesort() {
+	return homesort;
+}
+public static void setHomesort(Comparator<Tile> homesort) {
+	Tile.homesort = homesort;
 }
 public Tile() {
 	super();

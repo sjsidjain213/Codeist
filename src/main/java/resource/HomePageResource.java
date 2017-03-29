@@ -37,20 +37,20 @@ public class HomePageResource {
 	}
 	
 	@GET
-	@Path("/question-forum/{username}")
+	@Path("/questions-forum/{username}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ArrayList<Tile> getQuestion(@PathParam("username") String username)
 	{
 		return new HomePage().getQuestions(username);
 	}
 	
-	/*@GET
-	@Path("/project-forum")
+	@GET
+	@Path("/projects-feed/{username}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ArrayList<Tile> getProject(@PathParam("username") String username)
 	{
-    	return new HomePage().trendingProject(new ArrayList());
-	}*/
+    	return new HomePage().getProjects(username);
+	}
 	
 	
 	@GET

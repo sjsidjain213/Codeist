@@ -1,16 +1,7 @@
 package bean;
 
 public class Acknowledgement {
-private String matchedCount,modifiedCount,upsertedId,msg;
-
-
-public String getMsg() {
-	return msg;
-}
-
-public void setMsg(String msg) {
-	this.msg = msg;
-}
+private String matchedCount,modifiedCount,upsertedId,message;
 
 public String getMatchedCount() {
 	return matchedCount;
@@ -36,11 +27,18 @@ public void setUpsertedId(String upsertedId) {
 	this.upsertedId = upsertedId;
 }
 
-public Acknowledgement(String matchedCount, String modifiedCount, String upsertedId) {
-	super();
-	this.matchedCount = matchedCount;
-	this.modifiedCount = modifiedCount;
-	this.upsertedId = upsertedId;
+public String getMessage() {
+	return message;
+}
+
+public void setMessage(String message) {
+	this.message = message;
+}
+
+@Override
+public String toString() {
+	return "Acknowledgement [matchedCount=" + matchedCount + ", modifiedCount=" + modifiedCount + ", upsertedId="
+			+ upsertedId + ", message=" + message + "]";
 }
 
 public Acknowledgement() {
@@ -48,9 +46,13 @@ public Acknowledgement() {
 	// TODO Auto-generated constructor stub
 }
 
-@Override
-public String toString() {
-	return "Acknowledgement [matchedCount=" + matchedCount + ", modifiedCount=" + modifiedCount + ", upsertedId="
-			+ upsertedId + "]";
+public Acknowledgement(String matchedCount, String modifiedCount, String upsertedId, String message) {
+	super();
+	this.matchedCount = matchedCount;
+	this.modifiedCount = modifiedCount;
+	this.upsertedId = upsertedId;
+	this.message = message;
 }
+
+
 }
