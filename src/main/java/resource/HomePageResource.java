@@ -3,11 +3,13 @@ package resource;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import bean.Tile;
@@ -47,9 +49,10 @@ public class HomePageResource {
 	@GET
 	@Path("/projects-feed/{username}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<Tile> getProject(@PathParam("username") String username)
+	public ArrayList<Tile> getProject(@PathParam("username") String username,@Context HttpServletRequest req)
 	{
-    	return new HomePage().getProjects(username);
+		//System.out.println(req.getSession().getAttribute("username").toString());
+    	return new HomePage().getProjects(username);//req.getSession().getAttribute("username").toString());
 	}
 	
 	
