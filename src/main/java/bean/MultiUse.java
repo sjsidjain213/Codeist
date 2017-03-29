@@ -1,7 +1,25 @@
 package bean;
 
+import java.util.ArrayList;
+
 public class MultiUse {
 private String username,message,emailid;
+private ArrayList<String> upvotes,downvotes;
+public ArrayList<String> getUpvotes() {
+	return upvotes;
+}
+
+public void setUpvotes(ArrayList<String> upvotes) {
+	this.upvotes = upvotes;
+}
+
+public ArrayList<String> getDownvotes() {
+	return downvotes;
+}
+
+public void setDownvotes(ArrayList<String> downvotes) {
+	this.downvotes = downvotes;
+}
 
 public String getEmailid() {
 	return emailid;
@@ -38,7 +56,8 @@ public MultiUse(String username) {
 
 @Override
 public String toString() {
-	return "MultiUse [username=" + username + ", message=" + message + ", emailid=" + emailid + "]";
+	return "MultiUse [username=" + username + ", message=" + message + ", emailid=" + emailid + ", upvotes=" + upvotes
+			+ ", downvotes=" + downvotes + "]";
 }
 
 public String getUsername() {

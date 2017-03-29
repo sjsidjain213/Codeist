@@ -190,7 +190,7 @@ public Comment insertComment(Comment comment,String id,HttpServletRequest req)
 		Document doc = new Document("username","pulkit")
                   .append("comment", comment.getComment())
                   .append("date",GeneralServices.getCurrentDate().getTime());
-		Date d=new Date();
+	
 comment.setUsername("pulkit");//req.getSession().getAttribute("username").toString());
 //comment.setDate(doc.getDate("date"));
 String acknow= tc.updateOne(eq("_id",id1),new Document("$push",new Document("comments",doc))).toString();
