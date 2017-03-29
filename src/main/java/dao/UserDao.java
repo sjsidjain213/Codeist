@@ -97,6 +97,7 @@ public class UserDao {
       MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("unverifieduserdata");
 	  tc.deleteOne(doc);
 	  }
+	  
 	  public Acknowledgement updateUser(User user)
 	  { Document test = tc.find(eq("username",user.getUsername())).first();
 		  if(test==null)
@@ -106,7 +107,7 @@ public class UserDao {
 					  .append("country", user.getCountry().toLowerCase())
 					  .append("state",user.getState().toLowerCase())
 					  .append("city",user.getCity())
-					  .append("zipcode", user.getZipcode());
+					  .append("zipcode", Long.valueOf(user.getZipcode()));
 			  
 		    	  Document history = new Document("tag_view",new ArrayList<String>())
 					              .append("problem_category_view",new ArrayList<String>())
@@ -120,7 +121,7 @@ profile_url = (user.getGender().equals("m")&&user.getProfile_url()=="")?"https:/
 				  .append("password",GeneralServices.get_SHA_256_SecurePassword(user.getUsername(),user.getPassword()))
 				  .append("name",user.getName())
 				  .append("bio",user.getBio())
-				  .append("date",GeneralServices.getCurrentDate())
+				  .append("date",GeneralServices.getCurrentDate().getTime())
 				  .append("gender",user.getGender())
 			      .append("profile_url",profile_url)
 				  .append("category",user.getCategory())
@@ -199,7 +200,7 @@ profile_url = (user.getGender().equals("m")&&user.getProfile_url()=="")?"https:/
         		  .append("email_id",user.getEmail_id())
     	          .append("country",user.getCountry())
     	          .append("city",user.getCity())
-    	          .append("zipcode",user.getZipcode())
+    	          .append("zipcode",Long.valueOf(user.getZipcode()))
     	          .append("state",user.getState());
         String acknow2= tc.updateOne(eq("username",user.getUsername()),new Document("$set",new Document("contact_information",doc))).toString();
            return 	new GeneralServices().response(acknow2);
