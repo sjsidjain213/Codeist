@@ -29,7 +29,7 @@ public class ProjectInsert
 //inserting a new project to database
 public Acknowledgement insertProject(Project project,HttpServletRequest req)
 {  //String userfromsession = req.getSession().getAttribute("username").toString();
-   Document docexsit = tc.find(and(eq("username",project.getUsername()),eq("title",project.getTitle()))).first();
+	Document docexsit = tc.find(and(eq("username",project.getUsername()),eq("title",project.getTitle()))).first();
    ArrayList<String> a=new ArrayList<String>();
    a.add(project.getUsername());
    project.setContributors(a);
@@ -78,7 +78,8 @@ public Acknowledgement insertProject(Project project,HttpServletRequest req)
     //                      in("contributors",req.getSession().getAttribute("username").toString())),
     //                      eq("_id",oid))).first();
    // if(doccheck!=null){
-	Document document = tc.find(eq("_id",oid)).first();
+ 
+    Document document = tc.find(eq("_id",oid)).first();
       if(document!=null){
 		Document info=(Document) document.get("info");
 		  String title =  new GeneralServices().spaceRemover(project.getTitle());
@@ -101,6 +102,9 @@ public Acknowledgement insertProject(Project project,HttpServletRequest req)
    		 .append("images",(List<String>)project.getImages())
    		 .append("info",info);
 	tc.updateOne(eq("_id",oid),new Document("$set",doc));
+	new NotificationService().projectUpdateNotification(project.getUsername(), req.getSession().getAttribute("username").toString(),id,project.getTitle());
+	ArrayList<String> contributors = project.getContributors();
+	contributors.forEach(contributor->{new NotificationService().projectUpdateNotification(contributor, req.getSession().getAttribute("username").toString(),id,project.getTitle());});
 	return new GeneralServices().response(Notifications.SUCCESSFULLYINSERTED);
 	}
     //}else{

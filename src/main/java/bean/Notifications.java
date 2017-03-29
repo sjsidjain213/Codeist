@@ -24,7 +24,7 @@ PROJECTUPVOTE("20"),
 PROJECTDOWNVOTE("-10"),
 QUESTIONUPVOTE("10"),
 QUESTIONDOWNVOTE("-5"),
-
+PROJECTUPDATED("your project has been updated"),
 //Authorization related
 EDITWRITTENISNOTAVAILABLE("Edit write is not available"),
 SUCCESSFULLYINSERTED("success"),

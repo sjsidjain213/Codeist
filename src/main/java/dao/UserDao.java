@@ -6,24 +6,17 @@ import org.bson.Document;
 import bean.Acknowledgement;
 import bean.MultiUse;
 import bean.Notifications;
-import bean.Project;
-import bean.Signup;
 import bean.Tag;
 import bean.User;
 import service.DatabaseServices;
 import service.GeneralServices;
 
-import com.mongodb.Block;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import static com.mongodb.client.model.Filters.*;
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.function.Consumer;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -202,7 +195,7 @@ profile_url = (user.getGender().equals("m")&&user.getProfile_url()=="")?"https:/
     	          .append("city",user.getCity())
     	          .append("zipcode",Long.valueOf(user.getZipcode()))
     	          .append("state",user.getState());
-        String acknow2= tc.updateOne(eq("username",user.getUsername()),new Document("$set",new Document("contact_information",doc))).toString();
+tc.updateOne(eq("username",user.getUsername()),new Document("$set",new Document("contact_information",doc)));
            return 	new GeneralServices().response(Notifications.SUCCESSFULLYINSERTED);
       }
       
@@ -220,7 +213,7 @@ profile_url = (user.getGender().equals("m")&&user.getProfile_url()=="")?"https:/
 
       
       public Acknowledgement updateFavTags(Tag favTags,String username){
-    	  String acknow= tc.updateOne(eq("username",username),new Document("$set", new Document("favourite_tags",favTags.getTags()))).toString();
+          tc.updateOne(eq("username",username),new Document("$set", new Document("favourite_tags",favTags.getTags())));
     //??????????????????????
     	  Acknowledgement acknowledge1 = new GeneralServices().response(Notifications.SUCCESSFULLYINSERTED);
     	  return acknowledge1;

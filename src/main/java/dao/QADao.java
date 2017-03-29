@@ -111,7 +111,7 @@ public class QADao {
 	    		.append("info",info)
 	    		.append("featured_points", answer.getFeatured_points());
         String acknow =tc.updateOne(eq("question",answer.getQuestion()),new Document("$push",new Document("answers",doc))).toString();
-        Acknowledgement acknowledge = new GeneralServices().response(acknow);
+        Acknowledgement acknowledge = new GeneralServices().response(Notifications.SUCCESSFULLYINSERTED);
         //answer.getUsername is owner of question
         new NotificationService().answerNotification(answer.getUsername(),answer.getQuestion(),q_id,userfromsession,answer.getAnswer(),Notifications.QUESTIONSOLVED);
         return acknowledge;

@@ -22,6 +22,19 @@ public class NotificationService {
     	
     }
     
+    /*****************REFERENCE METHOD********************/
+    //called from projectinsert projectupdate method
+    //user generater from session, receiver all contributor, message updatee, project id 
+    public void projectUpdateNotification(String receiver,String commiter,String project_id, String project_name)
+    {
+    project_name = GeneralServices.spaceRemover(project_name);
+    String suffixurl = "/project/"+project_id;
+    String commitermessage = commiter+"has updated project name : "+project_name;
+    //(String commitername,String commitermessage,Notifications notify,String url)
+     Document doc = notificationMessage(commiter,commitermessage,Notifications.PROJECTUPDATED,suffixurl);
+     tc.updateOne(eq("username",receiver),new Document("$addToSet",new Document("notifications",doc)));
+ 	}
+    /*************************END******************************/
     public void commentNotification(String username,String projectname,String project_id,String commitername,String commitermsg,Notifications notify)
 	{   projectname = new GeneralServices().spaceRemover(projectname);
         String suffixurl= "/projects/"+project_id;
@@ -101,5 +114,15 @@ public class NotificationService {
 	         }
 	    return aldoc;
 	    }
-	
+	/***********************REFERENCE************************/
+	public static Document notificationMessage(String commitername,String commitermessage,Notifications notify,String url)
+	{
+		Document doc = new Document("date",GeneralServices.getCurrentDate())
+ 		       .append("message",notify.getMsg())
+ 		       .append("generator",commitername)
+ 		       .append("messagegenerator",commitermessage)
+ 		       .append("url",url);
+     		return doc;
+	}
+	/************************END*****************************/
 }
