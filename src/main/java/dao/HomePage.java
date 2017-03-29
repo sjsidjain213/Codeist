@@ -310,6 +310,7 @@ public class HomePage {
 		return ques;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static ArrayList<Tile> getTrendingProject(ArrayList<Tile> projects)
 	{
 // test pending
@@ -321,8 +322,11 @@ public class HomePage {
 		        doc.setUsername(d.getString("username"));
 		        doc.setTitle(d.getString("title"));
 		        doc.setId(d.get("_id").toString());
-		        doc.setUpvotecount(d.getLong("upvotecount"));
-		        doc.setDownvotecount(d.getLong("downvotecount"));
+		       // doc.setUpvotecount(d.getLong("upvotecount"));
+		       // doc.setDownvotecount(d.getLong("downvotecount"));
+		        doc.setUpvotes((ArrayList<String>)d.get("upvotes"));
+		        doc.setDownvotes((ArrayList<String>)d.get("downvotes"));
+		        doc.setUrl_title(GeneralServices.spaceAdder(d.getString("title")));
 		        // description might throw error check database 
 		        doc.setDescription(d.getString("description"));
 		        doc.setUrl(d.getString("project_url"));
