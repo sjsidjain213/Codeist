@@ -73,7 +73,11 @@ public Acknowledgement insertProject(Project project,HttpServletRequest req)
     @SuppressWarnings("unchecked")
    public Acknowledgement updateproject(Project project,HttpServletRequest req,String id){
     ObjectId oid = new ObjectId(id.toString());
-    //Document doccheck = tc.find(and(or(eq("username",req.getSession().getAttribute("username").toString()),in("contributors",req.getSession().getAttribute("username").toString())),eq("_id",oid))).first();
+    
+    //Document doccheck = tc.find(and(or(eq("username",req.getSession().getAttribute("username").toString()),
+    //                      in("contributors",req.getSession().getAttribute("username").toString())),
+    //                      eq("_id",oid))).first();
+   // if(doccheck!=null){
 	Document document = tc.find(eq("_id",oid)).first();
       if(document!=null){
 		Document info=(Document) document.get("info");
@@ -95,12 +99,14 @@ public Acknowledgement insertProject(Project project,HttpServletRequest req)
    		 .append("video_url",project.getVideo_url())
    		 .append("zip_file",project.getZip_file())
    		 .append("images",(List<String>)project.getImages())
-   		 .append("info",info );
+   		 .append("info",info);
 	tc.updateOne(eq("_id",oid),new Document("$set",doc));
-	return new GeneralServices().response("insert");
+	return new GeneralServices().response(Notifications.SUCCESSFULLYINSERTED);
 	}
+    //}else{
 	return new GeneralServices().response(null);
-}
+//}
+    }
 
 
 
@@ -142,7 +148,7 @@ return project;
 // for retrieving selected project
 @SuppressWarnings("unchecked")
 public Project getSelectedProject(String id,HttpServletRequest req)
-{
+{ 
 	ObjectId id1=new ObjectId(id.toString());
 	Project project=new Project();
 	Document d= tc.find(eq("_id",id1)).first();
@@ -170,8 +176,8 @@ public Project getSelectedProject(String id,HttpServletRequest req)
 	   		project.setViewby((ArrayList<String>)innerdoc.get("viewby"));
 	   		}
 	   		project.setComments(new ProjectInsert().getAllComments(d.getString("username"), d.getString("title")));
-	   		if(req.getSession().getAttribute("username")!=null)
-	   		view(d.getString("username"),d.getString("title"), req.getSession().getAttribute("username").toString());
+	   		//if(req.getSession().getAttribute("username")!=null)
+	   		//view(d.getString("username"),d.getString("title"), req.getSession().getAttribute("username").toString());
 	}
 	return project;
 }
@@ -342,7 +348,7 @@ public ArrayList<String> down(String id,String user){
 		}
 }
 
-
+/*
 @SuppressWarnings("unchecked")
 public Acknowledgement view(String username,String title,String user){
 	Document d = tc.find(and(eq("username",username),eq("title",title))).first();
@@ -367,7 +373,7 @@ public Acknowledgement view(String username,String title,String user){
 			
 		}
 }
-
+*/
 /*public ArrayList<MultiUse> getAllUserProject()
 {
 	tc.

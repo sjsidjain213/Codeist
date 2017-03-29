@@ -95,42 +95,43 @@ public Tile returnTile(Document d,String source,String subject)
 		return tl;	
 }
 
-public Acknowledgement response(String s)
+public Acknowledgement response(Notifications notify)
 {
-	if(s!=null&&s.equals("insert"))
-	{
-		Acknowledgement ac2 = new Acknowledgement();
-	       ac2.setMatchedCount("1");
-	       ac2.setModifiedCount("1");
-	       ac2.setUpsertedId("0");
-	    ac2.setMessage("success");
-	       return ac2;
-	}
-	
-	else if(s!=null&&s.equals("already exist"))
-	{ Acknowledgement ac2 = new Acknowledgement();
-    ac2.setMatchedCount("2");
-    ac2.setModifiedCount("1");
-    ac2.setUpsertedId("0");
-    ac2.setMessage("success");
-    return ac2;
-	}
-	else if(s!=null)
-	{ Acknowledgement ac2 = new Acknowledgement();
-    String sa [] = s.substring(s.indexOf("{")+1,s.indexOf("}")).split(",");
-       ac2.setMatchedCount(sa[0]);
-       ac2.setModifiedCount(sa[1]);
-       ac2.setUpsertedId(sa[2]);
-    return ac2;
-	}
-	else {
-		Acknowledgement ac2 = new Acknowledgement();
-		ac2.setMatchedCount("0");
-		ac2.setModifiedCount("0");
-		ac2.setUpsertedId("0");
-		ac2.setMessage("user is not logged in");
-		return ac2;
-	}
+	Acknowledgement acknow = new Acknowledgement();
+	acknow.setMessage(notify.getMsg());
+//{
+//	if(s!=null&&s.equals("insert"))
+//	{
+//		Acknowledgement ac2 = new Acknowledgement();
+//	       ac2.setMatchedCount("1");
+//	       ac2.setModifiedCount("1");
+//	       ac2.setUpsertedId("0");
+//	    ac2.setMessage("success");
+//	       return ac2;
+//	}
+//	
+//	else if(s!=null&&s.equals("already exist"))
+//	{ Acknowledgement ac2 = new Acknowledgement();
+//    ac2.setMatchedCount("2");
+//    ac2.setModifiedCount("1");
+//    ac2.setUpsertedId("0");
+//    ac2.setMessage("success");
+//    return ac2;
+//	}
+//	else if(s!=null)
+//	{ Acknowledgement ac2 = new Acknowledgement();
+//    String sa [] = s.substring(s.indexOf("{")+1,s.indexOf("}")).split(",");
+//       ac2.setMatchedCount(sa[0]);
+//       ac2.setModifiedCount(sa[1]);
+//       ac2.setUpsertedId(sa[2]);
+//    return ac2;
+//	}
+//	else {
+//		Acknowledgement ac2 = new Acknowledgement();
+//		ac2.setMessage("user is not logged in");
+//		return ac2;
+//	}
+	return acknow;
 }
 
 public static String spaceRemover(String s)

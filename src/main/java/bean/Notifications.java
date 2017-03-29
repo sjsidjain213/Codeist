@@ -24,6 +24,10 @@ PROJECTUPVOTE("20"),
 PROJECTDOWNVOTE("-10"),
 QUESTIONUPVOTE("10"),
 QUESTIONDOWNVOTE("-5"),
+
+//Authorization related
+EDITWRITTENISNOTAVAILABLE("Edit write is not available"),
+SUCCESSFULLYINSERTED("success"),
 USERLOGGEDOUT("user is succesfully logged out");	
 	private final String msg;
 

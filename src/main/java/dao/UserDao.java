@@ -139,7 +139,7 @@ profile_url = (user.getGender().equals("m")&&user.getProfile_url()=="")?"https:/
 				  .append("history",history)
 				  .append("favourite_tag",user.getFavourite_tag()); 
 		  tc.insertOne(doc);
-		  return new GeneralServices().response("insert");
+		  return new GeneralServices().response(Notifications.SUCCESSFULLYINSERTED);
 		  }
 		  else{
 			  return new GeneralServices().response(null);
@@ -203,7 +203,7 @@ profile_url = (user.getGender().equals("m")&&user.getProfile_url()=="")?"https:/
     	          .append("zipcode",Long.valueOf(user.getZipcode()))
     	          .append("state",user.getState());
         String acknow2= tc.updateOne(eq("username",user.getUsername()),new Document("$set",new Document("contact_information",doc))).toString();
-           return 	new GeneralServices().response(acknow2);
+           return 	new GeneralServices().response(Notifications.SUCCESSFULLYINSERTED);
       }
       
       public void moduleIDAdder(Notifications notify,String username,String variableid)
@@ -221,7 +221,8 @@ profile_url = (user.getGender().equals("m")&&user.getProfile_url()=="")?"https:/
       
       public Acknowledgement updateFavTags(Tag favTags,String username){
     	  String acknow= tc.updateOne(eq("username",username),new Document("$set", new Document("favourite_tags",favTags.getTags()))).toString();
-    	  Acknowledgement acknowledge1 = new GeneralServices().response(acknow);
+    //??????????????????????
+    	  Acknowledgement acknowledge1 = new GeneralServices().response(Notifications.SUCCESSFULLYINSERTED);
     	  return acknowledge1;
       }
       public Acknowledgement updateTagsViewed(String username,Tag tagsViewed){
