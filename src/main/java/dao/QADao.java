@@ -34,7 +34,7 @@ public class QADao {
 	    		.append("question",question.getQuestion())
 	    		.append("description",question.getDescription())
 	    		.append("tags",(List<String>)question.getTags())
-	    		.append("date",GeneralServices.getCurrentDate())
+	    		.append("date",GeneralServices.getCurrentDate().getTime())
 	    		.append("info",info)
 	    		.append("featured_points", question.getFeatured_points());
 	       tc.insertOne(doc);
@@ -70,7 +70,7 @@ public class QADao {
 	{Question quest = new Question();
 	quest.setUsername(doc.getString("username"));
 	quest.setDescription(doc.getString("description"));
-	quest.setDate(doc.getDate("date"));
+	quest.setDate(doc.getLong("date"));
 	quest.setTags((ArrayList<String>)doc.get("tags"));
 	quest.setQuestion_url(doc.getString("url"));
 	Document document=(Document) doc.get("info");
@@ -78,11 +78,12 @@ public class QADao {
 	quest.setUpvotes((ArrayList<String>)document.get("upvotes"));
 	quest.setFeatured_points(doc.getLong("featured_points"));
     ArrayList<Document> aldo = (ArrayList<Document>) doc.get("answers");
+    if(aldo != null){
 	for(Document d:aldo)
 	{	Answer answer =  new Answer();
 		answer.setUsername(d.getString("username"));
 		answer.setAnswer(d.getString("answer"));
-		answer.setDate(d.getDate("date"));
+		answer.setDate(d.getLong("date"));
 		Document in=(Document) d.get("info");
 		answer.setDownvotes((ArrayList<String>)in.get("downvotes"));
 		answer.setUpvotes((ArrayList<String>)in.get("upvotes"));
@@ -90,6 +91,7 @@ public class QADao {
 		alansw.add(answer);
 	}
 	quest.setAnswers(alansw);
+    }
 	return quest;
 	}
 	else{
@@ -105,7 +107,7 @@ public class QADao {
 	    String q_id = tc.find(and(eq("username",answer.getUsername()),eq("question",answer.getQuestion()))).first().get("_id").toString();
 	    Document doc = new Document("username",userfromsession)
 	    		.append("answer",answer.getAnswer())
-	    		.append("date",GeneralServices.getCurrentDate())
+	    		.append("date",GeneralServices.getCurrentDate().getTime())
 	    		.append("info",info)
 	    		.append("featured_points", answer.getFeatured_points());
         String acknow =tc.updateOne(eq("question",answer.getQuestion()),new Document("$push",new Document("answers",doc))).toString();

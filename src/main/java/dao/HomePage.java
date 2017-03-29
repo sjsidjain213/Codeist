@@ -330,7 +330,6 @@ public class HomePage {
 		   		doc.setDownvotes((ArrayList<String>)innerdoc.get("downvotes"));
 		   		
 		   		}
-		        
 		        doc.setUrl_title(GeneralServices.spaceRemover(d.getString("title")));
 		        // description might throw error check database 
 		        doc.setDescription(d.getString("description"));

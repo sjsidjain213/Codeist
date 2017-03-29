@@ -20,7 +20,7 @@ public void setDownvotecount(long downvotecount) {
 }
 private long featured_points;
 ArrayList<String> upvotes,downvotes;
-private Date date = new Date();
+private long date;
 
 public String getQuestion() {
 	return question;
@@ -58,10 +58,10 @@ public long getFeatured_points() {
 public void setFeatured_points(long featured_points) {
 	this.featured_points = featured_points;
 }
-public Date getDate() {
+public long getDate() {
 	return date;
 }
-public void setDate(Date date) {
+public void setDate(long date) {
 	this.date = date;
 }
 @Override
@@ -73,7 +73,7 @@ public Answer() {
 	super();
 	// TODO Auto-generated constructor stub
 }
-public Answer(String username, String answer, ArrayList<String> upvotes, ArrayList<String> downvotes, long featured_points, Date date) {
+public Answer(String username, String answer, ArrayList<String> upvotes, ArrayList<String> downvotes, long featured_points, long date) {
 	super();
 	this.username = username;
 	this.answer = answer;
