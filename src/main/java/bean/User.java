@@ -10,18 +10,27 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class User {
 	@XmlElement
     private String username,password,name,bio,phone_no,gender,email_id,country,state,city,message,category,institute,profile_url;
+	private ArrayList<String> favourite_tag,following,follower,contributing,project_id,project_bookmark,question_bookmark;
+	private ArrayList<String> tag_view, user_view, problem_category_view, project_view,question_ask,question_answer;
+	private long rating,zipcode,project_upvote,project_downvote,qa_upvote,qa_downvote,date,last_updated;
+	//private Date date = new Date();
+
+	public long getLast_updated() {
+		return last_updated;
+	}
+	public void setLast_updated(long last_updated) {
+		this.last_updated = last_updated;
+	}
+	public ArrayList<String> getTag_view() {
+		return tag_view;
+	}
 	public String getProfile_url() {
 		return profile_url;
 	}
 	public void setProfile_url(String profile_url) {
 		this.profile_url = profile_url;
 	}
-	private ArrayList<String> favourite_tag,following,follower,contributing,project_id,project_bookmark,question_bookmark;
-	private ArrayList<String> tag_view, user_view, problem_category_view, project_view,question_ask,question_answer;
-	private long rating,zipcode,project_upvote,project_downvote,qa_upvote,qa_downvote;
-	public ArrayList<String> getTag_view() {
-		return tag_view;
-	}
+
 	public void setTag_view(ArrayList<String> tag_view) {
 		this.tag_view = tag_view;
 	}
@@ -49,7 +58,6 @@ public class User {
 	public void setQa_downvote(long qa_downvote) {
 		this.qa_downvote = qa_downvote;
 	}
-	private Date date = new Date();
 	public String getUsername() {
 		return username;
 	}
@@ -218,10 +226,10 @@ public class User {
 	public void setZipcode(long zipcode) {
 		this.zipcode = zipcode;
 	}
-	public Date getDate() {
+	public long getDate() {
 		return date;
 	}
-	public void setDate(Date date) {
+	public void setDate(long date) {
 		this.date = date;
 	}
 	
@@ -232,7 +240,7 @@ public class User {
 			ArrayList<String> question_bookmark, ArrayList<String> tag_view, ArrayList<String> user_view,
 			ArrayList<String> problem_category_view, ArrayList<String> project_view, ArrayList<String> question_ask,
 			ArrayList<String> question_answer, long rating, long zipcode, long project_upvote, long project_downvote,
-			long qa_upvote, long qa_downvote, Date date) {
+			long qa_upvote, long qa_downvote, long date) {
 		super();
 		this.username = username;
 		this.password = password;
