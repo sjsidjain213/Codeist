@@ -36,6 +36,7 @@ public class QADao {
 	    		.append("description",question.getDescription())
 	    		.append("tags",(List<String>)question.getTags())
 	    		.append("date",GeneralServices.getCurrentDate().getTime())
+	    		.append("last_updated",GeneralServices.getCurrentDate().getTime())
 	    		.append("info",info)
 	    		.append("featured_points", question.getFeatured_points());
 	       tc.insertOne(doc);
@@ -72,6 +73,7 @@ public class QADao {
 	quest.setUsername(doc.getString("username"));
 	quest.setDescription(doc.getString("description"));
 	quest.setDate(doc.getLong("date"));
+	quest.setLast_updated(doc.getLong("last_updated"));
 	quest.setTags((ArrayList<String>)doc.get("tags"));
 	quest.setQuestion_url(doc.getString("url"));
 	Document document=(Document) doc.get("info");
@@ -85,6 +87,7 @@ public class QADao {
 		answer.setUsername(d.getString("username"));
 		answer.setAnswer(d.getString("answer"));
 		answer.setDate(d.getLong("date"));
+		answer.setLast_updated(d.getLong("last_updated"));
 		Document in=(Document) d.get("info");
 		answer.setDownvotes((ArrayList<String>)in.get("downvotes"));
 		answer.setUpvotes((ArrayList<String>)in.get("upvotes"));
@@ -112,28 +115,32 @@ public class QADao {
 	    Document doc = new Document("username",req.getSession().getAttribute("username").toString())
 	    		.append("answer",answer.getAnswer())
 	    		.append("date",GeneralServices.getCurrentDate().getTime())
+	    		.append("last_updated",GeneralServices.getCurrentDate().getTime())
 	    		.append("info",info);
 	    		//.append("featured_points", answer.getFeatured_points());
-        String acknow =tc.updateOne(eq("question",answer.getQuestion()),new Document("$push",new Document("answers",doc))).toString();
+        String acknow =tc.updateOne(eq("_id",oid),new Document("$push",new Document("answers",doc))).toString();
         Acknowledgement acknowledge = new GeneralServices().response(Notifications.SUCCESSFULLYINSERTED);
         //answer.getUsername is owner of question
         new NotificationService().answerNotification(d.getString("username"),d.getString("question"),id,req.getSession().getAttribute("username").toString(),answer.getAnswer(),Notifications.QUESTIONSOLVED);
         return acknowledge;
 	}
 	public void updateQuestion(HttpServletRequest req,Question question,String id)
-	{  MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("testqa");
+	{  //MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("testqa");
 	   
 	   ObjectId oid = new ObjectId(id.toString());
        //Document doc2 = tc.find(and(eq("username",req.getSession().getAttribute("username").toString()),eq("question",question.getQuestion()))).first();
 	   Document document = tc.find(eq("_id",oid)).first();
+	   ArrayList<Document> aldo = (ArrayList<Document>) document.get("answers");
 		Document doc = new Document("username",req.getSession().getAttribute("username"))
 	    		.append("question",question.getQuestion())
 	    		.append("description",question.getDescription())
 	    		.append("tags",(List<String>)question.getTags())
-	    		.append("updated_date", GeneralServices.getCurrentDate().getTime())
-	    		.append("featured_points", question.getFeatured_points());
+	    		.append("date", document.getLong("date"))
+	    		.append("last_updated", GeneralServices.getCurrentDate().getTime())
+	    		.append("featured_points", question.getFeatured_points())
+	    		.append("answers",aldo);
 		tc.updateOne(eq("_id",oid),new Document("$set",doc));
-}
+	}
 	@SuppressWarnings("unchecked")
 	public MultiUse upQuestion(String id,String user){
 		ObjectId id1=new ObjectId(id.toString());

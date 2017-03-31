@@ -20,8 +20,16 @@ public void setDownvotecount(long downvotecount) {
 }
 private long featured_points;
 ArrayList<String> upvotes,downvotes;
-private long date;
+private long date,last_updated;
 
+
+
+public long getLast_updated() {
+	return last_updated;
+}
+public void setLast_updated(long last_updated) {
+	this.last_updated = last_updated;
+}
 public String getQuestion() {
 	return question;
 }

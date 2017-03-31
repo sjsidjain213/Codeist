@@ -6,12 +6,20 @@ import java.util.Date;
 public class Question {
 
 	private String username,question,question_url,description;
-	private long date;
+	private long date,last_updated;
+	
 	private ArrayList<String> tags;
 	private long featured_points;
 	private ArrayList<String> upvotes,downvotes;
 	private long upvotecount,downvotecount;
 	private ArrayList<Answer> answers = new ArrayList<Answer>();
+	
+	public long getLast_updated() {
+		return last_updated;
+	}
+	public void setLast_updated(long last_updated) {
+		this.last_updated = last_updated;
+	}
 	public String getUsername() {
 		return username;
 	}
@@ -87,15 +95,17 @@ public class Question {
 	}
 	
 	
+	
 	public Question(String username, String question, String question_url, String description, long date,
-			ArrayList<String> tags, long featured_points, ArrayList<String> upvotes, ArrayList<String> downvotes,
-			long upvotecount, long downvotecount, ArrayList<Answer> answers) {
+			long last_updated, ArrayList<String> tags, long featured_points, ArrayList<String> upvotes,
+			ArrayList<String> downvotes, long upvotecount, long downvotecount, ArrayList<Answer> answers) {
 		super();
 		this.username = username;
 		this.question = question;
 		this.question_url = question_url;
 		this.description = description;
 		this.date = date;
+		this.last_updated = last_updated;
 		this.tags = tags;
 		this.featured_points = featured_points;
 		this.upvotes = upvotes;
