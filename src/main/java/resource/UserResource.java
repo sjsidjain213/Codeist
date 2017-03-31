@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -76,9 +77,13 @@ public class UserResource implements ContainerResponseFilter {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/profile/{username}")
-	public User getUserDetails(@Context HttpServletRequest req,@PathParam("username") String username)
-	{
-	return new UserDao().getUserDetails(username);
+	public User getUserDetails(@Context HttpServletRequest req,@PathParam("username") String username,@HeaderParam("auth_token") String auth_token)
+	{System.out.println(auth_token);
+		if(new SessionService().tokenVerifier(auth_token,req)){
+			return new UserDao().getUserDetails(username);
+		}else{
+            return new User();			
+		}
 	}
 	
 	@PUT

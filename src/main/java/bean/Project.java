@@ -3,7 +3,7 @@ package bean;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Project{
+public class Project extends Super{
 	private String username,title,description,readme,license,project_url,_private,id,url_title,region_state,region_city;
     public String getRegion_state() {
 		return region_state;

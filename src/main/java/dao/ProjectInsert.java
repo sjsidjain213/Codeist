@@ -12,6 +12,7 @@ import bean.Comment;
 import bean.MultiUse;
 import bean.Notifications;
 import bean.Project;
+import bean.Super;
 
 import static com.mongodb.client.model.Filters.*;
 import java.util.ArrayList;
@@ -122,9 +123,9 @@ catch(Exception e){
 
 
 @SuppressWarnings("unchecked")
-public List<Project> getProjectBrief(String username)
+public ArrayList<Project> getProjectBrief(String username)
 {System.out.println("here");
-  List<Project> project = new ArrayList<Project>();
+  ArrayList<Project> project = new ArrayList<Project>();
   Project pro=null;
   FindIterable <Document> fi = tc.find(eq("username",username));
   for(Document d: fi)
@@ -139,6 +140,7 @@ public List<Project> getProjectBrief(String username)
          pro.setImages((ArrayList<String>) d.get("images"));
          pro.setProject_url(d.getString("project_url"));
          pro.setComments(new ProjectInsert().getAllComments(d.getString("username"), d.getString("title")));
+         pro.setLogged("logged");  
          project.add(pro); 
   }
 return project;

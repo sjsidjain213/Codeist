@@ -61,7 +61,7 @@ return (new SessionService().sessionVerifier(req))?new ProjectInsert().updatepro
 @GET
 @Path("/user/{username}")   
 @Produces(MediaType.APPLICATION_JSON)
-public List<Project> getBriefProject(@Context HttpServletRequest req,@PathParam("username")String username)
+public ArrayList<Project> getBriefProject(@Context HttpServletRequest req,@PathParam("username")String username)
 {
 //return new ProjectInsert().getProjectBrief(username);
 return new ProjectInsert().getProjectBrief(username);

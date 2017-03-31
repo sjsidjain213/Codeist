@@ -24,7 +24,6 @@ import dao.SearchBar;
 
 @Path("/search")
 public class SearchResource {
-
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -32,7 +31,4 @@ public class SearchResource {
 	{
 		return new SearchBar().doSearch(d);
 	}
-	
-	
-	
 }

@@ -64,8 +64,20 @@ MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("use
 	return user;
 		}
 	
+	public boolean tokenVerifier(String auth_token,HttpServletRequest req)
+	{
+		String s_token = req.getSession().getAttribute("s_id").toString();
+        if(s_token!=null&&s_token.equals(auth_token))
+        {
+        	return true;
+        }else{
+        	return false;
+        }
+	}
+	
 	public boolean sessionVerifier(HttpServletRequest req)
 	{
+		
 		System.out.println(req.getSession().getAttribute("username")+"::"+req.getSession().getAttribute("s_id"));
     return (req.getSession().getAttribute("username")==null&&req.getSession().getAttribute("s_id")==null)?false:true;
 	}
