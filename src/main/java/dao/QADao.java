@@ -27,6 +27,7 @@ public class QADao {
 
 	public Acknowledgement insertQuestion(Question question, HttpServletRequest req)
 	{   //String userfromsession ="hsharma";// req.getSession().getAttribute("username").toString();
+		try{
 	    Document doc2 = tc.find(and(eq("username",req.getSession().getAttribute("username").toString()),eq("question",question.getQuestion()))).first();
 		if(doc2==null)
 		{
@@ -49,18 +50,23 @@ public class QADao {
 	    
 	    // for url
 	    String url = GeneralServices.urlGenerator(Notifications.QUESTIONMODULE, id, question.getQuestion());
-	    tc.updateOne(and(eq("username",req.getSession().getAttribute("username").toString()),eq("question",question.getQuestion())),new Document("$set",new Document("url",url)));
+	    String s=tc.find(and(eq("username",req.getSession().getAttribute("username").toString()),eq("question",question.getQuestion()))).first().get("_id").toString();
+	   
 	    Acknowledgement acknow = new Acknowledgement();
-	    acknow.setModifiedCount("1");
-	    acknow.setMatchedCount("0");
+	    acknow.setUpsertedId(s);
+	    acknow.setMessage(GeneralServices.spaceRemover(question.getQuestion()));
 		return acknow;
 		}
 	    else{
 			Acknowledgement acknow = new Acknowledgement();
-		     acknow.setModifiedCount("0");
-		     acknow.setMatchedCount("1");
+		     acknow.setMessage("exist");
+		    
 	    	return acknow;
 	    }
+		}
+		catch(Exception e){
+			return new GeneralServices().response(Notifications.ERROR);
+		}
 	}
 	
 	@SuppressWarnings("unchecked")
