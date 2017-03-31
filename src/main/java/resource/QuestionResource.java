@@ -16,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 import bean.Acknowledgement;
 import bean.Answer;
 import bean.MultiUse;
+import bean.Notifications;
 import bean.Question;
 import dao.ProjectInsert;
 import dao.QADao;
@@ -31,16 +32,16 @@ public class QuestionResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Acknowledgement insertQuestion(Question question,@Context HttpServletRequest req)
 	{
-		return new QADao().insertQuestion(question,req);
+		return (new SessionService().sessionVerifier(req))?new QADao().insertQuestion(question,req):new GeneralServices().response(null);
 	}
 	
 	@POST
-	@Path("/insertanswer")
+	@Path("/{id}/answer")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Acknowledgement insertAnswer(Answer answer,@Context HttpServletRequest req)
+	public Acknowledgement insertAnswer(@PathParam("id") String id,Answer answer,@Context HttpServletRequest req)
 	{
-		return new QADao().insertAnswer(answer,req);
+		return (new SessionService().sessionVerifier(req))?new QADao().insertAnswer(id,answer,req):new GeneralServices().response(null);
 	}
 	@GET
 	@Path("/{id}")
@@ -56,7 +57,9 @@ public class QuestionResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public MultiUse upquestion(@PathParam("id")String id,@Context HttpServletRequest req)
 	{
-	return new QADao().upQuestion(id,"utkarsh");
+		MultiUse obj= new MultiUse();
+		obj.setMessage(Notifications.SESSIONDONOTEXSIT.getMsg());
+	return (new SessionService().sessionVerifier(req))?new QADao().upQuestion(id,req.getSession().getAttribute("username").toString()):obj;
 	//return (new SessionService().sessionVerifier(req))?new QADao().upQuestion(id,req.getSession().getAttribute("username").toString()):new ArrayList<String>();
 	}
 	@PUT
@@ -65,7 +68,9 @@ public class QuestionResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public MultiUse downquestion(@PathParam("id")String id,@Context HttpServletRequest req)
 	{
-	return new QADao().downQuestion(id,"utkarsh");
+		MultiUse obj= new MultiUse();
+		obj.setMessage(Notifications.SESSIONDONOTEXSIT.getMsg());
+	return (new SessionService().sessionVerifier(req))?new QADao().downQuestion(id,req.getSession().getAttribute("username").toString()):obj;
 	//return (new SessionService().sessionVerifier(req))?new QADao().downQuestion(id,req.getSession().getAttribute("username").toString()):new ArrayList<String>();
 }
 	@PUT
@@ -74,7 +79,9 @@ public class QuestionResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public MultiUse upanswer(@PathParam("id")String id,@PathParam("username")String username,@Context HttpServletRequest req)
 	{
-	return new QADao().upanswer(id,username,"utkarsh");
+		MultiUse obj= new MultiUse();
+		obj.setMessage(Notifications.SESSIONDONOTEXSIT.getMsg());
+	return (new SessionService().sessionVerifier(req))?new QADao().upanswer(id,username,req.getSession().getAttribute("username").toString()):obj;
 	//return (new SessionService().sessionVerifier(req))?new QADao().upanswer(id,username,req.getSession().getAttribute("username").toString()):new ArrayList<String>();
 	}
 	@PUT
@@ -83,7 +90,9 @@ public class QuestionResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public MultiUse downanswer(@PathParam("id")String id,@PathParam("username")String username,@Context HttpServletRequest req)
 	{
-	return new QADao().downanswer(id,username,"utkarsh");
+		MultiUse obj= new MultiUse();
+		obj.setMessage(Notifications.SESSIONDONOTEXSIT.getMsg());
+	return (new SessionService().sessionVerifier(req))?new QADao().downanswer(id,username,req.getSession().getAttribute("username").toString()):obj;
 	//return (new SessionService().sessionVerifier(req))?new QADao().downanswer(id,username,req.getSession().getAttribute("username").toString()):new ArrayList<String>();
 	}
 
