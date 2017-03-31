@@ -141,6 +141,10 @@ public class QADao {
 	    		.append("answers",aldo);
 		tc.updateOne(eq("_id",oid),new Document("$set",doc));
 	}
+	
+	public void updateanswer(){
+		
+	}
 	@SuppressWarnings("unchecked")
 	public MultiUse upQuestion(String id,String user){
 		ObjectId id1=new ObjectId(id.toString());

@@ -52,13 +52,13 @@ public class UserResource implements ContainerResponseFilter {
 		return new SessionService().sessionCreate(req,res,user.getUsername(),user.getPassword());
 	}
 	
-	@POST
+	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("/logout/{username}")
-	public Acknowledgement logout(@Context HttpServletRequest req,@PathParam("username")String username)
+	@Path("/logout")
+	public Acknowledgement logout(@Context HttpServletRequest req)
 	{
-		return new SessionService().sessionDestroy(req,username);
+		return new SessionService().sessionDestroy(req);
 	}
 	
 	@POST

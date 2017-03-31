@@ -109,7 +109,7 @@ public Comment deleteComment(@PathParam("id")String id,Comment comment,@Context 
 	return (new SessionService().sessionVerifier(req))?new ProjectInsert().deleteComment(id,comment):comm;
 }
 
-@GET
+@PUT
 @Path("/{id}/upvote")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)

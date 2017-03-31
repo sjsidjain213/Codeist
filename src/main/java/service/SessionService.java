@@ -44,6 +44,7 @@ MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("use
 		req.getSession().setAttribute("s_id",s_id);
 		user.setIs_valid(true);
 		user.setSession_id(s_id);
+		user.setUsername(username);
 		return user;
 		}else if(doc.getString("session_id")!=null)
 		{
@@ -53,7 +54,7 @@ MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("use
 		req.getSession().setAttribute("s_id",s_id);
 		user.setIs_valid(true);
 		user.setSession_id(s_id);
-
+		user.setUsername(username);
 		user.setMessage("new session is generated");
 		return user;
 		}
@@ -69,9 +70,10 @@ MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("use
     return (req.getSession().getAttribute("username")==null&&req.getSession().getAttribute("s_id")==null)?false:true;
 	}
     
-	public Acknowledgement sessionDestroy(HttpServletRequest req,String username)
+	public Acknowledgement sessionDestroy(HttpServletRequest req)
 	{
 		System.out.println(req.getSession().getAttribute("username")+"**"+req.getSession().getAttribute("s_id"));
+		String username=req.getSession().getAttribute("username").toString();
 	if(req.getSession().getAttribute("username")!=null&&req.getSession().getAttribute("s_id")!=null)	
 		{req.getSession().removeAttribute("username");
 	    req.getSession().removeAttribute("s_id");
