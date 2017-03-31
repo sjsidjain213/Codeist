@@ -64,13 +64,13 @@ public class NotificationService {
         tc.updateOne(eq("username",username),new Document("$addToSet",new Document("notifications",doc)));
 	}
 	
-	public void answerNotification(String username,String question,String question_id,String commitername,String commitermsg,Notifications notify)
-	{   Document doc = new Document("date",GeneralServices.getCurrentDate())
+	public void answerNotification(String receiverusername,String question,String question_id,String commitername,String commitermsg,Notifications notify)
+	{   Document doc = new Document("date",GeneralServices.getCurrentDate().getTime())
  		       .append("message",notify.getMsg())
  		       .append("generator",commitername)
  		       .append("messagebygenerator",commitermsg)
  		       .append("url",GeneralServices.urlGenerator(Notifications.QUESTIONMODULE,question_id,question));
-	     tc.updateOne(eq("username",username),new Document("$addToSet",new Document("notifications",doc)));
+	     tc.updateOne(eq("username",receiverusername),new Document("$addToSet",new Document("notifications",doc)));
 	}
 	//username string id will have value of either question id or project id
 	public void voteNotification(String username,String pqname,String pqid,String commitername,Notifications notify)

@@ -1,7 +1,7 @@
 package bean;
 
 public enum Notifications {
-QUESTIONSOLVED("An answer had been provided for your question"),
+QUESTIONSOLVED("An answer had been inserted for your question"),
 USERWANTTOFOLLOW("A user want to follow you"),
 YOUWANTTOFOLLOW("your request for follwoing have been accepted"),
 COMMENT("An comment had been inserted in your project"),
