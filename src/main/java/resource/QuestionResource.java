@@ -104,6 +104,42 @@ public class QuestionResource {
 	return (new SessionService().sessionVerifier(req))?new QADao().downanswer(id,username,req.getSession().getAttribute("username").toString()):obj;
 	//return (new SessionService().sessionVerifier(req))?new QADao().downanswer(id,username,req.getSession().getAttribute("username").toString()):new ArrayList<String>();
 	}
+	
+	@POST
+	@Path("/{id}/delete")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Acknowledgement deleteQuestion(@PathParam("id") String id, @Context HttpServletRequest req)
+	{
+		 return new QADao().deleteQuestion(req, id);
+	}
 
-
+	
+	
+	@POST
+	@Path("/{id}/{username}/deleteans")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Acknowledgement deleteanswer(@PathParam("id") String id,Answer ans, @Context HttpServletRequest req)
+	{
+		 return new QADao().deleteanswer(req, ans.getUsername(),id);
+	}
+	
+	@POST
+	@Path("/{id}/updateans")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Acknowledgement updateanswer(@PathParam("id") String id,Answer ans, @Context HttpServletRequest req)
+	{
+		 return new QADao().updateanswer(req, ans,id);
+	}
+	
+	@POST
+	@Path("/{id}/updateques")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Acknowledgement updateQuestion(@PathParam("id") String id,Question ques, @Context HttpServletRequest req)
+	{
+		 return new QADao().updateQuestion(req, ques,id);
+	}
 }
