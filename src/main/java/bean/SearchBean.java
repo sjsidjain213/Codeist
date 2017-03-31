@@ -3,8 +3,44 @@ package bean;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+import org.bson.types.ObjectId;
+
 public class SearchBean {
 private String source,name,username,title,description,bio,priority,url, ques_url;
+private ObjectId id;
+private long matchedcount,upvotecount, rating, downvotecount;
+private ArrayList<String> tags,upvotes,downvotes;
+
+
+public long getUpvotecount() {
+	return upvotecount;
+}
+
+
+public void setUpvotecount(long upvotecount) {
+	this.upvotecount = upvotecount;
+}
+
+
+public long getDownvotecount() {
+	return downvotecount;
+}
+
+
+public void setDownvotecount(long downvotecount) {
+	this.downvotecount = downvotecount;
+}
+
+
+public void setUpvotes(ArrayList<String> upvotes) {
+	this.upvotes = upvotes;
+}
+
+
+public void setDownvotes(ArrayList<String> downvotes) {
+	this.downvotes = downvotes;
+}
+
 
 @Override
 public String toString() {
@@ -14,10 +50,16 @@ public String toString() {
 			+ ", rating=" + rating + ", ques_url" + "ques_url" +"]";
 }
 
-private long matchedcount,upvotes, rating, downvotes;
 
 public String getQues_url() {
 	return ques_url;
+}
+public ObjectId getId() {
+	return id;
+}
+
+public void setId(ObjectId id) {
+	this.id = id;
 }
 
 public void setQues_url(String ques_url) {
@@ -32,21 +74,6 @@ public void setRating(long rating) {
 	this.rating = rating;
 }
 
-public long getDownvotes() {
-	return downvotes;
-}
-
-public void setDownvotes(long downvotes) {
-	this.downvotes = downvotes;
-}
-
-public long getUpvotes() {
-	return upvotes;
-}
-
-public void setUpvotes(long upvotes) {
-	this.upvotes = upvotes;
-}
 
 public long getMatchedcount() {
 	return matchedcount;
@@ -73,7 +100,6 @@ public boolean setPriority(String priority) {
 return (priority.equals("high"))?true:false;
 }
 
-private ArrayList<String> tags;
 public ArrayList<String> getTags() {
 	return tags;
 }
@@ -156,8 +182,8 @@ public static Comparator<SearchBean> searchsort = new Comparator<SearchBean>() {
 
 		public int compare(SearchBean s1,SearchBean s2) {
 
-		   int upvote1 = (int)s1.getUpvotes();
-		   int upvote2 = (int)s2.getUpvotes();
+		   int upvote1 = (int)s1.getUpvotecount();
+		   int upvote2 = (int)s2.getUpvotecount();
 
 		   return upvote2-upvote1;
 	  }};

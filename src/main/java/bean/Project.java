@@ -4,8 +4,20 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Project{
-	private String username,title,description,readme,license,project_url,_private,id,url_title;
-    //private long downvotes, viewcount,upvotes;
+	private String username,title,description,readme,license,project_url,_private,id,url_title,region_state,region_city;
+    public String getRegion_state() {
+		return region_state;
+	}
+	public void setRegion_state(String region_state) {
+		this.region_state = region_state;
+	}
+	public String getRegion_city() {
+		return region_city;
+	}
+	public void setRegion_city(String region_city) {
+		this.region_city = region_city;
+	}
+	//private long downvotes, viewcount,upvotes;
    	private ArrayList<String> images,video_url,zip_file,contributors,tags,downvotes,viewby,project_link;
 	private ArrayList<Comment> comments;
     private Long date,last_updated ;
