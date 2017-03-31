@@ -105,7 +105,9 @@ public class QADao {
 	public Acknowledgement insertAnswer(String id,Answer answer,HttpServletRequest req)
 	{   Document info=new Document().append("upvotes",new ArrayList<String>()).append("downvotes",new ArrayList<String>());	
     	//String userfromsession ="pulkit"; //req.getSession().getAttribute("username").toString();
-		Document d = tc.find(eq("_id",id)).first();
+	 ObjectId oid = new ObjectId(id.toString());
+		Document d = tc.find(eq("_id",oid)).first();
+		System.out.println("****"+d);
 	    //String q_id = tc.find(and(eq("username",d.getString("username")),eq("question",answer.getQuestion()))).first().get("_id").toString();
 	    Document doc = new Document("username",req.getSession().getAttribute("username").toString())
 	    		.append("answer",answer.getAnswer())
@@ -115,7 +117,7 @@ public class QADao {
         String acknow =tc.updateOne(eq("question",answer.getQuestion()),new Document("$push",new Document("answers",doc))).toString();
         Acknowledgement acknowledge = new GeneralServices().response(Notifications.SUCCESSFULLYINSERTED);
         //answer.getUsername is owner of question
-        new NotificationService().answerNotification(answer.getUsername(),answer.getQuestion(),id,req.getSession().getAttribute("username").toString(),answer.getAnswer(),Notifications.QUESTIONSOLVED);
+        new NotificationService().answerNotification(d.getString("username"),d.getString("question"),id,req.getSession().getAttribute("username").toString(),answer.getAnswer(),Notifications.QUESTIONSOLVED);
         return acknowledge;
 	}
 	
