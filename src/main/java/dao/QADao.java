@@ -131,7 +131,7 @@ public class QADao {
         new NotificationService().answerNotification(d.getString("username"),d.getString("question"),id,req.getSession().getAttribute("username").toString(),answer.getAnswer(),Notifications.QUESTIONSOLVED);
         return acknowledge;
 	}
-	public void updateQuestion(HttpServletRequest req,Question question,String id)
+	/*public void updateQuestion(HttpServletRequest req,Question question,String id)
 	{  //MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("testqa");
 	   
 	   ObjectId oid = new ObjectId(id.toString());
@@ -147,7 +147,7 @@ public class QADao {
 	    		.append("featured_points", question.getFeatured_points())
 	    		.append("answers",aldo);
 		tc.updateOne(eq("_id",oid),new Document("$set",doc));
-	}
+	}*/
 	
 	public void updateanswer(){
 		
@@ -420,4 +420,91 @@ public class QADao {
 			}
 	}
 	
+	public Acknowledgement deleteQuestion(HttpServletRequest req,String id){
+	    ObjectId oid = new ObjectId(id.toString());
+	    Document document = tc.find(eq("_id",oid)).first();
+	      if(document!=null){
+			Document info=(Document) document.get("info");
+			  
+			  Document doc = new Document("username",req.getSession().getAttribute("username"))
+		    		.append("question",document.getString("question"))
+		    		.append("description",document.getString("description"))
+		    		.append("tags",document.get("tags"))
+		    		.append("date",GeneralServices.getCurrentDate().getTime())
+		    		.append("featured_points", document.getLong("featured_points"))
+			  		.append("info",info)
+			  		.append("url",document.getString("url"))
+			  		.append("answers",document.get("answers"));
+			  tc.deleteOne(document);
+			  System.out.println("deleted");
+	      }
+		return new GeneralServices().response(Notifications.SUCCESSFULLYDELETED);
+		
+	    
+	}
+	
+	public Acknowledgement updateQuestion(HttpServletRequest req,Question question,String id)
+    {  //MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("testqa");
+       
+       ObjectId oid = new ObjectId(id.toString());
+       //Document doc2 = tc.find(and(eq("username",req.getSession().getAttribute("username").toString()),eq("question",question.getQuestion()))).first();
+       Document document = tc.find(eq("_id",oid)).first();
+       ArrayList<Document> aldo = (ArrayList<Document>) document.get("answers");
+        Document doc = new Document("username",req.getSession().getAttribute("username"))
+                .append("question",question.getQuestion())
+                .append("description",question.getDescription())
+                .append("tags",(List<String>)question.getTags())
+                .append("date", document.getLong("date"))
+                .append("last_updated", GeneralServices.getCurrentDate().getTime())
+                .append("featured_points", question.getFeatured_points())
+                .append("answers",aldo);
+        tc.updateOne(eq("_id",oid),new Document("$set",doc));
+        return new GeneralServices().response(Notifications.SUCCESSFULLYUPDATED);
+    }
+    
+    public Acknowledgement updateanswer(HttpServletRequest req,Answer answer,String id){
+         ObjectId oid = new ObjectId(id.toString());
+         Document document = tc.find(eq("_id",oid)).first();
+         ArrayList<Document> aldo = (ArrayList<Document>) document.get("answers");
+         if(aldo != null){
+                for(Document d:aldo)
+                {   
+                	System.out.println(d);
+                    if(d.getString("username").equals(answer.getUsername())){
+                    	System.out.println("111");
+                        tc.updateOne(eq("_id",oid), new Document("$pull",new Document("answers",d)));
+                        break;
+                    }
+                }
+            }
+         Document info=new Document().append("upvotes",answer.getUpvotes()).append("downvotes",answer.getDownvotes());  
+         Document doc = new Document("username",req.getSession().getAttribute("username").toString())
+                    .append("answer",answer.getAnswer())
+                    .append("date",GeneralServices.getCurrentDate().getTime())
+                    .append("last_updated",GeneralServices.getCurrentDate().getTime())
+                    .append("info",info);
+         tc.updateOne(eq("_id",oid),new Document("$push",new Document("answers",doc)));
+         return new GeneralServices().response(Notifications.SUCCESSFULLYUPDATED);
+    }
+	
+    public Acknowledgement deleteanswer(HttpServletRequest req,String username,String id){
+         ObjectId oid = new ObjectId(id.toString());
+         Document document = tc.find(eq("_id",oid)).first();
+         ArrayList<Document> aldo = (ArrayList<Document>) document.get("answers");
+         if(aldo != null){
+                for(Document d:aldo)
+                {   
+                    if(d.getString("username").equals(username)){
+                        tc.updateOne(eq("_id",oid), new Document("$pull",new Document("answers",d)));
+                        return new GeneralServices().response(Notifications.SUCCESSFULLYDELETED);
+                        //break;
+                    }
+                }
+            }
+         return new GeneralServices().response(null);
+    }
+
+	
+	
+
 }

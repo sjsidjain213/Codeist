@@ -32,6 +32,8 @@ ERROR("error"),
 
 EDITWRITTENISNOTAVAILABLE("Edit write is not available"),
 SUCCESSFULLYINSERTED("success"),
+SUCCESSFULLYDELETED("success"),
+SUCCESSFULLYUPDATED("success"),
 USERLOGGEDOUT("user is succesfully logged out");	
 	private final String msg;
 
