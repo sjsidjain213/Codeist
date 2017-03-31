@@ -3,7 +3,24 @@ package bean;
 import java.util.ArrayList;
 
 public class MultiUse {
-private String username,message,emailid;
+private String username,message,emailid,session_id;
+public String getSession_id() {
+	return session_id;
+}
+
+public void setSession_id(String session_id) {
+	this.session_id = session_id;
+}
+
+private boolean is_valid;
+public boolean isIs_valid() {
+	return is_valid;
+}
+
+public void setIs_valid(boolean is_valid) {
+	this.is_valid = is_valid;
+}
+
 private ArrayList<String> upvotes,downvotes;
 public ArrayList<String> getUpvotes() {
 	return upvotes;

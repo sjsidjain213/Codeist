@@ -55,10 +55,10 @@ public class UserResource implements ContainerResponseFilter {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("/logout")
-	public Acknowledgement logout(@Context HttpServletRequest req)
+	@Path("/logout/{username}")
+	public Acknowledgement logout(@Context HttpServletRequest req,@PathParam("username")String username)
 	{
-		return new SessionService().sessionDestroy(req);
+		return new SessionService().sessionDestroy(req,username);
 	}
 	
 	@POST
