@@ -27,6 +27,15 @@ import service.SessionService;
 public class QuestionResource {
 	
 	@POST
+	@Path("/updatequestion")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void updateQuestion(Question question,@Context HttpServletRequest req)
+	{
+		new QADao().updateQuestion(req, question, "58ddf9a7c48fc91a78acefc3");
+		//return (new SessionService().sessionVerifier(req))?new QADao().insertQuestion(question,req):new GeneralServices().response(null);
+	}
+	@POST
 	@Path("/insert")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)

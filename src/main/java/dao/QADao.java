@@ -120,7 +120,20 @@ public class QADao {
         new NotificationService().answerNotification(d.getString("username"),d.getString("question"),id,req.getSession().getAttribute("username").toString(),answer.getAnswer(),Notifications.QUESTIONSOLVED);
         return acknowledge;
 	}
-	
+	public void updateQuestion(HttpServletRequest req,Question question,String id)
+	{  MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("testqa");
+	   
+	   ObjectId oid = new ObjectId(id.toString());
+       //Document doc2 = tc.find(and(eq("username",req.getSession().getAttribute("username").toString()),eq("question",question.getQuestion()))).first();
+	   Document document = tc.find(eq("_id",oid)).first();
+		Document doc = new Document("username",req.getSession().getAttribute("username"))
+	    		.append("question",question.getQuestion())
+	    		.append("description",question.getDescription())
+	    		.append("tags",(List<String>)question.getTags())
+	    		.append("updated_date", GeneralServices.getCurrentDate().getTime())
+	    		.append("featured_points", question.getFeatured_points());
+		tc.updateOne(eq("_id",oid),new Document("$set",doc));
+}
 	@SuppressWarnings("unchecked")
 	public MultiUse upQuestion(String id,String user){
 		ObjectId id1=new ObjectId(id.toString());
