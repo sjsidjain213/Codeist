@@ -23,7 +23,7 @@ public class SearchBar {
 	public ArrayList<SearchBean> doSearch(Tag tag)
 	{
 		MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("testuserdata");
-	 MongoCollection<Document>tctwo = new DatabaseServices().getDb().getCollection("project");
+	    MongoCollection<Document>tctwo = new DatabaseServices().getDb().getCollection("project");
 		MongoCollection <Document> tcques = new DatabaseServices().getDb().getCollection("testqa");
         HashMap<Object,SearchBean> hm = new HashMap<Object,SearchBean>();
 	    //HashMap<Object,SearchBean> hmproject = new HashMap<Object,SearchBean>();
@@ -43,6 +43,7 @@ public class SearchBar {
         	    user.setBio(doc.getString("bio"));
         	    user.setName(doc.getString("name"));
         	    user.setRating(doc.getInteger("rating"));
+        	    user.setId((String)doc.get("_id"));
         	    user.setMatchedcount(1);
         	    boolean bool =(doc.getString("username").equals(s)||doc.getString("name").equals(s))?user.setPriority("z"):user.setPriority("b");    
        	        alsearch.add(user);   
@@ -68,7 +69,8 @@ public class SearchBar {
                  project.setSource("title");
   	             project.setTitle(doc.getString("title"));
   	             project.setDescription(doc.getString("description"));
-  	             project.setTags((ArrayList<String>)doc.get("tags"));
+  	             project.setId((String)doc.get("_id"));
+         	     project.setTags((ArrayList<String>)doc.get("tags"));
   	             project.setUrl(doc.getString("project_url"));
   	             Document innerd = (Document)doc.get("info");
   	             if(innerd != null){
@@ -101,6 +103,40 @@ public class SearchBar {
   	             project.setTitle(doc.getString("title"));
   	             project.setDescription(doc.getString("description"));
   	             project.setTags((ArrayList<String>)doc.get("tags"));
+  	             project.setId((String)doc.get("_id"));
+       	         project.setUrl(doc.getString("project_url"));
+  	             Document innerd = (Document)doc.get("info");
+	             if(innerd != null){
+	            	 project.setUpvotes(innerd.getInteger("upvotes"));
+	            	 project.setDownvotes(innerd.getInteger("downvotes"));
+	             }
+  	             project.setMatchedcount(1);
+  	             boolean bool =(doc.getString("description").matches("(?i:"+s+")"))?project.setPriority("b"):project.setPriority("a");    
+        	     alsearch.add(project);
+                 hm.put(doc.get("_id"),project);
+        	     }else{
+                     SearchBean sb=hm.get(doc.get("_id"));
+         	         if(sb!=null)
+         	         {
+         	         	sb.setMatchedcount((sb.getMatchedcount()+1));
+         	            String source = sb.getSource();
+         	    //       source = source+ ":description";
+       	                sb.setSource(source);
+         	         	hm.put(doc.get("_id"),sb);
+         	         }	    	 
+         	     }
+        });
+       
+        //search on basis of region in tags
+        fi = tctwo.find(or(eq("region_state",Pattern.compile("(?i:.*"+s+".*)"))));	
+        fi.forEach((Block<Document>) doc -> { 
+        	     if(!hm.containsKey(doc.get("_id"))){
+        	     SearchBean project = new SearchBean();
+                 project.setSource("region");
+  	             project.setTitle(doc.getString("title"));
+  	             project.setDescription(doc.getString("description"));
+  	             project.setId((String)doc.get("_id"));
+       	         project.setTags((ArrayList<String>)doc.get("tags"));
   	             project.setUrl(doc.getString("project_url"));
   	             Document innerd = (Document)doc.get("info");
 	             if(innerd != null){
@@ -124,6 +160,39 @@ public class SearchBar {
          	     }
         });
        
+        //search on basis of region in tags
+         fi = tctwo.find(or(eq("region_city",Pattern.compile("(?i:.*"+s+".*)"))));	
+        fi.forEach((Block<Document>) doc -> { 
+        	     if(!hm.containsKey(doc.get("_id"))){
+        	     SearchBean project = new SearchBean();
+                 project.setSource("region");
+  	             project.setTitle(doc.getString("title"));
+  	             project.setDescription(doc.getString("description"));
+  	             project.setId((String)doc.get("_id"));
+       	         project.setTags((ArrayList<String>)doc.get("tags"));
+  	             project.setUrl(doc.getString("project_url"));
+  	             Document innerd = (Document)doc.get("info");
+	             if(innerd != null){
+	            	 project.setUpvotes(innerd.getInteger("upvotes"));
+	            	 project.setDownvotes(innerd.getInteger("downvotes"));
+	             }
+  	             project.setMatchedcount(1);
+  	             boolean bool =(doc.getString("description").matches("(?i:"+s+")"))?project.setPriority("b"):project.setPriority("a");    
+        	     alsearch.add(project);
+                 hm.put(doc.get("_id"),project);
+        	     }else{
+                     SearchBean sb=hm.get(doc.get("_id"));
+         	         if(sb!=null)
+         	         {
+         	         	sb.setMatchedcount((sb.getMatchedcount()+1));
+         	            String source = sb.getSource();
+         	    //       source = source+ ":description";
+       	                sb.setSource(source);
+         	         	hm.put(doc.get("_id"),sb);
+         	         }	    	 
+         	     }
+        });
+        
         //search projects on basis of tags
         fi = tctwo.find();
         Pattern pattern = Pattern.compile("(?i:.*"+s+".*)");
@@ -173,6 +242,76 @@ public class SearchBar {
           });
         });
         
+
+        //search on basis of region in tags
+       // search bean project or question is same
+        
+        fi = tcques.find(or(eq("region_city",Pattern.compile("(?i:.*"+s+".*)"))));	
+        fi.forEach((Block<Document>) doc -> { 
+        	     if(!hm.containsKey(doc.get("_id"))){
+        	     SearchBean project = new SearchBean();
+                 project.setSource("region");
+  	             project.setTitle(doc.getString("title"));
+  	             project.setDescription(doc.getString("description"));
+  	             project.setId((String)doc.get("_id"));
+       	         project.setTags((ArrayList<String>)doc.get("tags"));
+  	             project.setUrl(doc.getString("project_url"));
+  	             Document innerd = (Document)doc.get("info");
+	             if(innerd != null){
+	            	 project.setUpvotes(innerd.getInteger("upvotes"));
+	            	 project.setDownvotes(innerd.getInteger("downvotes"));
+	             }
+  	             project.setMatchedcount(1);
+  	             boolean bool =(doc.getString("description").matches("(?i:"+s+")"))?project.setPriority("b"):project.setPriority("a");    
+        	     alsearch.add(project);
+                 hm.put(doc.get("_id"),project);
+        	     }else{
+                     SearchBean sb=hm.get(doc.get("_id"));
+         	         if(sb!=null)
+         	         {
+         	         	sb.setMatchedcount((sb.getMatchedcount()+1));
+         	            String source = sb.getSource();
+         	    //       source = source+ ":description";
+       	                sb.setSource(source);
+         	         	hm.put(doc.get("_id"),sb);
+         	         }	    	 
+         	     }
+        });
+        
+
+        //search on basis of region in question
+         fi = tcques.find(or(eq("region_state",Pattern.compile("(?i:.*"+s+".*)"))));	
+        fi.forEach((Block<Document>) doc -> { 
+        	     if(!hm.containsKey(doc.get("_id"))){
+        	     SearchBean project = new SearchBean();
+                 project.setSource("region");
+  	             project.setTitle(doc.getString("title"));
+  	             project.setDescription(doc.getString("description"));
+  	             project.setId((String)doc.get("_id"));
+       	         project.setTags((ArrayList<String>)doc.get("tags"));
+  	             project.setUrl(doc.getString("project_url"));
+  	             Document innerd = (Document)doc.get("info");
+	             if(innerd != null){
+	            	 project.setUpvotes(innerd.getInteger("upvotes"));
+	            	 project.setDownvotes(innerd.getInteger("downvotes"));
+	             }
+  	             project.setMatchedcount(1);
+  	             boolean bool =(doc.getString("description").matches("(?i:"+s+")"))?project.setPriority("b"):project.setPriority("a");    
+        	     alsearch.add(project);
+                 hm.put(doc.get("_id"),project);
+        	     }else{
+                     SearchBean sb=hm.get(doc.get("_id"));
+         	         if(sb!=null)
+         	         {
+         	         	sb.setMatchedcount((sb.getMatchedcount()+1));
+         	            String source = sb.getSource();
+         	    //       source = source+ ":description";
+       	                sb.setSource(source);
+         	         	hm.put(doc.get("_id"),sb);
+         	         }	    	 
+         	     }
+        });
+        
         //search questions on basis of tags
         fi = tcques .find();
         pattern = Pattern.compile("(?i:.*"+s+".*)");
@@ -186,6 +325,7 @@ public class SearchBar {
         		  SearchBean ques = new SearchBean();
         	  	  ques.setSource("question");
         	  	  ques.setTitle(doc.getString("question"));
+        	      ques.setId((String)doc.get("_id"));
         	  	  ques.setDescription(doc.getString("description"));
         	  	  ques.setUsername(doc.getString("username"));
         	  	  ques.setUpvotes(doc.getInteger("upvotes"));
@@ -227,6 +367,7 @@ public class SearchBar {
         	    	 SearchBean ques = new SearchBean();
         	    	 ques.setSource("question");
         	    	 ques.setTitle(doc.getString("question"));
+        	    	 ques.setId((String)doc.get("_id"));
         	    	 ques.setDescription(doc.getString("description"));
         	    	 ques.setUsername(doc.getString("username"));
         	    	 ques.setUpvotes(doc.getInteger("upvotes"));

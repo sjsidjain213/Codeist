@@ -13,6 +13,8 @@ import javax.ws.rs.core.MediaType;
 
 import org.bson.Document;
 
+import bean.A;
+import bean.MultiUse;
 import bean.Project;
 import bean.SearchBean;
 import bean.Tag;
@@ -36,7 +38,7 @@ public class SearchResource {
 	@Path("/region")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<Document> regionData()
+	public A regionData()
 	{
 	return new RegionDao().getState();
 	}

@@ -4,7 +4,15 @@ import java.util.ArrayList;
 import java.util.Comparator;
 
 public class SearchBean {
-private String source,name,username,title,description,bio,priority,url, ques_url;
+private String source,name,username,title,description,bio,priority,url, ques_url,id;
+
+public String getId() {
+	return id;
+}
+
+public void setId(String id) {
+	this.id = id;
+}
 
 @Override
 public String toString() {

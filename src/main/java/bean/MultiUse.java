@@ -2,8 +2,19 @@ package bean;
 
 import java.util.ArrayList;
 
+import org.bson.Document;
+
 public class MultiUse {
 private String username,message,emailid,session_id;
+private Document region;
+public Document getRegion() {
+	return region;
+}
+
+public void setRegion(Document region) {
+	this.region = region;
+}
+
 public String getSession_id() {
 	return session_id;
 }
