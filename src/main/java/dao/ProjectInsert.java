@@ -29,7 +29,8 @@ public class ProjectInsert
 	
 //inserting a new project to database
 public Acknowledgement insertProject(Project project,HttpServletRequest req)
-{  //String userfromsession = req.getSession().getAttribute("username").toString();
+{ try{
+	String userfromsession = req.getSession().getAttribute("username").toString();
 	Document docexsit = tc.find(and(eq("username",project.getUsername()),eq("title",project.getTitle()))).first();
    ArrayList<String> a=new ArrayList<String>();
    a.add(project.getUsername());
@@ -39,8 +40,8 @@ public Acknowledgement insertProject(Project project,HttpServletRequest req)
     { 
 	  Document info=new Document().append("upvotes", new ArrayList<String>()).append("downvotes",new ArrayList<String>()).append("viewby",new ArrayList<String>());
       Document doc = new Document()
-	    		// .append("username", req.getSession().getAttribute("username"))
-	    		 .append("username", project.getUsername())
+	    		 .append("username", req.getSession().getAttribute("username"))
+	    		// .append("username", project.getUsername())
 	    		 .append("title",project.getTitle())	
 	    		 .append("date",GeneralServices.getCurrentDate().getTime()) //
 	    		 .append("last_updated",GeneralServices.getCurrentDate())
@@ -62,7 +63,7 @@ public Acknowledgement insertProject(Project project,HttpServletRequest req)
 	    		  String projectid= tc.find(and(eq("username",project.getUsername()),eq("title",project.getTitle()))).first().get("_id").toString();
 	    		  String url = GeneralServices.urlGenerator(Notifications.PROJECTMODULE, projectid, project.getTitle());
 	    		  new UserDao().moduleIDAdder(Notifications.PROJECTMODULE,project.getUsername(), projectid);
-	    		  UpdateResult rs=tc.updateOne(and(eq("username",project.getUsername()),eq("title",project.getTitle())),new Document("$set",new Document("project_url",url)));		    		 
+	    		  UpdateResult rs=tc.updateOne(and(eq("username",userfromsession),eq("title",project.getTitle())),new Document("$set",new Document("project_url",url)));		    		 
 	    		  ack.setUpsertedId(projectid);
 	    		  ack.setMessage(GeneralServices.spaceRemover(project.getTitle()));
 	    		  return ack;
@@ -70,6 +71,11 @@ public Acknowledgement insertProject(Project project,HttpServletRequest req)
 	                    ack.setMessage("exist");
 	                 	return ack;
                        }
+}
+catch(Exception e){
+	return new GeneralServices().response(Notifications.ERROR);
+
+}
                     }
     @SuppressWarnings("unchecked")
    public Acknowledgement updateproject(Project project,HttpServletRequest req,String id){

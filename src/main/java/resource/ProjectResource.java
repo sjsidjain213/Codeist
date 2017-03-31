@@ -42,8 +42,9 @@ public class ProjectResource {
 @Produces(MediaType.APPLICATION_JSON)
 public Acknowledgement insertProject(Project project,@Context HttpServletRequest req)
 {
+	
 //return new ProjectInsert().insertProject(project);
-return (new SessionService().sessionVerifier(req))?new ProjectInsert().insertProject(project,req):new GeneralServices().response(null);
+return (new SessionService().sessionVerifier(req))?new ProjectInsert().insertProject(project,req):new GeneralServices().response(Notifications.SESSIONDONOTEXSIT);
 //return	new ProjectInsert().insertProject(project,req);
 }
 //to update

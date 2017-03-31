@@ -38,7 +38,8 @@ public class QADao {
 	    		.append("date",GeneralServices.getCurrentDate().getTime())
 	    		.append("last_updated",GeneralServices.getCurrentDate().getTime())
 	    		.append("info",info)
-	    		.append("featured_points", question.getFeatured_points());
+	    		.append("featured_points", question.getFeatured_points())
+	    		.append("answers",new ArrayList<Answer>());
 	       tc.insertOne(doc);
 	    
 	    String id = tc.find(and(eq("username",req.getSession().getAttribute("username").toString()),eq("question",question.getQuestion()))).first().get("_id").toString();
