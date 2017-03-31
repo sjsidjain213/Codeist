@@ -7,6 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.bson.Document;
+import org.bson.types.ObjectId;
 
 import com.mongodb.Block;
 import com.mongodb.client.FindIterable;
@@ -24,7 +25,7 @@ public class SearchBar {
 	{
 		MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("testuserdata");
 	    MongoCollection<Document>tctwo = new DatabaseServices().getDb().getCollection("project");
-		MongoCollection <Document> tcques = new DatabaseServices().getDb().getCollection("testqa");
+		MongoCollection <Document> tcques = new DatabaseServices().getDb().getCollection("qa");
         HashMap<Object,SearchBean> hm = new HashMap<Object,SearchBean>();
 	    //HashMap<Object,SearchBean> hmproject = new HashMap<Object,SearchBean>();
 	    //HashMap<Object,SearchBean> hmtags = new HashMap<Object,SearchBean>();
@@ -43,7 +44,7 @@ public class SearchBar {
         	    user.setBio(doc.getString("bio"));
         	    user.setName(doc.getString("name"));
         	    user.setRating(doc.getInteger("rating"));
-        	    user.setId((String)doc.get("_id"));
+        	    user.setId((ObjectId) doc.get("_id"));
         	    user.setMatchedcount(1);
         	    boolean bool =(doc.getString("username").equals(s)||doc.getString("name").equals(s))?user.setPriority("z"):user.setPriority("b");    
        	        alsearch.add(user);   
@@ -69,14 +70,17 @@ public class SearchBar {
                  project.setSource("title");
   	             project.setTitle(doc.getString("title"));
   	             project.setDescription(doc.getString("description"));
-  	             project.setId((String)doc.get("_id"));
+  	             project.setId((ObjectId) doc.get("_id"));
          	     project.setTags((ArrayList<String>)doc.get("tags"));
   	             project.setUrl(doc.getString("project_url"));
-  	             Document innerd = (Document)doc.get("info");
-  	             if(innerd != null){
-  	            	 project.setUpvotes(innerd.getLong("upvotes"));
-  	            	 project.setDownvotes(innerd.getLong("downvotes"));
-  	             }
+//  	             Document innerd = (Document)doc.get("info");
+//  	             if(innerd != null){
+//  	            	 project.setUpvotecount(doc.getLong("upvotecount"));
+//  	            	 //project.setUpvoteCount(innerd.getLong("upvotes"));
+//  	            	 project.setDownvotecount(innerd.getLong("downvotecount"));
+//  	             }
+            	 project.setUpvotecount(doc.getLong("upvotecount"));
+            	 project.setDownvotecount(doc.getLong("downvotecount"));
   	             project.setMatchedcount(1);
   	             boolean bool =(doc.getString("title").matches("(?i:"+s+")"))?project.setPriority("z"):project.setPriority("b");    
         	     alsearch.add(project);
@@ -103,13 +107,15 @@ public class SearchBar {
   	             project.setTitle(doc.getString("title"));
   	             project.setDescription(doc.getString("description"));
   	             project.setTags((ArrayList<String>)doc.get("tags"));
-  	             project.setId((String)doc.get("_id"));
+  	             project.setId((ObjectId) doc.get("_id"));
        	         project.setUrl(doc.getString("project_url"));
-  	             Document innerd = (Document)doc.get("info");
-	             if(innerd != null){
-	            	 project.setUpvotes(innerd.getInteger("upvotes"));
-	            	 project.setDownvotes(innerd.getInteger("downvotes"));
-	             }
+//  	             Document innerd = (Document)doc.get("info");
+//	             if(innerd != null){
+//	            	 project.setUpvotecount(innerd.getLong("upvotecount"));
+//	            	 project.setDownvotecount(innerd.getLong("downvotecount"));
+//	             }
+            	 project.setUpvotecount(doc.getLong("upvotecount"));
+            	 project.setDownvotecount(doc.getLong("downvotecount"));
   	             project.setMatchedcount(1);
   	             boolean bool =(doc.getString("description").matches("(?i:"+s+")"))?project.setPriority("b"):project.setPriority("a");    
         	     alsearch.add(project);
@@ -135,14 +141,16 @@ public class SearchBar {
                  project.setSource("region");
   	             project.setTitle(doc.getString("title"));
   	             project.setDescription(doc.getString("description"));
-  	             project.setId((String)doc.get("_id"));
+  	             project.setId((ObjectId) doc.get("_id"));
        	         project.setTags((ArrayList<String>)doc.get("tags"));
   	             project.setUrl(doc.getString("project_url"));
-  	             Document innerd = (Document)doc.get("info");
-	             if(innerd != null){
-	            	 project.setUpvotes(innerd.getInteger("upvotes"));
-	            	 project.setDownvotes(innerd.getInteger("downvotes"));
-	             }
+//  	             Document innerd = (Document)doc.get("info");
+//	             if(innerd != null){
+//	            	 project.setUpvotecount(innerd.getLong("upvotecount"));
+//	            	 project.setDownvotecount(innerd.getLong("downvotecount"));
+//	             }
+            	 project.setUpvotecount(doc.getLong("upvotecount"));
+            	 project.setDownvotecount(doc.getLong("downvotecount"));
   	             project.setMatchedcount(1);
   	             boolean bool =(doc.getString("description").matches("(?i:"+s+")"))?project.setPriority("b"):project.setPriority("a");    
         	     alsearch.add(project);
@@ -167,15 +175,18 @@ public class SearchBar {
         	     SearchBean project = new SearchBean();
                  project.setSource("region");
   	             project.setTitle(doc.getString("title"));
+  	             System.out.println(doc.get("_id")+"::"+(ObjectId)doc.get("_id"));
   	             project.setDescription(doc.getString("description"));
-  	             project.setId((String)doc.get("_id"));
+  	             project.setId((ObjectId) doc.get("_id"));
        	         project.setTags((ArrayList<String>)doc.get("tags"));
   	             project.setUrl(doc.getString("project_url"));
-  	             Document innerd = (Document)doc.get("info");
-	             if(innerd != null){
-	            	 project.setUpvotes(innerd.getInteger("upvotes"));
-	            	 project.setDownvotes(innerd.getInteger("downvotes"));
-	             }
+//  	             Document innerd = (Document)doc.get("info");
+//	             if(innerd != null){
+//	            	 project.setUpvotecount(innerd.getLong("upvotes"));
+//	            	 project.setDownvotecount(innerd.getLong("downvotes"));
+//	             }
+            	 project.setUpvotecount(doc.getLong("upvotecount"));
+            	 project.setDownvotecount(doc.getLong("downvotecount"));
   	             project.setMatchedcount(1);
   	             boolean bool =(doc.getString("description").matches("(?i:"+s+")"))?project.setPriority("b"):project.setPriority("a");    
         	     alsearch.add(project);
@@ -209,11 +220,13 @@ public class SearchBar {
 	             project.setTags((ArrayList<String>)doc.get("tags"));
 	             project.setUsername(doc.getString("username"));
 	             project.setUrl(doc.getString("project_url"));
-	             Document innerd = (Document)doc.get("info");
-  	             if(innerd != null){
-  	            	 project.setUpvotes(innerd.getInteger("upvotes"));
-  	            	 project.setDownvotes(innerd.getInteger("downvotes"));
-  	             }
+//	             Document innerd = (Document)doc.get("info");
+//  	             if(innerd != null){
+//  	          	 project.setUpvotecount(innerd.getLong("upvotecount"));
+//            	 project.setDownvotecount(innerd.getLong("downvotecount"));
+//             }
+            	 project.setUpvotecount(doc.getLong("upvotecount"));
+            	 project.setDownvotecount(doc.getLong("downvotecount"));
 	             project.setMatchedcount(1);
 	             boolean bool =(st.matches("(?:"+s+")"))?project.setPriority("z"):project.setPriority("b");    
       	         alsearch.add(project);
@@ -253,14 +266,16 @@ public class SearchBar {
                  project.setSource("region");
   	             project.setTitle(doc.getString("title"));
   	             project.setDescription(doc.getString("description"));
-  	             project.setId((String)doc.get("_id"));
+  	             project.setId((ObjectId) doc.get("_id"));
        	         project.setTags((ArrayList<String>)doc.get("tags"));
   	             project.setUrl(doc.getString("project_url"));
-  	             Document innerd = (Document)doc.get("info");
-	             if(innerd != null){
-	            	 project.setUpvotes(innerd.getInteger("upvotes"));
-	            	 project.setDownvotes(innerd.getInteger("downvotes"));
-	             }
+//  	             Document innerd = (Document)doc.get("info");
+//	             if(innerd != null){
+//	            	 project.setUpvotecount(innerd.getLong("upvotecount"));
+//	            	 project.setDownvotecount(innerd.getLong("downvotecount"));
+//	                 }
+            	 project.setUpvotecount(doc.getLong("upvotecount"));
+            	 project.setDownvotecount(doc.getLong("downvotecount"));
   	             project.setMatchedcount(1);
   	             boolean bool =(doc.getString("description").matches("(?i:"+s+")"))?project.setPriority("b"):project.setPriority("a");    
         	     alsearch.add(project);
@@ -287,15 +302,13 @@ public class SearchBar {
                  project.setSource("region");
   	             project.setTitle(doc.getString("title"));
   	             project.setDescription(doc.getString("description"));
-  	             project.setId((String)doc.get("_id"));
+  	             project.setId((ObjectId) doc.get("_id"));
        	         project.setTags((ArrayList<String>)doc.get("tags"));
   	             project.setUrl(doc.getString("project_url"));
-  	             Document innerd = (Document)doc.get("info");
-	             if(innerd != null){
-	            	 project.setUpvotes(innerd.getInteger("upvotes"));
-	            	 project.setDownvotes(innerd.getInteger("downvotes"));
-	             }
-  	             project.setMatchedcount(1);
+  	           
+	            	 project.setUpvotecount(doc.getLong("upvotecount"));
+	            	 project.setDownvotecount(doc.getLong("downvotecount"));
+	             project.setMatchedcount(1);
   	             boolean bool =(doc.getString("description").matches("(?i:"+s+")"))?project.setPriority("b"):project.setPriority("a");    
         	     alsearch.add(project);
                  hm.put(doc.get("_id"),project);
@@ -325,11 +338,11 @@ public class SearchBar {
         		  SearchBean ques = new SearchBean();
         	  	  ques.setSource("question");
         	  	  ques.setTitle(doc.getString("question"));
-        	      ques.setId((String)doc.get("_id"));
+        	      ques.setId((ObjectId) doc.get("_id"));
         	  	  ques.setDescription(doc.getString("description"));
         	  	  ques.setUsername(doc.getString("username"));
-        	  	  ques.setUpvotes(doc.getInteger("upvotes"));
-        	  	  ques.setDownvotes(doc.getInteger("downvotes"));
+        	  	  ques.setUpvotecount(doc.getLong("upvotecount"));
+        	  	  ques.setDownvotecount(doc.getLong("downvotecount"));
         	  	  ques.setMatchedcount(1);
 	             boolean bool =(st.matches("(?:"+s+")"))?ques.setPriority("z"):ques.setPriority("b");    
       	         alsearch.add(ques);
@@ -367,11 +380,11 @@ public class SearchBar {
         	    	 SearchBean ques = new SearchBean();
         	    	 ques.setSource("question");
         	    	 ques.setTitle(doc.getString("question"));
-        	    	 ques.setId((String)doc.get("_id"));
+        	    	 ques.setId((ObjectId) doc.get("_id"));
         	    	 ques.setDescription(doc.getString("description"));
         	    	 ques.setUsername(doc.getString("username"));
-        	    	 ques.setUpvotes(doc.getInteger("upvotes"));
-        	    	 ques.setDownvotes(doc.getInteger("downvotes"));
+        	    	 ques.setUpvotecount(doc.getLong("upvotecount"));
+        	    	 ques.setDownvotecount(doc.getLong("downvotecount"));
         	    	 ques.setMatchedcount(1);
         	    	 boolean bool =(doc.getString("question").matches("(?i:"+s+")"))?ques.setPriority("z"):ques.setPriority("b");
         	    	 System.out.println(bool);
@@ -410,7 +423,7 @@ public class SearchBar {
         for(int i=0;i<alsearch.size();i++){
         	System.out.println("11");
         		if(i>0){
-        			System.out.println("22"+alsearch.get(i).getUpvotes());
+        			System.out.println("22"+alsearch.get(i).getUpvotecount());
         			if(alsearch.get(i).getMatchedcount() == alsearch.get(i-1).getMatchedcount()){
         				System.out.println("equal+++++");
         				//flag = 0;

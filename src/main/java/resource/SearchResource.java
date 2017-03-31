@@ -13,7 +13,6 @@ import javax.ws.rs.core.MediaType;
 
 import org.bson.Document;
 
-import bean.A;
 import bean.MultiUse;
 import bean.Project;
 import bean.SearchBean;
@@ -34,13 +33,6 @@ public class SearchResource {
 		return new SearchBar().doSearch(d);
 	}
 	
-	@GET
-	@Path("/region")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public A regionData()
-	{
-	return new RegionDao().getState();
-	}
+	
 	
 }
