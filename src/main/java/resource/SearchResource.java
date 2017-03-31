@@ -11,11 +11,13 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.bson.Document;
 
 import bean.Project;
 import bean.SearchBean;
 import bean.Tag;
 import dao.ProjectInsert;
+import dao.RegionDao;
 import dao.SearchBar;
 
 
@@ -28,6 +30,15 @@ public class SearchResource {
 	public ArrayList<SearchBean> search(Tag d)
 	{
 		return new SearchBar().doSearch(d);
+	}
+	
+	@GET
+	@Path("/region")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public ArrayList<Document> regionData()
+	{
+	return new RegionDao().getState();
 	}
 	
 }
