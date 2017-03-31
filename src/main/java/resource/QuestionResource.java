@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 
 import bean.Acknowledgement;
 import bean.Answer;
+import bean.MultiUse;
 import bean.Question;
 import dao.ProjectInsert;
 import dao.QADao;
@@ -53,7 +54,7 @@ public class QuestionResource {
 	@Path("/{id}/upvote")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<String> upquestion(@PathParam("id")String id,@Context HttpServletRequest req)
+	public MultiUse upquestion(@PathParam("id")String id,@Context HttpServletRequest req)
 	{
 	return new QADao().upQuestion(id,"utkarsh");
 	//return (new SessionService().sessionVerifier(req))?new QADao().upQuestion(id,req.getSession().getAttribute("username").toString()):new ArrayList<String>();
@@ -62,7 +63,7 @@ public class QuestionResource {
 	@Path("/{id}/downvote")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<String> downquestion(@PathParam("id")String id,@Context HttpServletRequest req)
+	public MultiUse downquestion(@PathParam("id")String id,@Context HttpServletRequest req)
 	{
 	return new QADao().downQuestion(id,"utkarsh");
 	//return (new SessionService().sessionVerifier(req))?new QADao().downQuestion(id,req.getSession().getAttribute("username").toString()):new ArrayList<String>();
@@ -71,7 +72,7 @@ public class QuestionResource {
 	@Path("/{id}/{username}/upvote")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<String> upanswer(@PathParam("id")String id,@PathParam("username")String username,@Context HttpServletRequest req)
+	public MultiUse upanswer(@PathParam("id")String id,@PathParam("username")String username,@Context HttpServletRequest req)
 	{
 	return new QADao().upanswer(id,username,"utkarsh");
 	//return (new SessionService().sessionVerifier(req))?new QADao().upanswer(id,username,req.getSession().getAttribute("username").toString()):new ArrayList<String>();
@@ -80,7 +81,7 @@ public class QuestionResource {
 	@Path("/{id}/{username}/downvote")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<String> downanswer(@PathParam("id")String id,@PathParam("username")String username,@Context HttpServletRequest req)
+	public MultiUse downanswer(@PathParam("id")String id,@PathParam("username")String username,@Context HttpServletRequest req)
 	{
 	return new QADao().downanswer(id,username,"utkarsh");
 	//return (new SessionService().sessionVerifier(req))?new QADao().downanswer(id,username,req.getSession().getAttribute("username").toString()):new ArrayList<String>();

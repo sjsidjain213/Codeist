@@ -37,7 +37,7 @@ public Acknowledgement insertProject(Project project,HttpServletRequest req)
    Acknowledgement ack=new Acknowledgement();
    if(docexsit==null)
     { 
-	  Document info=new Document().append("upvotes", (ArrayList<String>)project.getUpvotes()).append("downvotes",(ArrayList<String>)project.getDownvotes()).append("viewby",(List<String>)project.getViewby());
+	  Document info=new Document().append("upvotes", new ArrayList<String>()).append("downvotes",new ArrayList<String>()).append("viewby",new ArrayList<String>());
       Document doc = new Document()
 	    		// .append("username", req.getSession().getAttribute("username"))
 	    		 .append("username", project.getUsername())
