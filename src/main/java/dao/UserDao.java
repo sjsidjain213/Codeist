@@ -143,6 +143,7 @@ profile_url = (user.getGender().equals("m")&&user.getProfile_url()=="")?"https:/
       { //username from session
     	  User user = new User();
     	  FindIterable <Document> fi = tc.find(eq("username",username));
+    	  System.out.println(fi.first());
     	  for(Document d : fi)
     	  {
               user.setBio(d.getString("bio"));
@@ -169,7 +170,7 @@ profile_url = (user.getGender().equals("m")&&user.getProfile_url()=="")?"https:/
               user.setUser_view((ArrayList<String>)innerdoc.get("user_viewed"));
               user.setProject_view((ArrayList<String>)innerdoc.get("project_viewed"));}
               catch(NullPointerException e){
-            	System.out.println(e.getMessage());  
+            	System.out.println(e.getMessage()+"error");  
               }
               //System.out.println(d);
     	  } 

@@ -36,6 +36,7 @@ System.out.println();
         WebTarget mgRoot = client.target("https://api.mailgun.net/v3");
         //String text = "http://codeist.mi43ujva9v.us-west-2.elasticbeanstalk.com/webapi/user/verifier/"+hash1+"/"+hash2;
         String text = "http://localhost:8080/Codeist/webapi/user/verifier/"+hash1+"/"+hash2;
+     System.out.println("inside mail");
         Form reqData = new Form();
         reqData.param("from", "Siddhartha <sid@javacrunch.in>");
         reqData.param("to",email);

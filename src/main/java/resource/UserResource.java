@@ -75,11 +75,12 @@ public class UserResource implements ContainerResponseFilter {
 	// For Demo Purpose : : User here can access his/her profile ONLY after login 
 	// for login user session is required to create session use method login for session creation
 	@GET
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/profile/{username}")
-	public User getUserDetails(@Context HttpServletRequest req,@PathParam("username") String username,@HeaderParam("auth_token") String auth_token)
+	public User getUserDetails(@Context HttpServletRequest req,@PathParam("username") String username,@HeaderParam("auth_token") String auth_token,HttpServletResponse response)
 	{System.out.println(auth_token);
-		if(new SessionService().tokenVerifier(auth_token,req)){
+		if(new SessionService().tokenVerifier(auth_token,req,response)){
 			return new UserDao().getUserDetails(username);
 		}else{
             return new User();			
@@ -99,7 +100,7 @@ public class UserResource implements ContainerResponseFilter {
 	public void filter(ContainerRequestContext  requestContext, ContainerResponseContext cres) throws IOException {
 		// TODO Auto-generated method stub
 		cres.getHeaders().add("Access-Control-Allow-Origin", "*");
-	      cres.getHeaders().add("Access-Control-Allow-Headers", "origin, content-type, accept, authorization");
+	      cres.getHeaders().add("Access-Control-Allow-Headers", "origin, content-type, accept, authorization,auth_token");
 	      cres.getHeaders().add("Access-Control-Allow-Credentials", "true");
 	      cres.getHeaders().add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
 	      cres.getHeaders().add("Access-Control-Max-Age", "1209600");

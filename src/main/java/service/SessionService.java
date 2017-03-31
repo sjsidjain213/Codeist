@@ -34,13 +34,13 @@ MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("use
 	MultiUse user = new MultiUse();
 	System.out.println(GeneralServices.get_SHA_256_SecurePassword(username, password)+"::"+req.getSession().getAttribute("username")+"::"+doc.getString("session_id"));
 	if (tc.find(eq("username",username)).first()!=null&&GeneralServices.get_SHA_256_SecurePassword(username, password).equals(doc.getString("password")))
-	{ System.out.println("inside password");
+	{ System.out.println("user exsit and password match");
 		if(req.getSession().getAttribute("username")==null&&doc.getString("session _id")==null)
 		{
 			//create session
 		req.getSession().setAttribute("username", username);
 	    String s_id =	req.getSession().getId();
-	    System.out.println(tc.updateOne(eq("username", username),new Document("$set",new Document("session_id",s_id))));
+	    System.out.println("new session"+tc.updateOne(eq("username", username),new Document("$set",new Document("session_id",s_id))));
 		req.getSession().setAttribute("s_id",s_id);
 		user.setIs_valid(true);
 		user.setSession_id(s_id);
@@ -64,13 +64,20 @@ MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("use
 	return user;
 		}
 	
-	public boolean tokenVerifier(String auth_token,HttpServletRequest req)
-	{
-		String s_token = req.getSession().getAttribute("s_id").toString();
-        if(s_token!=null&&s_token.equals(auth_token))
-        {
+	public boolean tokenVerifier(String auth_token,HttpServletRequest req,HttpServletResponse response)
+	{String s_token =null;
+	if(req.getSession().getAttribute("s_id")!=null)
+		{System.out.println("sessio id present"+"::"+req.getSession().getAttribute("s_id")); 
+		s_token = req.getSession().getAttribute("s_id").toString();
+        if(req.getSession().getAttribute("s_id")!=null&&s_token.equals(auth_token))
+        {//response.setHeader("logged_in", "true");
+        	System.out.println("okay");
+       
         	return true;
-        }else{
+        }
+    	System.out.println("notokay");
+        return false;
+		}else{        	System.out.println("verunotokay");
         	return false;
         }
 	}

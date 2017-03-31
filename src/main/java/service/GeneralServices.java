@@ -255,6 +255,7 @@ public void signup(Signup signup)
 	String name = signup.getName();
 	String email = signup.getEmailid();
 	String password = signup.getPassword();
+	System.out.println("password"+"::"+password);
 	password = GeneralServices.get_SHA_256_SecurePassword(name,password);
 	Date date = GeneralServices.getCurrentDate();
 		
@@ -263,8 +264,10 @@ public void signup(Signup signup)
 	    String hashed2 = linkEncryptCreator(email,String.valueOf(dateepoch));
         //enter for verification
 	    new UserDao().signupUser(name, password, email, date);
-        SendEmail.SendSimple(email,hashed1, hashed2);
-}
+     try{
+	    SendEmail.SendSimple(email,hashed1, hashed2);
+     }catch(Exception e){System.out.println("mail send");}
+     }
 
 public static Long datetoepoch(Date date){
 	return date.getTime();
