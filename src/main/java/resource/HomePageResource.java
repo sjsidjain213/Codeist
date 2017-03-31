@@ -30,16 +30,16 @@ public class HomePageResource {
     	return new HomePage().getHistory(username);
 	}*/
 	
-	@GET
-	@Path("/project/{username}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<Tile> getProjects(@PathParam("username") String username)
-	{
-		return new HomePage().getProjects(username);
-	}
+//	@GET
+//	@Path("/project/{username}")
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public ArrayList<Tile> getProjects(@PathParam("username") String username)
+//	{
+//		return new HomePage().getProjects(username);
+//	}
 	
 	@GET
-	@Path("/questions-forum/{username}")
+	@Path("/forum/{username}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ArrayList<Tile> getQuestion(@PathParam("username") String username)
 	{

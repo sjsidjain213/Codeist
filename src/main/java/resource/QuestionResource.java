@@ -22,7 +22,7 @@ import dao.QADao;
 import service.GeneralServices;
 import service.SessionService;
 
-@Path("/question")
+@Path("/questions")
 public class QuestionResource {
 	
 	@POST
