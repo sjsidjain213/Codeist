@@ -9,6 +9,7 @@ import com.mongodb.client.result.UpdateResult;
 
 import bean.Acknowledgement;
 import bean.Comment;
+import bean.MultiUse;
 import bean.Notifications;
 import bean.Project;
 
@@ -250,9 +251,10 @@ public ArrayList<Comment> getAllComments(String username,String projectname)
 }
 
 @SuppressWarnings("unchecked")
-public ArrayList<String> up(String id,String user){
+public MultiUse  up(String id,String user){
 	ObjectId id1=new ObjectId(id.toString());
 	Document d = tc.find(eq("_id",id1)).first();
+	MultiUse obj=new MultiUse();
 	String username=d.getString("username");
 	// access in this pattern in QADao vote method also
 	Document infodetails=(Document)d.get("info");
@@ -274,7 +276,9 @@ public ArrayList<String> up(String id,String user){
 			//changes make in other too
 			//new NotificationService().voteNotification(username,title,p_id,user,Notifications.UPVOTESQUESTION);
 			//new NotificationService().projectUpvoteNotification(project.getUsername(), req.getSession().getAttribute("username").toString(),id,project.getTitle());
-           	 return up;}
+           	obj.setUpvotes(up);
+           	obj.setDownvotes(down);
+			return obj;}
 			else{
 				up.remove(user);
 				String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.upvotes",up))).toString();	 	 
@@ -282,7 +286,9 @@ public ArrayList<String> up(String id,String user){
 				tcuser.updateOne(eq("username",username),new Document("$inc",new Document("project_upvote",-1)));
 			}
 			//new NotificationService().projectUpvoteNotification(project.getUsername(), req.getSession().getAttribute("username").toString(),id,project.getTitle());
-		return up;
+			obj.setUpvotes(up);
+           	obj.setDownvotes(down);
+			return obj;
 		}
 		else{
 			if(down!=null && down.contains(user)){
@@ -299,16 +305,19 @@ public ArrayList<String> up(String id,String user){
 		//make chnages here
 			 //	 new NotificationService().voteNotification(username,title,Notifications.UPVOTESPROJECT);
 			 //new NotificationService().projectUpvoteNotification(project.getUsername(), req.getSession().getAttribute("username").toString(),id,project.getTitle());
-			 return up;
+			 obj.setUpvotes(up);
+	           	obj.setDownvotes(down);
+				return obj;
 			
 		}
 }
 
 @SuppressWarnings("unchecked")
-public ArrayList<String> down(String id,String user){
+public MultiUse down(String id,String user){
 	ObjectId id1=new ObjectId(id.toString());
 	Document d = tc.find(eq("_id",id1)).first();
 	String username=d.getString("username");
+	MultiUse obj=new MultiUse();
 	Document infodetails=(Document)d.get("info");
 		ArrayList<String> up=(ArrayList<String>)infodetails.get("upvotes");
 		ArrayList<String> down=(ArrayList<String>)infodetails.get("downvotes");
@@ -328,7 +337,9 @@ public ArrayList<String> down(String id,String user){
 			//make changes here
 			// new NotificationService().voteNotification(username,title,Notifications.DOWNVOTESPROJECT);
 			//new NotificationService().projectDownvoteNotification(project.getUsername(), req.getSession().getAttribute("username").toString(),id,project.getTitle());
-			 return down;}
+			 obj.setUpvotes(up);
+	           	obj.setDownvotes(down);
+				return obj;}
 			else{
 				down.remove(user);
 				String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.downvotes",down))).toString();	 
@@ -336,7 +347,9 @@ public ArrayList<String> down(String id,String user){
 				tcuser.updateOne(eq("username",username),new Document("$inc",new Document("project_downvote",-1)));
 			}
 			//new NotificationService().projectDownvoteNotification(project.getUsername(), req.getSession().getAttribute("username").toString(),id,project.getTitle());
-		return down;
+			 obj.setUpvotes(up);
+	           	obj.setDownvotes(down);
+				return obj;
 		}
 		else{
 			if(up!=null && up.contains(user)){
@@ -353,7 +366,9 @@ public ArrayList<String> down(String id,String user){
 			//make changes here
 			 // new NotificationService().voteNotification(username,title,Notifications.DOWNVOTESPROJECT);
 			// new NotificationService().projectDownvoteNotification(project.getUsername(), req.getSession().getAttribute("username").toString(),id,project.getTitle());
-			 return down;
+			 obj.setUpvotes(up);
+	           	obj.setDownvotes(down);
+				return obj;
 			
 		}
 }

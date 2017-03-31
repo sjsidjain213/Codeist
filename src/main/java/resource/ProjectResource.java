@@ -24,6 +24,8 @@ import javax.ws.rs.ext.Provider;
 
 import bean.Acknowledgement;
 import bean.Comment;
+import bean.MultiUse;
+import bean.Notifications;
 import dao.ProjectInsert;
 import dao.UserDao;
 import service.GeneralServices;
@@ -41,8 +43,8 @@ public class ProjectResource {
 public Acknowledgement insertProject(Project project,@Context HttpServletRequest req)
 {
 //return new ProjectInsert().insertProject(project);
-//return (new SessionService().sessionVerifier(req))?new ProjectInsert().insertProject(project,req):new GeneralServices().response(null);
-return	new ProjectInsert().insertProject(project,req);
+return (new SessionService().sessionVerifier(req))?new ProjectInsert().insertProject(project,req):new GeneralServices().response(null);
+//return	new ProjectInsert().insertProject(project,req);
 }
 //to update
 @PUT
@@ -51,8 +53,8 @@ return	new ProjectInsert().insertProject(project,req);
 @Produces(MediaType.APPLICATION_JSON)
 public Acknowledgement updateProject(Project project,@Context HttpServletRequest req,@PathParam("id")String id)
 {
-return new ProjectInsert().updateproject(project,req,id);
-//return (new SessionService().sessionVerifier(req))?new ProjectInsert().updateproject(project,req,id):new GeneralServices().response(null);
+//return new ProjectInsert().updateproject(project,req,id);
+return (new SessionService().sessionVerifier(req))?new ProjectInsert().updateproject(project,req,id):new GeneralServices().response(null);
 }
 //all projects of a user
 @GET
@@ -74,6 +76,9 @@ return new ProjectInsert().getProjectBrief(username);
 ////return new Project();
 //return (new SessionService().sessionVerifier(req))?new ProjectInsert().getSelectedProject(req.getSession().getAttribute("username").toString(), GeneralServices.spaceAdder(title),req):new Project();
 //}
+
+
+
 @GET
 @Path("/{id}")
 @Produces(MediaType.APPLICATION_JSON)
@@ -90,36 +95,42 @@ return new ProjectInsert().getSelectedProject(id,req);
 @Consumes(MediaType.APPLICATION_JSON)
 public Comment insertComment(@Context HttpServletRequest req,Comment comment,@PathParam("id")String id)
 {
-return new ProjectInsert().insertComment(comment,id,req);
-//return (new SessionService().sessionVerifier(req))?new ProjectInsert().insertComment(comment,id,req):new Comment();
+//return new ProjectInsert().insertComment(comment,id,req);
+return (new SessionService().sessionVerifier(req))?new ProjectInsert().insertComment(comment,id,req):new Comment();
 }
 
 @POST
 @Path("/{id}/comment/delete")
 @Produces(MediaType.APPLICATION_JSON)
-public Comment deleteComment(@PathParam("id")String id,Comment comment){
-	return new ProjectInsert().deleteComment(id,comment);
-	//return (new SessionService().sessionVerifier(req))?new ProjectInsert().deleteComment(id, username, date ,req):new Comment();
+public Comment deleteComment(@PathParam("id")String id,Comment comment,@Context HttpServletRequest req){
+	//return new ProjectInsert().deleteComment(id,comment);
+	Comment comm=new Comment();
+	comm.setComment(Notifications.SESSIONDONOTEXSIT.getMsg());
+	return (new SessionService().sessionVerifier(req))?new ProjectInsert().deleteComment(id,comment):comm;
 }
 
-@PUT
+@GET
 @Path("/{id}/upvote")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public ArrayList<String> up(@PathParam("id")String id,@Context HttpServletRequest req)
+public MultiUse up(@PathParam("id")String id,@Context HttpServletRequest req)
 {
-return new ProjectInsert().up(id,"utkarsh");
-//return (new SessionService().sessionVerifier(req))?new ProjectInsert().up(id,req.getSession().getAttribute("username").toString()):new ArrayList<String>();
+//return new ProjectInsert().up(id,"utkarsh");
+	MultiUse obj= new MultiUse();
+	obj.setMessage(Notifications.SESSIONDONOTEXSIT.getMsg());
+return (new SessionService().sessionVerifier(req))?new ProjectInsert().up(id,req.getSession().getAttribute("username").toString()):obj;
 }
 
 @PUT
 @Path("/{id}/downvote")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public ArrayList<String> down(@PathParam("id")String id,@Context HttpServletRequest req)
+public MultiUse down(@PathParam("id")String id,@Context HttpServletRequest req)
 {
-return new ProjectInsert().down(id,"utkarsh");
-//return (new SessionService().sessionVerifier(req))?new ProjectInsert().down(id,req.getSession().getAttribute("username").toString()):new ArrayList<String>();
+//return new ProjectInsert().down(id,"utkarsh");
+	MultiUse obj= new MultiUse();
+	obj.setMessage(Notifications.SESSIONDONOTEXSIT.getMsg());
+return (new SessionService().sessionVerifier(req))?new ProjectInsert().down(id,req.getSession().getAttribute("username").toString()):obj;
 }
 }
 

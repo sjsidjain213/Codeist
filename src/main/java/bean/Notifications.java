@@ -26,6 +26,8 @@ QUESTIONUPVOTE("10"),
 QUESTIONDOWNVOTE("-5"),
 PROJECTUPDATED("your project has been updated"),
 //Authorization related
+UPVOTED("upvoted"),
+
 EDITWRITTENISNOTAVAILABLE("Edit write is not available"),
 SUCCESSFULLYINSERTED("success"),
 USERLOGGEDOUT("user is succesfully logged out");	
