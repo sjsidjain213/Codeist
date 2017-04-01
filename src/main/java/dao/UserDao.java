@@ -143,7 +143,7 @@ profile_url = (user.getGender().equals("m")&&user.getProfile_url()=="")?"https:/
       { //username from session
     	  User user = new User();
     	  FindIterable <Document> fi = tc.find(eq("username",username));
-    	  System.out.println(fi.first());
+    	//  System.out.println(fi)
     	  for(Document d : fi)
     	  {
               user.setBio(d.getString("bio"));
