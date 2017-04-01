@@ -18,6 +18,8 @@ import bean.Answer;
 import bean.MultiUse;
 import bean.Notifications;
 import bean.Question;
+import bean.Tile;
+import dao.HomePage;
 import dao.ProjectInsert;
 //import dao.QADao;
 import dao.QADao;
@@ -44,6 +46,19 @@ public class QuestionResource {
 	{
 		return (new SessionService().sessionVerifier(req))?new QADao().insertQuestion(question,req):new GeneralServices().response(null);
 	}
+	
+	//implement this api to get related project to an question
+	/*
+	@GET
+	@Path("/forum/{username}/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ArrayList<Tile> getQuestion(@PathParam("username")String username,@PathParam("question_id") String question_id)
+	{
+	get questions tags from database
+	return new HomePage().getRelatedProject(username,question_id,altags)
+		//return new HomePage().getQuestions(username);
+      //return new HomePage().getQuestions(req.getSession().getAttribute("username").toString());
+	}*/
 	
 	@POST
 	@Path("/{id}/answer")
@@ -142,14 +157,13 @@ public class QuestionResource {
 	public Acknowledgement updateQuestion(@PathParam("id") String id,Question ques, @Context HttpServletRequest req)
 	{
 		 return new QADao().updateQuestion(req, ques,id);
+	/*
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	//@Consumes(MediaType.APPLICATION_JSON)
+	public ArrayList<Question> getProblems_asked(@PathParam("username") String email)
+	{
+		 return new QADao().getProblem(email);
 	}*/
-	
-//	@GET
-//	@Produces(MediaType.APPLICATION_JSON)
-//	//@Consumes(MediaType.APPLICATION_JSON)
-//	@Path("/asked/{username}")
-//	public ArrayList<Question> getProblems_asked(@PathParam("username") String email)
-//	{
-//		 return new QADao().getProblem(email);
-//	}
+	@Path("/asked/{username}")
 }

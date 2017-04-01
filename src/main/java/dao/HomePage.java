@@ -31,6 +31,14 @@ public class HomePage {
      	return project;
  	}
  	
+ 	public ArrayList<Tile> getRelatedProject(String username,String question_id,ArrayList<String> altags)
+ 	{
+ 		// username of loggedin, question_id of new inserted question, altags of question 
+ 		ArrayList<Tile> project = new ArrayList<Tile>();
+ 		project = getInterestRelatedProject(project,username,altags,question_id);
+ 		return project;
+ 	}
+ 	
  	public ArrayList<Tile> getQuestions(String username)
  	{
  		ArrayList<Tile> question = new ArrayList<Tile>();
@@ -90,11 +98,28 @@ public class HomePage {
     
  		if(project != null)
  	    	  Collections.sort(project, Tile.homesort);
- 	      System.out.println("project"+project);
+ 	       System.out.println("project"+project);
  		
  		return project;
  	}
- 	
+ 	// interest
+ 	//one more thing is required is question id which is inserted
+ 	public ArrayList<Tile> getInterestRelatedProject(ArrayList<Tile> project, String username,ArrayList<String> altags,String question_id)
+ 	{
+ 		MongoCollection<Document> tc =new DatabaseServices().getDb().getCollection("project");
+	//tags matched in project
+ 		FindIterable <Document> quesfavtags =  tc.find(in("tags",altags));
+    //project is the arraylist in which we want to add feed
+    //public void getHistory(ArrayList<Tile> altl, FindIterable<Document> fi,String source, String subject)
+    //sorted according to matched count, region and owner (if owner is institute then high priority)
+ 		if(quesfavtags != null)
+	    	   getHistory(project,quesfavtags,"matched","project");
+   //question id is added in institute
+               tc =new DatabaseServices().getDb().getCollection("institute");
+               FindIterable <Document> institute =  tc.find(in("tags",altags));
+               new GeneralServices().addProblem(institute,question_id);       
+ 		return project;       
+ 	}
  	public ArrayList<Tile> getInterestQuestion(ArrayList<Tile> question, String username)
  	{
  		 MongoCollection<Document> tc =new DatabaseServices().getDb().getCollection("userdata");
@@ -156,116 +181,8 @@ public class HomePage {
  	       
  	}
  	
- 	/*public ArrayList<Tile> getHistory(String username)
-	{
- 		//needs to be tested, ClassCastException for long in Tile.java line 84
- 	   MongoCollection<Document> tc =new DatabaseServices().getDb().getCollection("userdata");
-	   
-	   Document doc = tc.find(eq("username",username)).first();
-	   ArrayList<String> alquesbookmark = (ArrayList<String>) doc.get("question_bookmark");
-	   ArrayList<String> alquesask = (ArrayList<String>) doc.get("question_ask");
-	   ArrayList<String> alquesanswer = (ArrayList<String>) doc.get("question_answer");
-	   
-       
-	   //project
-	      //id
-	   ArrayList<String> alcontributing = (ArrayList<String>) doc.get("contributing");
-	   ArrayList<String> albookmark = (ArrayList<String>) doc.get("project_bookmark");
-	   ArrayList<String> alfollowing = (ArrayList<String>) doc.get("following");
-	   ArrayList<String> alfavtags = (ArrayList<String>) doc.get("favourite_tag");
-	   
-         // in tags
-	   doc = (Document) doc.get("history");
-       ArrayList<String> alviewedtags = (ArrayList<String>) doc.get("tag_view");
-       ArrayList<String> alviewedproject = (ArrayList<String>) doc.get("project_view");
-       ArrayList<String> alvieweduser = (ArrayList<String>) doc.get("user_view");
-       
-       tc =new DatabaseServices().getDb().getCollection("project");
-       FindIterable <Document> docfavtags =  tc.find(in("tags",alfavtags));
-       FindIterable <Document> docviewedtags =  tc.find(in("tags",alviewedtags));
-       FindIterable <Document> docvieweduser =  tc.find(in("username",alvieweduser));
-       FindIterable <Document> docfollowing =  tc.find(in("username",alfollowing));
-       FindIterable <Document> docviewedproject =  tc.find(in("title",alviewedproject));
-       FindIterable <Document> doccontributing = null;
-       for(String s : alcontributing){
-    	   ObjectId id = new ObjectId(s);
-    	   doccontributing = tc.find(in("_id",id));
-       }
-      
-       FindIterable <Document> docbookmark = null;
-       for(String s : albookmark){
-    	   ObjectId id = new ObjectId(s);
-    	   docbookmark = tc.find(in("_id",id));
-    	}
-       
-       tc =new DatabaseServices().getDb().getCollection("qa");
-       FindIterable <Document> quesfavtags =  tc.find(in("tags",alfavtags));
-       FindIterable <Document> quesviewedtags =  tc.find(in("tags",alviewedtags));
-       FindIterable <Document> quesvieweduser =  tc.find(in("username",alvieweduser));
-       FindIterable <Document> quesfollowing =  tc.find(in("username",alfollowing));
-       FindIterable <Document> quesbookmark = null;
-       for(String s : alquesbookmark){
-    	   ObjectId id = new ObjectId(s);
-    	   quesbookmark = tc.find(in("_id",id));
-       }
-       
-       FindIterable <Document> quesask = null;
-       for(String s : alquesask){
-    	   System.out.println(s+"###############################################################");
-    	   ObjectId id = new ObjectId(s);
-    	   quesask = tc.find(in("_id",id));
-       }
-       FindIterable <Document> quesanswer = null;
-       for(String s : alquesanswer){
-    	   ObjectId id = new ObjectId(s);
-    	   quesanswer = tc.find(in("_id",id));
-       }
-       
-      ArrayList<Tile> altl = new ArrayList<Tile>();
-      HashSet<Object> hs = new HashSet<Object>(); 
-      if(doccontributing != null)
-    	  getHistory(altl,doccontributing,"contributing","project");
-      if(docbookmark != null)
-    	  getHistory(altl,docbookmark,"project bookmark","project");
-      if(docfavtags != null)
-    	  getHistory(altl,docfavtags,"favtags","project");
-      if(docviewedtags != null)
-    	  getHistory(altl,docviewedtags,"viewed tags","project");
-      if(docvieweduser != null)
-    	  getHistory(altl,docvieweduser,"vieweduser","project");
-      if(docviewedproject != null)
-    	  getHistory(altl,docviewedproject,"viewedproject","project");
-      if(docfollowing != null)
-    	  getHistory(altl,docfollowing,"following","project");
-      if(quesfavtags != null)
-    	  getHistory(altl,quesfavtags,"favtags","question");
-      if(quesviewedtags != null)
-    	  getHistory(altl,quesviewedtags,"viewed tags","question");
-      if(quesvieweduser != null)
-    	  getHistory(altl,quesvieweduser,"vieweduser","question");
-      if(quesfollowing != null)
-    	  getHistory(altl,quesfollowing,"following","question");
-      if(quesbookmark != null)
-    	  getHistory(altl,quesbookmark,"question bookmark","question");
-      if(quesask != null)
-    	  getHistory(altl,quesask,"asked question","question");
-      if(quesanswer != null)
-      getHistory(altl,quesanswer,"answered question","question");
-      
-      if(altl != null)
-    	  Collections.sort(altl, Tile.homesort);
-      System.out.println("alsearch"+altl);
-         return altl;   
-	}*/
-
- 	
-	/*public void getProjects(String id)
-	{
-		MongoCollection<Document> tc =new DatabaseServices().getDb().getCollection("project");
-		FindIterable<Document> fi =  tc.find().sort(new Document("date",1));
-	}*/
 	public void getHistory(ArrayList<Tile> altl, FindIterable<Document> fi,String source, String subject)
-	{
+	{//subject is either question or answer and source is interesting and trending
 		for(Document d:fi)
 	      {	if(!hm.containsKey(d.get("_id")))
 		      	{   
@@ -367,4 +284,133 @@ public class HomePage {
 		}
 		return userList;
 	}
+
+	
+	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	/*public ArrayList<Tile> getHistory(String username)
+{
+		//needs to be tested, ClassCastException for long in Tile.java line 84
+	   MongoCollection<Document> tc =new DatabaseServices().getDb().getCollection("userdata");
+   
+   Document doc = tc.find(eq("username",username)).first();
+   ArrayList<String> alquesbookmark = (ArrayList<String>) doc.get("question_bookmark");
+   ArrayList<String> alquesask = (ArrayList<String>) doc.get("question_ask");
+   ArrayList<String> alquesanswer = (ArrayList<String>) doc.get("question_answer");
+   
+   
+   //project
+      //id
+   ArrayList<String> alcontributing = (ArrayList<String>) doc.get("contributing");
+   ArrayList<String> albookmark = (ArrayList<String>) doc.get("project_bookmark");
+   ArrayList<String> alfollowing = (ArrayList<String>) doc.get("following");
+   ArrayList<String> alfavtags = (ArrayList<String>) doc.get("favourite_tag");
+   
+     // in tags
+   doc = (Document) doc.get("history");
+   ArrayList<String> alviewedtags = (ArrayList<String>) doc.get("tag_view");
+   ArrayList<String> alviewedproject = (ArrayList<String>) doc.get("project_view");
+   ArrayList<String> alvieweduser = (ArrayList<String>) doc.get("user_view");
+   
+   tc =new DatabaseServices().getDb().getCollection("project");
+   FindIterable <Document> docfavtags =  tc.find(in("tags",alfavtags));
+   FindIterable <Document> docviewedtags =  tc.find(in("tags",alviewedtags));
+   FindIterable <Document> docvieweduser =  tc.find(in("username",alvieweduser));
+   FindIterable <Document> docfollowing =  tc.find(in("username",alfollowing));
+   FindIterable <Document> docviewedproject =  tc.find(in("title",alviewedproject));
+   FindIterable <Document> doccontributing = null;
+   for(String s : alcontributing){
+	   ObjectId id = new ObjectId(s);
+	   doccontributing = tc.find(in("_id",id));
+   }
+  
+   FindIterable <Document> docbookmark = null;
+   for(String s : albookmark){
+	   ObjectId id = new ObjectId(s);
+	   docbookmark = tc.find(in("_id",id));
+	}
+   
+   tc =new DatabaseServices().getDb().getCollection("qa");
+   FindIterable <Document> quesfavtags =  tc.find(in("tags",alfavtags));
+   FindIterable <Document> quesviewedtags =  tc.find(in("tags",alviewedtags));
+   FindIterable <Document> quesvieweduser =  tc.find(in("username",alvieweduser));
+   FindIterable <Document> quesfollowing =  tc.find(in("username",alfollowing));
+   FindIterable <Document> quesbookmark = null;
+   for(String s : alquesbookmark){
+	   ObjectId id = new ObjectId(s);
+	   quesbookmark = tc.find(in("_id",id));
+   }
+   
+   FindIterable <Document> quesask = null;
+   for(String s : alquesask){
+	   System.out.println(s+"###############################################################");
+	   ObjectId id = new ObjectId(s);
+	   quesask = tc.find(in("_id",id));
+   }
+   FindIterable <Document> quesanswer = null;
+   for(String s : alquesanswer){
+	   ObjectId id = new ObjectId(s);
+	   quesanswer = tc.find(in("_id",id));
+   }
+   
+  ArrayList<Tile> altl = new ArrayList<Tile>();
+  HashSet<Object> hs = new HashSet<Object>(); 
+  if(doccontributing != null)
+	  getHistory(altl,doccontributing,"contributing","project");
+  if(docbookmark != null)
+	  getHistory(altl,docbookmark,"project bookmark","project");
+  if(docfavtags != null)
+	  getHistory(altl,docfavtags,"favtags","project");
+  if(docviewedtags != null)
+	  getHistory(altl,docviewedtags,"viewed tags","project");
+  if(docvieweduser != null)
+	  getHistory(altl,docvieweduser,"vieweduser","project");
+  if(docviewedproject != null)
+	  getHistory(altl,docviewedproject,"viewedproject","project");
+  if(docfollowing != null)
+	  getHistory(altl,docfollowing,"following","project");
+  if(quesfavtags != null)
+	  getHistory(altl,quesfavtags,"favtags","question");
+  if(quesviewedtags != null)
+	  getHistory(altl,quesviewedtags,"viewed tags","question");
+  if(quesvieweduser != null)
+	  getHistory(altl,quesvieweduser,"vieweduser","question");
+  if(quesfollowing != null)
+	  getHistory(altl,quesfollowing,"following","question");
+  if(quesbookmark != null)
+	  getHistory(altl,quesbookmark,"question bookmark","question");
+  if(quesask != null)
+	  getHistory(altl,quesask,"asked question","question");
+  if(quesanswer != null)
+  getHistory(altl,quesanswer,"answered question","question");
+  
+  if(altl != null)
+	  Collections.sort(altl, Tile.homesort);
+  System.out.println("alsearch"+altl);
+     return altl;   
+}*/
+
+	
+/*public void getProjects(String id)
+{
+	MongoCollection<Document> tc =new DatabaseServices().getDb().getCollection("project");
+	FindIterable<Document> fi =  tc.find().sort(new Document("date",1));
+}*/

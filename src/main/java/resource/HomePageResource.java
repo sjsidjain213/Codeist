@@ -45,8 +45,7 @@ public class HomePageResource {
 	{
 		System.out.println("dfghjkl");
 		return new HomePage().getQuestions(username);
-//		return new HomePage().getQuestions(req.getSession().getAttribute("username").toString());
-	
+      //return new HomePage().getQuestions(req.getSession().getAttribute("username").toString());
 	}
 	
 	@GET
