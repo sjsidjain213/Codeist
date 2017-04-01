@@ -108,7 +108,9 @@ catch(Exception e){
    		 .append("video_url",project.getVideo_url())
    		 .append("zip_file",project.getZip_file())
    		 .append("images",(List<String>)project.getImages())
-   		 .append("info",info);
+   		 .append("info",info)
+	    .append("region_state",project.getRegion_state())
+	    .append("region_city", project.getRegion_city());
 	tc.updateOne(eq("_id",oid),new Document("$set",doc));
 	new NotificationService().projectUpdateNotification(project.getUsername(), req.getSession().getAttribute("username").toString(),id,project.getTitle());
 	ArrayList<String> contributors = project.getContributors();
@@ -139,6 +141,8 @@ public ArrayList<Project> getProjectBrief(String username)
          pro.setDownvotes((ArrayList<String>)d1.get("downvotes"));
          pro.setImages((ArrayList<String>) d.get("images"));
          pro.setProject_url(d.getString("project_url"));
+         pro.setRegion_state(d.getString("region_state"));
+         pro.setRegion_city(d.getString("region_city"));
          pro.setComments(new ProjectInsert().getAllComments(d.getString("username"), d.getString("title")));
          pro.setLogged("logged");  
          project.add(pro); 
@@ -182,6 +186,8 @@ public Project getSelectedProject(String id,HttpServletRequest req)
 	   		project.setVideo_url((ArrayList<String>)d.get("video_url"));
 	   		project.setZip_file((ArrayList<String>)d.get("zip_file"));
 	   		project.setImages((ArrayList<String>)d.get("images"));
+	   		project.setRegion_city(d.getString("region_city"));
+	   		project.setRegion_state(d.getString("region_state"));
 	   		Document innerdoc = (Document)d.get("info");
 	   		if(innerdoc!=null){
 	   		project.setUpvotes((ArrayList<String>)innerdoc.get("upvotes"));
@@ -205,7 +211,7 @@ public Comment insertComment(Comment comment,String id,HttpServletRequest req)
                   .append("comment", comment.getComment())
                   .append("date",GeneralServices.getCurrentDate().getTime());
 	
-comment.setUsername("pulkit");//req.getSession().getAttribute("username").toString());
+comment.setUsername(req.getSession().getAttribute("username").toString());
 comment.setDate(doc.getLong("date"));
 String acknow= tc.updateOne(eq("_id",id1),new Document("$push",new Document("comments",doc))).toString();
 //new NotificationService().commentNotification(project.getString("username"),project.getString("title"),id,req.getSession().getAttribute("username").toString(),comment.getComment(),Notifications.COMMENT);
