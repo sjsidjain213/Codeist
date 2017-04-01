@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Project extends Super{
-	private String username,title,description,readme,license,project_url,_private,id,url_title,region_state,region_city;
+	private String username,title,description,readme,license,project_url,_private,id,url_title,region_state,region_city,department;
     public String getRegion_state() {
 		return region_state;
 	}
