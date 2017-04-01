@@ -12,6 +12,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import bean.Super;
 import bean.Tile;
 import bean.User;
 import bean.test;
@@ -49,10 +50,13 @@ public class HomePageResource {
 	@GET
 	@Path("/projects-feed")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<Tile> getProject(@Context HttpServletRequest req)
+	public Super getProject(@Context HttpServletRequest req)
 	{
-		//System.out.println(req.getSession().getAttribute("username").toString());
-    	return new HomePage().getProjects(req.getSession().getAttribute("username").toString());//req.getSession().getAttribute("username").toString());
+		Super s = new Super();
+		ArrayList<Tile> altile = new HomePage().getProjects(req.getSession().getAttribute("username").toString());
+		s.setAlsuper(altile);
+		s.setLogged("logged");
+    	return s; //req.getSession().getAttribute("username").toString());
 	}
 	
 	

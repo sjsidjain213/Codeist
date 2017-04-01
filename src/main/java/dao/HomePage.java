@@ -28,7 +28,7 @@ public class HomePage {
  		ArrayList<Tile> project = new ArrayList<Tile>();
  	      project =  getTrendingProject(project);
  		  project = getInterestProject(project, username);
- 	return project;
+     	return project;
  	}
  	
  	public ArrayList<Tile> getQuestions(String username)

@@ -1,8 +1,18 @@
 package bean;
 
+import java.util.ArrayList;
+
 public class Super {
 	private String logged;
+public ArrayList<Tile> getAlsuper() {
+		return alsuper;
+	}
 
+	public void setAlsuper(ArrayList<Tile> alsuper) {
+		this.alsuper = alsuper;
+	}
+
+private ArrayList<Tile> alsuper;
 	public Super() {
 		super();
 		// TODO Auto-generated constructor stub

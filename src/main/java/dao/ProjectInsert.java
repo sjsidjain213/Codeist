@@ -123,7 +123,7 @@ catch(Exception e){
 
 
 @SuppressWarnings("unchecked")
-public ArrayList<Project> getProjectBrief(String username)
+public ArrayList<? extends Super> getProjectBrief(String username)
 {System.out.println("here");
   ArrayList<Project> project = new ArrayList<Project>();
   Project pro=null;

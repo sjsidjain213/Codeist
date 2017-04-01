@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 
-public class Tile{	
+public class Tile extends Super{	
 //url for project/question url use of url is mandatory
 //title for project/question title
 //description for project/question description 	
