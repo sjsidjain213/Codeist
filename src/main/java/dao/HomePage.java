@@ -285,6 +285,7 @@ public class HomePage {
 	      }
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static ArrayList<Tile> trendingQuestion()
 	{
 // test pending
@@ -295,11 +296,17 @@ public class HomePage {
 		{Tile doc = new Tile();
 		        doc.setUsername(d.getString("username"));
 		        doc.setTitle(d.getString("question"));
-		        doc.setUpvotecount(d.getLong("upvotecount"));
-		        doc.setDownvotecount(d.getLong("downvotecount"));
+//		        doc.setUpvotecount(d.getLong("upvotecount"));
+//		        doc.setDownvotecount(d.getLong("downvotecount"));
 		        // description might throw error check database 
 		        doc.setDescription(d.getString("description"));
 		        doc.setUrl(d.getString("question_url"));
+		        Document innerdoc = (Document)d.get("info");
+		   		if(innerdoc!=null){
+		   		doc.setUpvotes((ArrayList<String>)innerdoc.get("upvotes"));
+		   		doc.setDownvotes((ArrayList<String>)innerdoc.get("downvotes"));
+		   		
+		   		}
 		        ArrayList<String> altwo = new ArrayList<String>();
 		        if(altwo.size() < 1)
 		        altwo.add("trending");
