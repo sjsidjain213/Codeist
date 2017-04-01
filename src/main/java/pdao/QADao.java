@@ -33,8 +33,8 @@ public class QADao {
 	quest.setUsername(doc.getString("username"));
 	quest.setQuestion(doc.getString("question"));
 	quest.setDescription(doc.getString("description"));
-	quest.setRegion_state(doc.getString("region_state"));
-	quest.setRegion_city(doc.getString("region_city"));
+	quest.setState(doc.getString("region_state"));
+	quest.setCity(doc.getString("region_city"));
 	quest.setDate(doc.getLong("date"));
 	//quest.setLast_updated(doc.getLong("last_updated"));
 	quest.setTags((ArrayList<String>)doc.get("tags"));
