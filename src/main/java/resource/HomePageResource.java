@@ -52,13 +52,13 @@ public class HomePageResource {
 	@GET
 	@Path("/projects-feed/{username}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Super getProject(@Context HttpServletRequest req,@PathParam("username") String username)
+	public ArrayList<Tile> getProject(@Context HttpServletRequest req,@PathParam("username") String username)
 	{
 		Super s = new Super();
 		ArrayList<Tile> altile = new HomePage().getProjects(username);
 		s.setAlsuper(altile);
 		s.setLogged("logged");
-    	return s; //req.getSession().getAttribute("username").toString());
+    	return altile; //req.getSession().getAttribute("username").toString());
 	}
 	
 	
