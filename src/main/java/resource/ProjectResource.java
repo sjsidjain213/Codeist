@@ -123,7 +123,7 @@ return new ProjectInsert().up(id,username);
 }
 
 @PUT
-@Path("/{id}/downvote")
+@Path("/{id}/downvote/{username}")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public MultiUse down(@PathParam("id")String id,@PathParam("username")String username,@Context HttpServletRequest req)
