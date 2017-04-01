@@ -29,7 +29,7 @@ PROJECTUPDATED("your project has been updated"),
 UPVOTED("upvoted"),
 DOWNVOTED("downvoted"),
 ERROR("error"),
-
+PROJECTINSERTED("project inserted"),
 EDITWRITTENISNOTAVAILABLE("Edit write is not available"),
 SUCCESSFULLYINSERTED("success"),
 SUCCESSFULLYDELETED("success"),
