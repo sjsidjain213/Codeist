@@ -1,22 +1,15 @@
 package pdao;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 
 import org.bson.Document;
-import org.bson.types.ObjectId;
 
 import static com.mongodb.client.model.Filters.*;
 
-import com.mongodb.Block;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
-
-import bean.Question;
 import bean.Tile;
-import bean.User;
 import service.DatabaseServices;
 import service.GeneralServices;
 

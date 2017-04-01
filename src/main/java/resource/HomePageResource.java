@@ -44,8 +44,7 @@ public class HomePageResource {
 	public ArrayList<Tile> getQuestion(@Context HttpServletRequest req,@PathParam("username") String username)
 	{
 		return new HomePage().getQuestions(username);
-//		return new HomePage().getQuestions(req.getSession().getAttribute("username").toString());
-	
+      //return new HomePage().getQuestions(req.getSession().getAttribute("username").toString());
 	}
 	
 	@GET

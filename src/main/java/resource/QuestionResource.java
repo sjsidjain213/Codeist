@@ -18,6 +18,8 @@ import bean.Answer;
 import bean.MultiUse;
 import bean.Notifications;
 import bean.Question;
+import bean.Tile;
+import dao.HomePage;
 import dao.ProjectInsert;
 //import dao.QADao;
 import pdao.QADao;
@@ -44,6 +46,19 @@ public class QuestionResource {
 	{
 		return (new SessionService().sessionVerifier(req))?new QADao().insertQuestion(question,req):new GeneralServices().response(null);
 	}
+	
+	//implement this api to get related project to an question
+	/*
+	@GET
+	@Path("/forum/{username}/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ArrayList<Tile> getQuestion(@PathParam("username")String username,@PathParam("question_id") String question_id)
+	{
+	get questions tags from database
+	return new HomePage().getRelatedProject(username,question_id,altags)
+		//return new HomePage().getQuestions(username);
+      //return new HomePage().getQuestions(req.getSession().getAttribute("username").toString());
+	}*/
 	
 	@POST
 	@Path("/{id}/answer")
