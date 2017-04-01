@@ -78,8 +78,8 @@ public class UserResource implements ContainerResponseFilter {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/profile/{username}")
-	public User getUserDetails(@Context HttpServletRequest req,@PathParam("username") String username,@HeaderParam("auth_token") String auth_token,HttpServletResponse response)
-	{System.out.println(auth_token);
+	public User getUserDetails(@Context HttpServletRequest req,@PathParam("username") String username,@HeaderParam("auth_token") String auth_token,@Context HttpServletResponse response)
+	{System.out.println(auth_token+"ihiwdhni");
 		if(new SessionService().tokenVerifier(auth_token,req,response)){
 			return new UserDao().getUserDetails(username);
 		}else{
