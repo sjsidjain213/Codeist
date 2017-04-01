@@ -6,7 +6,25 @@ import java.util.Date;
 public class Institute {
 	private String loginid,password,university_name,college_name,state,city,email_id,phone_no,address;
 	private ArrayList<ArrayList<String>> departments;
-	private ArrayList<String> tags;
+	private ArrayList<String> tags,project_id,question_id,question_asked;
+	public ArrayList<String> getProject_id() {
+		return project_id;
+	}
+	public void setProject_id(ArrayList<String> project_id) {
+		this.project_id = project_id;
+	}
+	public ArrayList<String> getQuestion_id() {
+		return question_id;
+	}
+	public void setQuestion_id(ArrayList<String> question_id) {
+		this.question_id = question_id;
+	}
+	public ArrayList<String> getQuestion_asked() {
+		return question_asked;
+	}
+	public void setQuestion_asked(ArrayList<String> question_asked) {
+		this.question_asked = question_asked;
+	}
 	private Date date;
 	public String getLoginid() {
 		return loginid;

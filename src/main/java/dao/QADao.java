@@ -83,6 +83,8 @@ public class QADao {
 	//quest.setLast_updated(doc.getLong("last_updated"));
 	quest.setTags((ArrayList<String>)doc.get("tags"));
 	quest.setQuestion_url(doc.getString("url"));
+	quest.setCity(doc.getString("city"));
+	quest.setState(doc.getString("state"));
 	Document document=(Document) doc.get("info");
 	quest.setDownvotes((ArrayList<String>)document.get("downvotes"));
 	quest.setUpvotes((ArrayList<String>)document.get("upvotes"));

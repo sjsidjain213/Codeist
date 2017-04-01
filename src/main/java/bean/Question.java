@@ -5,33 +5,45 @@ import java.util.Date;
 
 public class Question {
 
-	private String username,question,question_url,description,region_state,region_city;
-	public String getRegion_state() {
-		return region_state;
+	private String username,question,question_url,description,state,city,university_name,college_name;
+	public String getState() {
+		return state;
 	}
-	public void setRegion_state(String region_state) {
-		this.region_state = region_state;
+	public void setState(String state) {
+		this.state = state;
 	}
-	public String getRegion_city() {
-		return region_city;
+	public String getCity() {
+		return city;
 	}
-	public void setRegion_city(String region_city) {
-		this.region_city = region_city;
+	public void setCity(String city) {
+		this.city = city;
+	}
+	public String getUniversity_name() {
+		return university_name;
+	}
+	public void setUniversity_name(String university_name) {
+		this.university_name = university_name;
+	}
+	public String getCollege_name() {
+		return college_name;
+	}
+	public void setCollege_name(String college_name) {
+		this.college_name = college_name;
 	}
 	private long date,last_updated;
 	private String email_id;
-	public String getEmail_id() {
-		return email_id;
-	}
-	public void setEmail_id(String email) {
-		this.email_id = email;
-	}
 	private ArrayList<String> tags;
 	private long featured_points;
 	private ArrayList<String> upvotes,downvotes;
 	private long upvotecount,downvotecount;
 	private ArrayList<Answer> answers = new ArrayList<Answer>();
 	
+	public String getEmail_id() {
+		return email_id;
+	}
+	public void setEmail_id(String email) {
+		this.email_id = email;
+	}
 	public long getLast_updated() {
 		return last_updated;
 	}
@@ -139,8 +151,10 @@ public class Question {
 	@Override
 	public String toString() {
 		return "Question [username=" + username + ", question=" + question + ", question_url=" + question_url
-				+ ", description=" + description + ", date=" + date + ", tags=" + tags + ", featured_points="
-				+ featured_points + ", upvotes=" + upvotes + ", downvotes=" + downvotes + ", upvotecount=" + upvotecount
+				+ ", description=" + description + ", state=" + state + ", city=" + city + ", university_name="
+				+ university_name + ", college_name=" + college_name + ", date=" + date + ", last_updated="
+				+ last_updated + ", email_id=" + email_id + ", tags=" + tags + ", featured_points=" + featured_points
+				+ ", upvotes=" + upvotes + ", downvotes=" + downvotes + ", upvotecount=" + upvotecount
 				+ ", downvotecount=" + downvotecount + ", answers=" + answers + "]";
 	}
 
