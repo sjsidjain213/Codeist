@@ -37,25 +37,25 @@ import bean.User;
 public class ProjectResource {
 
 @POST
-@Path("/insert")
+@Path("/insert/{username}")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public Acknowledgement insertProject(Project project,@Context HttpServletRequest req)
+public Acknowledgement insertProject(Project project,@PathParam("username") String username)
 {
 	
 //return new ProjectInsert().insertProject(project);
+return	new ProjectInsert().insertProject(project,username);
 //return (new SessionService().sessionVerifier(req))?new ProjectInsert().insertProject(project,req):new GeneralServices().response(Notifications.SESSIONDONOTEXSIT);
-return	new ProjectInsert().insertProject(project,req);
 }
 //to update
 @PUT
 @Path("/{id}")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public Acknowledgement updateProject(Project project,@Context HttpServletRequest req,@PathParam("id")String id)
+public Acknowledgement updateProject(Project project,@PathParam("id")String id)
 {
-return new ProjectInsert().updateproject(project,req,id);
 //return (new SessionService().sessionVerifier(req))?new ProjectInsert().updateproject(project,req,id):new GeneralServices().response(null);
+return new ProjectInsert().updateproject(project,id);
 }
 //all projects of a user
 @GET
@@ -85,7 +85,7 @@ return new ProjectInsert().getProjectBrief(username);
 @Produces(MediaType.APPLICATION_JSON)
 public Project getSelected(@PathParam("id")String id,@Context HttpServletRequest req)
 {
-return new ProjectInsert().getSelectedProject(id,req);
+return new ProjectInsert().getSelectedProject(id);
 
 //return new Project();
 }
@@ -96,42 +96,42 @@ return new ProjectInsert().getSelectedProject(id,req);
 @Consumes(MediaType.APPLICATION_JSON)
 public Comment insertComment(@Context HttpServletRequest req,Comment comment,@PathParam("id")String id)
 {
-return new ProjectInsert().insertComment(comment,id,req);
 //return (new SessionService().sessionVerifier(req))?new ProjectInsert().insertComment(comment,id,req):new Comment();
+return new ProjectInsert().insertComment(comment,id);
 }
 
 @POST
 @Path("/{id}/comment/delete")
 @Produces(MediaType.APPLICATION_JSON)
 public Comment deleteComment(@PathParam("id")String id,Comment comment,@Context HttpServletRequest req){
+	//return (new SessionService().sessionVerifier(req))?new ProjectInsert().deleteComment(id,comment):comm;
+	//comm.setComment(Notifications.SESSIONDONOTEXSIT.getMsg());
+	//Comment comm=new Comment();
 	return new ProjectInsert().deleteComment(id,comment);
-//	Comment comm=new Comment();
-//	comm.setComment(Notifications.SESSIONDONOTEXSIT.getMsg());
-//	return (new SessionService().sessionVerifier(req))?new ProjectInsert().deleteComment(id,comment):comm;
 }
 
 @PUT
-@Path("/{id}/upvote")
+@Path("/{id}/upvote/{username}")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public MultiUse up(@PathParam("id")String id,@Context HttpServletRequest req)
+public MultiUse up(@PathParam("id")String id,@PathParam("username")String username,@Context HttpServletRequest req)
 {
-return new ProjectInsert().up(id,"utkarsh");
-//	MultiUse obj= new MultiUse();
-//	obj.setMessage(Notifications.SESSIONDONOTEXSIT.getMsg());
 //return (new SessionService().sessionVerifier(req))?new ProjectInsert().up(id,req.getSession().getAttribute("username").toString()):obj;
+	//obj.setMessage(Notifications.SESSIONDONOTEXSIT.getMsg());
+	//MultiUse obj= new MultiUse();
+return new ProjectInsert().up(id,username);
 }
 
 @PUT
-@Path("/{id}/downvote")
+@Path("/{id}/downvote/{username}")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public MultiUse down(@PathParam("id")String id,@Context HttpServletRequest req)
+public MultiUse down(@PathParam("id")String id,@PathParam("username")String username,@Context HttpServletRequest req)
 {
-return new ProjectInsert().down(id,"utkarsh");
-//	MultiUse obj= new MultiUse();
-//	obj.setMessage(Notifications.SESSIONDONOTEXSIT.getMsg());
 //return (new SessionService().sessionVerifier(req))?new ProjectInsert().down(id,req.getSession().getAttribute("username").toString()):obj;
+	//obj.setMessage(Notifications.SESSIONDONOTEXSIT.getMsg());
+	//MultiUse obj= new MultiUse();
+return new ProjectInsert().down(id,username);
 }
 }
 

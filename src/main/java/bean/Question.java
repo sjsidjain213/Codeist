@@ -5,7 +5,19 @@ import java.util.Date;
 
 public class Question {
 
-	private String username,question,question_url,description;
+	private String username,question,question_url,description,region_state,region_city;
+	public String getRegion_state() {
+		return region_state;
+	}
+	public void setRegion_state(String region_state) {
+		this.region_state = region_state;
+	}
+	public String getRegion_city() {
+		return region_city;
+	}
+	public void setRegion_city(String region_city) {
+		this.region_city = region_city;
+	}
 	private long date,last_updated;
 	private String email_id;
 	public String getEmail_id() {

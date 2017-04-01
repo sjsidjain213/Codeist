@@ -29,20 +29,20 @@ public class ProjectInsert
 	MongoCollection <Document> tcuser=new DatabaseServices().getDb().getCollection("testuserdata");
 	
 //inserting a new project to database
-public Acknowledgement insertProject(Project project,HttpServletRequest req)
+public Acknowledgement insertProject(Project project,String username)
 { try{
-	String userfromsession="pulkit";// = req.getSession().getAttribute("username").toString();
+	String userfromsession = username;
+	//String userfromsession = req.getSession().getAttribute("username").toString();
 	Document docexsit = tc.find(and(eq("username",project.getUsername()),eq("title",project.getTitle()))).first();
    ArrayList<String> a=new ArrayList<String>();
    a.add(project.getUsername());
    project.setContributors(a);
    Acknowledgement ack=new Acknowledgement();
-   project.setUsername("pulkit");
    if(docexsit==null)
     { 
 	  Document info=new Document().append("upvotes", new ArrayList<String>()).append("downvotes",new ArrayList<String>()).append("viewby",new ArrayList<String>());
       Document doc = new Document()
-	    		 .append("username", userfromsession)
+	    		 .append("username", username)
 	    		// .append("username", project.getUsername())
 	    		 .append("title",project.getTitle())	
 	    		 .append("date",GeneralServices.getCurrentDate().getTime()) //
@@ -81,7 +81,7 @@ catch(Exception e){
 }
                     }
     @SuppressWarnings("unchecked")
-   public Acknowledgement updateproject(Project project,HttpServletRequest req,String id){
+   public Acknowledgement updateproject(Project project,String id){
     ObjectId oid = new ObjectId(id.toString());
     
     //Document doccheck = tc.find(and(or(eq("username",req.getSession().getAttribute("username").toString()),
@@ -112,9 +112,9 @@ catch(Exception e){
    		 .append("images",(List<String>)project.getImages())
    		 .append("info",info);
 	tc.updateOne(eq("_id",oid),new Document("$set",doc));
-	new NotificationService().projectUpdateNotification(project.getUsername(), "pulkit",id,project.getTitle());
+	//new NotificationService().projectUpdateNotification(project.getUsername(), req.getSession().getAttribute("username").toString(),id,project.getTitle());
 	ArrayList<String> contributors = project.getContributors();
-	contributors.forEach(contributor->{new NotificationService().projectUpdateNotification(contributor, "pulkit",id,project.getTitle());});
+	//contributors.forEach(contributor->{new NotificationService().projectUpdateNotification(contributor, req.getSession().getAttribute("username").toString(),id,project.getTitle());});
 	return new GeneralServices().response(Notifications.SUCCESSFULLYINSERTED);
 	}
     //}else{
@@ -162,7 +162,7 @@ return project;
 
 // for retrieving selected project
 @SuppressWarnings("unchecked")
-public Project getSelectedProject(String id,HttpServletRequest req)
+public Project getSelectedProject(String id)
 { 
 	ObjectId id1=new ObjectId(id.toString());
 	Project project=new Project();
@@ -197,7 +197,7 @@ public Project getSelectedProject(String id,HttpServletRequest req)
 	return project;
 }
 
-public Comment insertComment(Comment comment,String id,HttpServletRequest req)
+public Comment insertComment(Comment comment,String id)
 {   ObjectId id1=new ObjectId(id.toString());
 	Document project = tc.find(eq("_id",id1)).first();
 	System.out.println(project);
@@ -266,6 +266,7 @@ public MultiUse  up(String id,String user){
 	Document d = tc.find(eq("_id",id1)).first();
 	MultiUse obj=new MultiUse();
 	String username=d.getString("username");
+	
 	// access in this pattern in QADao vote method also
 	Document infodetails=(Document)d.get("info");
 		ArrayList<String> up=(ArrayList<String>)infodetails.get("upvotes");
