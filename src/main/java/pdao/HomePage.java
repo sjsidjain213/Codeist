@@ -21,17 +21,55 @@ import service.DatabaseServices;
 import service.GeneralServices;
 
 public class HomePage {
-	public void getProblems(ArrayList<Tile> question, String username)
+	HashMap<Object,Tile> hm = new HashMap<Object,Tile>();
+ 	
+	public ArrayList<Tile> getQuestions(String username)
+ 	{
+ 		ArrayList<Tile> question = new ArrayList<Tile>();
+ 		  question = getInterestQuestion(question, username);
+ 		  return question;
+ 	}
+ 	
+	
+	public ArrayList<Tile> getInterestQuestion(ArrayList<Tile> question, String username)
 	{
 		 MongoCollection<Document> tc =new DatabaseServices().getDb().getCollection("userdata");
-		 Document doc = tc.find(eq("username",username)).first();
-		 ArrayList<String> alfavtags = (ArrayList<String>) doc.get("favourite_tag");
+	Document doc = tc.find(eq("username",username)).first();
+	// all tags of user
+	ArrayList<String> alfavtags = (ArrayList<String>) doc.get("favourite_tag");
 		
+	// matched questions
 		 tc =new DatabaseServices().getDb().getCollection("qa");
 	     FindIterable <Document> quesfavtags =  tc.find(in("tags",alfavtags));
-	       
-		
+	   
+	     if(quesfavtags != null)
+	//question is the arraylist in which response will be stored
+	    	 getHistory(question,quesfavtags,"interesting","question");
+	          
+		return question;
 	}
+
+	public void getHistory(ArrayList<Tile> altl, FindIterable<Document> fi,String source, String subject)
+	{
+		for(Document d:fi)
+	      {	if(!hm.containsKey(d.get("_id")))
+		      	{   
+	    	  		Tile tl = new GeneralServices().returnTile(d,source,subject);
+		      	    hm.put(d.get("_id"),tl);
+		      		altl.add(tl);
+		      	}
+		      	else{
+	        	 Tile tl =    hm.get(d.get("_id"));
+	        	 int i = tl.getPositioncount()+1;
+	        	 ArrayList <String> al = tl.getSource();
+	        	 //al.add(source);
+	        	 tl.setSource(al);
+	 	      	tl.setPositioncount(i);
+	 	      	hm.put(d.get("_id"),tl);
+	         	}
+	      }
+	}
+	/*
 	public ArrayList<Tile> getInterestQuestion(ArrayList<Tile> question, String username)
  	{
  		 MongoCollection<Document> tc =new DatabaseServices().getDb().getCollection("userdata");
@@ -92,5 +130,5 @@ public class HomePage {
  	       
  	}
  	
-	
+	*/
 }

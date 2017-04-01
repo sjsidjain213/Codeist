@@ -65,7 +65,7 @@ public boolean match(Tag tags,ArrayList<String> tag)
 
 public Tile returnTile(Document d,String source,String subject)
 {
-	Tile tl = new Tile();
+    	Tile tl = new Tile();
 	    tl.setId(d.get("_id").toString());
 	    ArrayList<String> altwo = new ArrayList<String>();
 	    if(altwo.size() < 1)
@@ -90,6 +90,7 @@ public Tile returnTile(Document d,String source,String subject)
 	    }
 	    else{
 	    	tl.setTitle(d.getString("question"));
+	        tl.setDescription(d.getString("description"));
 	    	tl.setUpvotecount(d.getLong("upvotecount"));
 	    	tl.setDownvotecount(d.getLong("downvotecount"));
 	    }

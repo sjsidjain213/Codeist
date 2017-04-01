@@ -16,7 +16,7 @@ import bean.Super;
 import bean.Tile;
 import bean.User;
 import bean.test;
-import dao.HomePage;
+import pdao.HomePage;
 import service.GeneralServices;
 import service.objectupload;
 
@@ -40,13 +40,15 @@ public class HomePageResource {
 //	}
 	
 	@GET
-	@Path("/forum")
+	@Path("/forum/{username}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<Tile> getQuestion(@Context HttpServletRequest req)
+	public ArrayList<Tile> getQuestion(@Context HttpServletRequest req,@PathParam("username") String username)
 	{
-		return new HomePage().getQuestions(req.getSession().getAttribute("username").toString());
-	}
+		return new HomePage().getQuestions(username);
+//		return new HomePage().getQuestions(req.getSession().getAttribute("username").toString());
 	
+	}
+	/*
 	@GET
 	@Path("/projects-feed")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -78,5 +80,5 @@ public class HomePageResource {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
+	}*/
 }
