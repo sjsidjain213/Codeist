@@ -59,7 +59,7 @@ public class QuestionResource {
 		//return new HomePage().getQuestions(username);
       //return new HomePage().getQuestions(req.getSession().getAttribute("username").toString());
 	}*/
-	
+	/*
 	@POST
 	@Path("/{id}/answer")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -160,10 +160,11 @@ public class QuestionResource {
 	/*
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/asked/{username}")
 	//@Consumes(MediaType.APPLICATION_JSON)
 	public ArrayList<Question> getProblems_asked(@PathParam("username") String email)
 	{
 		 return new QADao().getProblem(email);
 	}*/
-	@Path("/asked/{username}")
+	
 }
