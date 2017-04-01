@@ -22,7 +22,7 @@ public class InstituteResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public ArrayList<Question> getQuestion(@PathParam("username")String username)
 	{
-		return new InstituteDao().getAllOwnQuestions(username);
+		return new InstituteDao().getAllQuestions(username);
 	//	return new QADao().getQuestion(username);
 	}
 }

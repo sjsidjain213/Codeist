@@ -14,18 +14,39 @@ public class InstituteDao {
 	// getname
 	public ArrayList<Question> getAllQuestions(String username)
 	{
-   	ArrayList<Question> alq = new ArrayList<Question>();
+   	 ArrayList<Question> alq = new ArrayList<Question>();
      Document doc = tc.find(eq("username",username)).first();
      ArrayList<String> alquestion = (ArrayList<String>) doc.get("question_id");
+     System.out.println(alquestion);
      if(alquestion.size()>0){
      for(String s : alquestion)
      { 
-    	Question quest = new QADao().getQuestion(s);		
-        alq.add(quest);
+    	Question quest = new QADao().getQuestion(s);
+    	System.out.println(quest);
+    	ArrayList<String> tags = quest.getTags();
+       ArrayList<String> source =  addDepartment(username,tags);
+        quest.setDepartment(source);
+       alq.add(quest);
      }
      }
      return alq;
 	}
+	
+	public ArrayList<String> addDepartment(String username,ArrayList<String> questiontags)
+	{
+	Document doc = tc.find(eq("username",username)).first();
+	ArrayList<String> al = (ArrayList<String>) doc.get("departments");
+ArrayList<String> aldepartment = new ArrayList<String>();
+	for(String sout:al)
+	{
+        if(tc.find(in(sout,questiontags)).first()!=null)
+        {
+        	aldepartment.add(sout);
+        }
+	}
+	return aldepartment;
+	}
+	
 	
 	public ArrayList<Project> getAllProjects(String username)
 	{
