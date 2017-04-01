@@ -39,20 +39,20 @@ public class HomePageResource {
 //	}
 	
 	@GET
-	@Path("/forum/{username}")
+	@Path("/forum")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<Tile> getQuestion(@PathParam("username") String username)
+	public ArrayList<Tile> getQuestion(@Context HttpServletRequest req)
 	{
-		return new HomePage().getQuestions(username);
+		return new HomePage().getQuestions(req.getSession().getAttribute("username").toString());
 	}
 	
 	@GET
-	@Path("/projects-feed/{username}")
+	@Path("/projects-feed")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<Tile> getProject(@PathParam("username") String username,@Context HttpServletRequest req)
+	public ArrayList<Tile> getProject(@Context HttpServletRequest req)
 	{
 		//System.out.println(req.getSession().getAttribute("username").toString());
-    	return new HomePage().getProjects(username);//req.getSession().getAttribute("username").toString());
+    	return new HomePage().getProjects(req.getSession().getAttribute("username").toString());//req.getSession().getAttribute("username").toString());
 	}
 	
 	

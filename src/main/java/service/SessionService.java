@@ -40,6 +40,7 @@ MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("use
 			//create session
 		req.getSession().setAttribute("username", username);
 	    String s_id =	req.getSession().getId();
+	    System.out.println("S-id"+s_id);
 	    System.out.println("new session"+tc.updateOne(eq("username", username),new Document("$set",new Document("session_id",s_id))));
 		req.getSession().setAttribute("s_id",s_id);
 		user.setIs_valid(true);
@@ -52,6 +53,7 @@ MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("use
 		String s_id =	req.getSession().getId();
 		System.out.println(tc.updateOne(eq("username", username),new Document("$set",new Document("session_id",s_id))));
 		req.getSession().setAttribute("s_id",s_id);
+		System.out.println("S-id"+s_id);
 		user.setIs_valid(true);
 		user.setSession_id(s_id);
 		user.setUsername(username);
