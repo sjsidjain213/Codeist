@@ -41,6 +41,7 @@ public class UserDao {
 		 if(doc!=null)
 		 {   String password = tc.find(and(eq("name",name),eq("emailid",email),eq("date",date))).first().getString("password");
 		    	new UserDao().insertNewUser(name,email,date,password,doc);
+		   // 	response.sendRedirect("localhost");
 			 return "verified";
 		 }
 		 else{
@@ -65,7 +66,7 @@ public class UserDao {
 					  .append("password",password)
 					  .append("name",name)
 					  .append("bio","")
-					  .append("date",date)
+					  .append("date",date.getTime())
 					  .append("profile_url","")
 					  .append("gender","")
 					  .append("category","")
@@ -141,9 +142,10 @@ profile_url = (user.getGender().equals("m")&&user.getProfile_url()=="")?"https:/
 	@SuppressWarnings("unchecked")
 	public User getUserDetails(String username)
       { //username from session
-    	  User user = new User();
+    	System.out.println("received");
+		User user = new User();
     	  FindIterable <Document> fi = tc.find(eq("username",username));
-    	//  System.out.println(fi)
+    	
     	  for(Document d : fi)
     	  {
               user.setBio(d.getString("bio"));
