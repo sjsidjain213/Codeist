@@ -9,6 +9,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import bean.Project;
 import bean.Question;
 import dao.InstituteDao;
 import dao.QADao;
@@ -17,12 +18,30 @@ import dao.QADao;
 public class InstituteResource {
 	
 	@GET
-	@Path("/{username}")
+	@Path("/question/{username}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public ArrayList<Question> getQuestion(@PathParam("username")String username)
 	{
 		return new InstituteDao().getAllQuestions(username);
 	//	return new QADao().getQuestion(username);
+	}
+	@GET
+	@Path("project/{username}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public ArrayList<Project> getProject(@PathParam("username")String username)
+	{
+		return new InstituteDao().getAllProjects(username);
+	//	return new QADao().getQuestion(username);
+	}
+	@GET
+	@Path("/{username}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public ArrayList<Question> getOwnQuestion(@PathParam("username")String username)
+	{
+		return new InstituteDao().getAllOwnQuestions(username);	
+		//	return new QADao().getQuestion(username);
 	}
 }
