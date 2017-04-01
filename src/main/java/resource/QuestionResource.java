@@ -22,7 +22,7 @@ import bean.Tile;
 import dao.HomePage;
 import dao.ProjectInsert;
 //import dao.QADao;
-import pdao.QADao;
+import dao.QADao;
 import service.GeneralServices;
 import service.SessionService;
 
@@ -157,8 +157,8 @@ public class QuestionResource {
 	public Acknowledgement updateQuestion(@PathParam("id") String id,Question ques, @Context HttpServletRequest req)
 	{
 		 return new QADao().updateQuestion(req, ques,id);
-	}*/
-	
+	}
+	/*
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	//@Consumes(MediaType.APPLICATION_JSON)
@@ -166,5 +166,5 @@ public class QuestionResource {
 	public ArrayList<Question> getProblems_asked(@PathParam("username") String email)
 	{
 		 return new QADao().getProblem(email);
-	}
+	}*/
 }
