@@ -31,17 +31,18 @@ public class ProjectInsert
 //inserting a new project to database
 public Acknowledgement insertProject(Project project,HttpServletRequest req)
 { try{
-	String userfromsession = req.getSession().getAttribute("username").toString();
+	String userfromsession="pulkit";// = req.getSession().getAttribute("username").toString();
 	Document docexsit = tc.find(and(eq("username",project.getUsername()),eq("title",project.getTitle()))).first();
    ArrayList<String> a=new ArrayList<String>();
    a.add(project.getUsername());
    project.setContributors(a);
    Acknowledgement ack=new Acknowledgement();
+   project.setUsername("pulkit");
    if(docexsit==null)
     { 
 	  Document info=new Document().append("upvotes", new ArrayList<String>()).append("downvotes",new ArrayList<String>()).append("viewby",new ArrayList<String>());
       Document doc = new Document()
-	    		 .append("username", req.getSession().getAttribute("username"))
+	    		 .append("username", userfromsession)
 	    		// .append("username", project.getUsername())
 	    		 .append("title",project.getTitle())	
 	    		 .append("date",GeneralServices.getCurrentDate().getTime()) //
@@ -74,6 +75,7 @@ public Acknowledgement insertProject(Project project,HttpServletRequest req)
                        }
 }
 catch(Exception e){
+	e.printStackTrace();
 	return new GeneralServices().response(Notifications.ERROR);
 
 }
@@ -110,9 +112,9 @@ catch(Exception e){
    		 .append("images",(List<String>)project.getImages())
    		 .append("info",info);
 	tc.updateOne(eq("_id",oid),new Document("$set",doc));
-	new NotificationService().projectUpdateNotification(project.getUsername(), req.getSession().getAttribute("username").toString(),id,project.getTitle());
+	new NotificationService().projectUpdateNotification(project.getUsername(), "pulkit",id,project.getTitle());
 	ArrayList<String> contributors = project.getContributors();
-	contributors.forEach(contributor->{new NotificationService().projectUpdateNotification(contributor, req.getSession().getAttribute("username").toString(),id,project.getTitle());});
+	contributors.forEach(contributor->{new NotificationService().projectUpdateNotification(contributor, "pulkit",id,project.getTitle());});
 	return new GeneralServices().response(Notifications.SUCCESSFULLYINSERTED);
 	}
     //}else{
@@ -172,7 +174,7 @@ public Project getSelectedProject(String id,HttpServletRequest req)
 		   	project.setUrl_title(GeneralServices.spaceRemover(d.getString("title")));
 	   		project.setDescription(d.getString("description"));
 	   		project.setDate(d.getLong("date"));
-	   		project.setLast_updated(d.getLong("last_updated"));
+	   		//project.setLast_updated(d.getLong("last_updated"));
 	   		project.setTags((ArrayList<String>)d.get("tags")); 
 	   		project.setLicense(d.getString("license"));
 	   		project.setProject_link((ArrayList<String>)d.get("project_link"));
@@ -274,12 +276,12 @@ public MultiUse  up(String id,String user){
 				if(down!=null &&down.contains(user)){
 					down.remove(user);
 					 String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.downvotes",down))).toString();
-					 tc.updateOne(eq("_id",id1),new Document("$set",new Document("downvotecount",down.size())));
+					// tc.updateOne(eq("_id",id1),new Document("$set",new Document("downvotecount",down.size())));
 					 tcuser.updateOne(eq("username",username),new Document("$inc",new Document("project_downvote",-1)));
 				}
 			up.add(user);
 			String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.upvotes",up))).toString();	
-			tc.updateOne(eq("_id",id1),new Document("$set",new Document("upvotecount",up.size())));
+			//tc.updateOne(eq("_id",id1),new Document("$set",new Document("upvotecount",up.size())));
 			tcuser.updateOne(eq("username",username),new Document("$inc",new Document("project_upvote",1)));
 			//changes make in other too
 			//new NotificationService().voteNotification(username,title,p_id,user,Notifications.UPVOTESQUESTION);
@@ -290,7 +292,7 @@ public MultiUse  up(String id,String user){
 			else{
 				up.remove(user);
 				String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.upvotes",up))).toString();	 	 
-				tc.updateOne(eq("_id",id1),new Document("$set",new Document("upvotecount",up.size())));
+				//tc.updateOne(eq("_id",id1),new Document("$set",new Document("upvotecount",up.size())));
 				tcuser.updateOne(eq("username",username),new Document("$inc",new Document("project_upvote",-1)));
 			}
 			//new NotificationService().projectUpvoteNotification(project.getUsername(), req.getSession().getAttribute("username").toString(),id,project.getTitle());
@@ -302,13 +304,13 @@ public MultiUse  up(String id,String user){
 			if(down!=null && down.contains(user)){
 				down.remove(user);
 				 String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.downvotes",down))).toString();
-				 tc.updateOne(eq("_id",id1),new Document("$set",new Document("downvotecount",down.size())));
+				 //tc.updateOne(eq("_id",id1),new Document("$set",new Document("downvotecount",down.size())));
 				 tcuser.updateOne(eq("username",username),new Document("$inc",new Document("project_downvote",-1)));
 			}
 			up=new ArrayList<String>();
 			up.add(user);
 			 String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.upvotes",up))).toString();
-			 tc.updateOne(eq("_id",id1),new Document("$set",new Document("upvotecount",up.size())));
+			 //tc.updateOne(eq("_id",id1),new Document("$set",new Document("upvotecount",up.size())));
 			 tcuser.updateOne(eq("username",username),new Document("$inc",new Document("project_upvote",1)));
 		//make chnages here
 			 //	 new NotificationService().voteNotification(username,title,Notifications.UPVOTESPROJECT);
@@ -335,12 +337,12 @@ public MultiUse down(String id,String user){
 				if(up!=null && up.contains(user)){
 					up.remove(user);
 					 String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.upvotes",up))).toString();	 
-					 tc.updateOne(eq("_id",id1),new Document("$set",new Document("upvotecount",up.size())));
+					 //tc.updateOne(eq("_id",id1),new Document("$set",new Document("upvotecount",up.size())));
 					 tcuser.updateOne(eq("username",username),new Document("$inc",new Document("project_upvote",-1)));
 				}
 			down.add(user);
 			String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.downvotes",down))).toString();	 
-			tc.updateOne(eq("_id",id1),new Document("$set",new Document("downvotecount",down.size())));
+			//tc.updateOne(eq("_id",id1),new Document("$set",new Document("downvotecount",down.size())));
 			tcuser.updateOne(eq("username",username),new Document("$inc",new Document("project_downvote",1)));
 			//make changes here
 			// new NotificationService().voteNotification(username,title,Notifications.DOWNVOTESPROJECT);
@@ -351,7 +353,7 @@ public MultiUse down(String id,String user){
 			else{
 				down.remove(user);
 				String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.downvotes",down))).toString();	 
-				tc.updateOne(eq("_id",id1),new Document("$set",new Document("downvotecount",down.size())));
+				//tc.updateOne(eq("_id",id1),new Document("$set",new Document("downvotecount",down.size())));
 				tcuser.updateOne(eq("username",username),new Document("$inc",new Document("project_downvote",-1)));
 			}
 			//new NotificationService().projectDownvoteNotification(project.getUsername(), req.getSession().getAttribute("username").toString(),id,project.getTitle());
@@ -363,13 +365,13 @@ public MultiUse down(String id,String user){
 			if(up!=null && up.contains(user)){
 				up.remove(user);
 				 String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.upvotes",up))).toString();	
-				 tc.updateOne(eq("_id",id1),new Document("$set",new Document("upvotecount",up.size())));
+				 //tc.updateOne(eq("_id",id1),new Document("$set",new Document("upvotecount",up.size())));
 				 tcuser.updateOne(eq("username",username),new Document("$inc",new Document("project_upvote",-1)));
 			}
 			down=new ArrayList<String>();
 			down.add(user);
 			 String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.downvotes",down))).toString();	
-			 tc.updateOne(eq("_id",id1),new Document("$set",new Document("downvotecount",down.size())));
+			// tc.updateOne(eq("_id",id1),new Document("$set",new Document("downvotecount",down.size())));
 			 tcuser.updateOne(eq("username",username),new Document("$inc",new Document("project_downvote",1)));
 			//make changes here
 			 // new NotificationService().voteNotification(username,title,Notifications.DOWNVOTESPROJECT);

@@ -20,7 +20,7 @@ import bean.Notifications;
 import bean.Question;
 import dao.ProjectInsert;
 //import dao.QADao;
-import pdao.QADao;
+import dao.QADao;
 import service.GeneralServices;
 import service.SessionService;
 
@@ -52,7 +52,7 @@ public class QuestionResource {
 	public Acknowledgement insertAnswer(@PathParam("id") String id,Answer answer,@Context HttpServletRequest req)
 	{
 		return (new SessionService().sessionVerifier(req))?new QADao().insertAnswer(id,answer,req):new GeneralServices().response(null);
-	}
+	}*/
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -60,7 +60,7 @@ public class QuestionResource {
 	public Question getQuestion(@PathParam("id")String question)
 	{
 		return new QADao().getQuestion(question);
-	}
+	}/*
 	@PUT
 	@Path("/{id}/upvote")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -144,12 +144,12 @@ public class QuestionResource {
 		 return new QADao().updateQuestion(req, ques,id);
 	}*/
 	
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	//@Consumes(MediaType.APPLICATION_JSON)
-	@Path("/asked/{username}")
-	public ArrayList<Question> getProblems_asked(@PathParam("username") String email)
-	{
-		 return new QADao().getProblem(email);
-	}
+//	@GET
+//	@Produces(MediaType.APPLICATION_JSON)
+//	//@Consumes(MediaType.APPLICATION_JSON)
+//	@Path("/asked/{username}")
+//	public ArrayList<Question> getProblems_asked(@PathParam("username") String email)
+//	{
+//		 return new QADao().getProblem(email);
+//	}
 }

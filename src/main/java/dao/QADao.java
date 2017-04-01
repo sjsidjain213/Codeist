@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 
 public class QADao {
 	
-	MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("testqa");
+	MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("qa");
 	MongoCollection<Document> tcuser = new DatabaseServices().getDb().getCollection("testuserdata");
 
 	public Acknowledgement insertQuestion(Question question, HttpServletRequest req)
@@ -80,13 +80,13 @@ public class QADao {
 	quest.setUsername(doc.getString("username"));
 	quest.setDescription(doc.getString("description"));
 	quest.setDate(doc.getLong("date"));
-	quest.setLast_updated(doc.getLong("last_updated"));
+	//quest.setLast_updated(doc.getLong("last_updated"));
 	quest.setTags((ArrayList<String>)doc.get("tags"));
 	quest.setQuestion_url(doc.getString("url"));
 	Document document=(Document) doc.get("info");
 	quest.setDownvotes((ArrayList<String>)document.get("downvotes"));
 	quest.setUpvotes((ArrayList<String>)document.get("upvotes"));
-	quest.setFeatured_points(doc.getLong("featured_points"));
+	//quest.setFeatured_points(doc.getLong("featured_points"));
     ArrayList<Document> aldo = (ArrayList<Document>) doc.get("answers");
     if(aldo != null){
 	for(Document d:aldo)

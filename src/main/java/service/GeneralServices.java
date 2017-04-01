@@ -63,6 +63,7 @@ public boolean match(Tag tags,ArrayList<String> tag)
 	return false;
 }
 
+@SuppressWarnings("unchecked")
 public Tile returnTile(Document d,String source,String subject)
 {
     	Tile tl = new Tile();
@@ -79,13 +80,21 @@ public Tile returnTile(Document d,String source,String subject)
 	    	tl.setUrl_title(GeneralServices.spaceRemover(d.getString("title")));
 			tl.setDescription(d.getString("description"));
 			tl.setTags((ArrayList<String>)d.get("tags"));
-	    	Document doc = (Document) d.get("info");
-	    	if((ArrayList<String>)doc.get("upvotes") != null){
-	    		tl.setUpvotes((ArrayList<String>) doc.get("upvotes"));
-	    	}
-	    	if(doc.get("downvotes") != null){
-	    		tl.setDownvotes((ArrayList<String>) doc.get("downvotes"));
-	    	}
+			System.out.println("-----------------------------");
+    	Document doc = (Document) d.get("info");
+//	    	if((ArrayList<String>)doc.get("upvotes") != null){
+//	    		tl.setUpvotes((ArrayList<String>) doc.get("upvotes"));
+//	    	}
+//	    	if(doc.get("downvotes") != null){
+//	    		tl.setDownvotes((ArrayList<String>) doc.get("downvotes"));
+//	    	}
+    	System.out.println("-----------------------------");
+			if(doc!=null){
+				System.out.println("inside");
+		   		tl.setUpvotes((ArrayList<String>)doc.get("upvotes"));
+		   		tl.setDownvotes((ArrayList<String>)doc.get("downvotes"));
+		   		
+		   		}
 	    
 	    }
 	    else{
