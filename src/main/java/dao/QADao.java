@@ -152,6 +152,8 @@ public class QADao {
 
 	@SuppressWarnings("unchecked")
 	public MultiUse upQuestion(String id,String user){
+	//public void questionUpvoteNotification(String receiver,String commiter,String question_id, String question_name)
+    //username from database,commitername from session, question id from front end, question name from database 
 		ObjectId id1=new ObjectId(id.toString());
 		Document d = tc.find(eq("_id",id1)).first();
 		MultiUse obj=new MultiUse();

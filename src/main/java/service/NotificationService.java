@@ -12,7 +12,7 @@ import bean.Notifications;
 //details1 -> commitername
 //details2 -> commitermsg 
 public class NotificationService {
-    String prefixurl= "http://localhost:8080/Codeist";
+    String prefixurl= "http://localhost:8080/Codeist/webapi";
     MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("testuserdata");
 	
     public void updateProjectNotification(String username,String projectname,String project_id,String commitername,String commitermsg,Notifications notify)
@@ -28,31 +28,50 @@ public class NotificationService {
     public void projectUpdateNotification(String receiver,String commiter,String project_id, String project_name)
     {
     project_name = GeneralServices.spaceRemover(project_name);
-    String suffixurl = "/project/"+project_id;
+    String suffixurl = "/projects/"+project_id;
     String commitermessage = commiter+"has updated project name : "+project_name;
     //(String commitername,String commitermessage,Notifications notify,String url)
-     Document doc = notificationMessage(commiter,commitermessage,Notifications.PROJECTUPDATED,suffixurl);
+     Document doc = notificationMessage(commiter,commitermessage,Notifications.PROJECTUPDATED,prefixurl+suffixurl);
      tc.updateOne(eq("username",receiver),new Document("$addToSet",new Document("notifications",doc)));
  	}
     /*************************END******************************/
     public void projectUpvoteNotification(String receiver,String commiter,String project_id, String project_name)
     {
     project_name = GeneralServices.spaceRemover(project_name);
-    String suffixurl = "/project/"+project_id;
+    String suffixurl = "/projects/"+project_id;
     String commitermessage = commiter+"has upvoted project name : "+project_name;
     //(String commitername,String commitermessage,Notifications notify,String url)
-     Document doc = notificationMessage(commiter,commitermessage,Notifications.UPVOTESPROJECT,suffixurl);
+     Document doc = notificationMessage(commiter,commitermessage,Notifications.UPVOTESPROJECT,prefixurl+suffixurl);
      tc.updateOne(eq("username",receiver),new Document("$addToSet",new Document("notifications",doc)));
  	}
     public void projectDownvotevoteNotification(String receiver,String commiter,String project_id, String project_name)
     {
     project_name = GeneralServices.spaceRemover(project_name);
-    String suffixurl = "/project/"+project_id;
+    String suffixurl = "/projects/"+project_id;
     String commitermessage = commiter+"has downvoted project name : "+project_name;
     //(String commitername,String commitermessage,Notifications notify,String url)
-     Document doc = notificationMessage(commiter,commitermessage,Notifications.DOWNVOTESPROJECT,suffixurl);
+     Document doc = notificationMessage(commiter,commitermessage,Notifications.DOWNVOTESPROJECT,prefixurl+suffixurl);
      tc.updateOne(eq("username",receiver),new Document("$addToSet",new Document("notifications",doc)));
  	}
+    public void questionUpvoteNotification(String receiver,String commiter,String question_id, String question_name)
+    {
+    question_name = GeneralServices.spaceRemover(question_name);
+    String suffixurl = "/question/"+question_id;
+    String commitermessage = commiter+"has upvoted question name : "+question_name;
+    //(String commitername,String commitermessage,Notifications notify,String url)
+     Document doc = notificationMessage(commiter,commitermessage,Notifications.UPVOTESQUESTION,prefixurl+suffixurl);
+     tc.updateOne(eq("username",receiver),new Document("$addToSet",new Document("notifications",doc)));
+ 	}
+    public void questionDownvoteNotification(String receiver,String commiter,String question_id, String question_name)
+    {
+    question_name = GeneralServices.spaceRemover(question_name);
+    String suffixurl = "/question/"+question_id;
+    String commitermessage = commiter+"has downvoted question name : "+question_name;
+    //(String commitername,String commitermessage,Notifications notify,String url)
+     Document doc = notificationMessage(commiter,commitermessage,Notifications.DOWNVOTESQUESTION,prefixurl+suffixurl);
+     tc.updateOne(eq("username",receiver),new Document("$addToSet",new Document("notifications",doc)));
+ 	}
+    
     public void commentNotification(String username,String projectname,String project_id,String commitername,String commitermsg,Notifications notify)
 	{   projectname = new GeneralServices().spaceRemover(projectname);
         String suffixurl= "/projects/"+project_id;
