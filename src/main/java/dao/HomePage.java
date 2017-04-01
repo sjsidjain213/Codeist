@@ -296,8 +296,8 @@ public class HomePage {
 		{Tile doc = new Tile();
 		        doc.setUsername(d.getString("username"));
 		        doc.setTitle(d.getString("question"));
-//		        doc.setUpvotecount(d.getLong("upvotecount"));
-//		        doc.setDownvotecount(d.getLong("downvotecount"));
+		        doc.setUpvotecount(d.getLong("upvotecount"));
+		        doc.setDownvotecount(d.getLong("downvotecount"));
 		        // description might throw error check database 
 		        doc.setDescription(d.getString("description"));
 		        doc.setUrl(d.getString("question_url"));
@@ -329,8 +329,8 @@ public class HomePage {
 		        doc.setUsername(d.getString("username"));
 		        doc.setTitle(d.getString("title"));
 		        doc.setId(d.get("_id").toString());
-		       // doc.setUpvotecount(d.getLong("upvotecount"));
-		       // doc.setDownvotecount(d.getLong("downvotecount"));
+		        doc.setUpvotecount(d.getLong("upvotecount"));
+		        doc.setDownvotecount(d.getLong("downvotecount"));
 		        Document innerdoc = (Document)d.get("info");
 		   		if(innerdoc!=null){
 		   		doc.setUpvotes((ArrayList<String>)innerdoc.get("upvotes"));
