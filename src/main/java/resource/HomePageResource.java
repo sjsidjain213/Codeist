@@ -1,24 +1,17 @@
 package resource;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import bean.Super;
 import bean.Tile;
-import bean.User;
-import bean.test;
 import pdao.HomePage;
-import service.GeneralServices;
-import service.objectupload;
 
 @Path("/homepage")
 public class HomePageResource {

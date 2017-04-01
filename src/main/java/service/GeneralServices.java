@@ -91,8 +91,10 @@ public Tile returnTile(Document d,String source,String subject)
 	    else{
 	    	tl.setTitle(d.getString("question"));
 	        tl.setDescription(d.getString("description"));
-	    	tl.setUpvotecount(d.getLong("upvotecount"));
-	    	tl.setDownvotecount(d.getLong("downvotecount"));
+	   tl.setTags((ArrayList<String>)d.get("tags"));
+	   //"/questions/{id}"
+	   // 	tl.setUpvotecount(d.getLong("upvotecount"));
+	   // 	tl.setDownvotecount(d.getLong("downvotecount"));
 	    }
 		tl.setViewcount(1);
 		return tl;	

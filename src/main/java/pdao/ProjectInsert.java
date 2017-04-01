@@ -59,7 +59,9 @@ public Acknowledgement insertProject(Project project,HttpServletRequest req)
 	    		 .append("images",(List<String>)project.getImages())
 	    		 .append("info", info)
 	    		 .append("upvotecount", new Long(0))
-	    		 .append("downvotecount", new Long(0));
+	    		 .append("downvotecount", new Long(0))
+	    		 .append("region_state",project.getRegion_state())
+	    		    .append("region_city", project.getRegion_city());
 	    		  tc.insertOne(doc);
 	    		  String projectid= tc.find(and(eq("username",project.getUsername()),eq("title",project.getTitle()))).first().get("_id").toString();
 	    		  String url = GeneralServices.urlGenerator(Notifications.PROJECTMODULE, projectid, project.getTitle());
