@@ -11,6 +11,7 @@ import service.DatabaseServices;
 public class InstituteDao {
 	MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("institute");
     //id of institute
+	// getname
 	public ArrayList<Question> getAllQuestions(String username)
 	{
    	ArrayList<Question> alq = new ArrayList<Question>();
@@ -55,4 +56,5 @@ public class InstituteDao {
      }
      return alq;
 	}
+	
 }
