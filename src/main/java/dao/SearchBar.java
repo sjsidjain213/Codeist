@@ -268,7 +268,7 @@ public class SearchBar {
   	             project.setTitle(doc.getString("title"));
   	             project.setId(doc.get("_id").toString());
   	             project.setDescription(doc.getString("description"));
-  	             project.setId(doc.getString("_id"));
+  	             project.setId(doc.get("_id").toString());
        	         project.setTags((ArrayList<String>)doc.get("tags"));
   	             project.setUrl(doc.getString("project_url"));
 //  	             Document innerd = (Document)doc.get("info");
@@ -305,7 +305,7 @@ public class SearchBar {
   	             project.setTitle(doc.getString("title"));
   	             project.setId(doc.get("_id").toString());
   	             project.setDescription(doc.getString("description"));
-  	             project.setId(doc.getString("_id"));
+  	             project.setId(doc.get("_id").toString());
        	         project.setTags((ArrayList<String>)doc.get("tags"));
   	             project.setUrl(doc.getString("project_url"));
   	           
