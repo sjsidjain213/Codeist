@@ -343,6 +343,7 @@ public class HomePage {
 		}
 		return project;
 	}
+	
 	public ArrayList<User> topUsers(){
 		MongoCollection<Document> tc =new DatabaseServices().getDb().getCollection("userdata");
 		FindIterable<Document> fi = tc.find().sort(new Document("rating",-1)).limit(100);

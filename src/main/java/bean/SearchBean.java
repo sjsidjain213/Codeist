@@ -7,7 +7,7 @@ import org.bson.types.ObjectId;
 
 public class SearchBean {
 private String source,name,username,title,description,bio,priority,url, ques_url;
-private ObjectId id;
+private String id;
 private long matchedcount,upvotecount, rating, downvotecount;
 private ArrayList<String> tags,upvotes,downvotes;
 
@@ -47,18 +47,18 @@ public String toString() {
 	return "SearchBean [source=" + source + ", name=" + name + ", username=" + username + ", title=" + title
 			+ ", description=" + description + ", bio=" + bio + ", priority=" + priority + ", url=" + url
 			+ ", matchedcount=" + matchedcount + ", tags=" + tags + ", upvotes=" + upvotes + ", downvotes=" + downvotes 
-			+ ", rating=" + rating + ", ques_url" + "ques_url" +"]";
+			+ ", rating=" + rating + ", ques_url" + "ques_url" + ", id=" + id + "]";
 }
 
 
 public String getQues_url() {
 	return ques_url;
 }
-public ObjectId getId() {
+public String getId() {
 	return id;
 }
 
-public void setId(ObjectId id) {
+public void setId(String id) {
 	this.id = id;
 }
 
@@ -187,5 +187,15 @@ public static Comparator<SearchBean> searchsort = new Comparator<SearchBean>() {
 
 		   return upvote2-upvote1;
 	  }};
+	  
+	  public static Comparator<SearchBean> downvoteSort = new Comparator<SearchBean>() {
+
+			public int compare(SearchBean s1,SearchBean s2) {
+
+			   int downvote1 = (int)s1.getDownvotecount();
+			   int downvote2 = (int)s2.getDownvotecount();
+
+			   return downvote1-downvote2;
+		  }};
 
 }

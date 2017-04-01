@@ -43,8 +43,8 @@ public class SearchBar {
         	    user.setUsername(doc.getString("username"));
         	    user.setBio(doc.getString("bio"));
         	    user.setName(doc.getString("name"));
-        	    user.setRating(doc.getInteger("rating"));
-        	    user.setId((ObjectId) doc.get("_id"));
+        	    user.setRating(doc.getLong("rating"));
+        	    user.setId(doc.get("_id").toString());
         	    user.setMatchedcount(1);
         	    boolean bool =(doc.getString("username").equals(s)||doc.getString("name").equals(s))?user.setPriority("z"):user.setPriority("b");    
        	        alsearch.add(user);   
@@ -70,7 +70,7 @@ public class SearchBar {
                  project.setSource("title");
   	             project.setTitle(doc.getString("title"));
   	             project.setDescription(doc.getString("description"));
-  	             project.setId((ObjectId) doc.get("_id"));
+  	             project.setId(doc.get("_id").toString());
          	     project.setTags((ArrayList<String>)doc.get("tags"));
   	             project.setUrl(doc.getString("project_url"));
 //  	             Document innerd = (Document)doc.get("info");
@@ -107,7 +107,7 @@ public class SearchBar {
   	             project.setTitle(doc.getString("title"));
   	             project.setDescription(doc.getString("description"));
   	             project.setTags((ArrayList<String>)doc.get("tags"));
-  	             project.setId((ObjectId) doc.get("_id"));
+  	             project.setId(doc.get("_id").toString());
        	         project.setUrl(doc.getString("project_url"));
 //  	             Document innerd = (Document)doc.get("info");
 //	             if(innerd != null){
@@ -141,7 +141,7 @@ public class SearchBar {
                  project.setSource("region");
   	             project.setTitle(doc.getString("title"));
   	             project.setDescription(doc.getString("description"));
-  	             project.setId((ObjectId) doc.get("_id"));
+  	             project.setId(doc.get("_id").toString());
        	         project.setTags((ArrayList<String>)doc.get("tags"));
   	             project.setUrl(doc.getString("project_url"));
 //  	             Document innerd = (Document)doc.get("info");
@@ -177,7 +177,7 @@ public class SearchBar {
   	             project.setTitle(doc.getString("title"));
   	             System.out.println(doc.get("_id")+"::"+(ObjectId)doc.get("_id"));
   	             project.setDescription(doc.getString("description"));
-  	             project.setId((ObjectId) doc.get("_id"));
+  	             project.setId(doc.get("_id").toString());
        	         project.setTags((ArrayList<String>)doc.get("tags"));
   	             project.setUrl(doc.getString("project_url"));
 //  	             Document innerd = (Document)doc.get("info");
@@ -216,6 +216,7 @@ public class SearchBar {
         	  {  SearchBean project = new SearchBean();
                  project.setSource("tags");
 	             project.setTitle(doc.getString("title"));
+	             project.setId(doc.get("_id").toString());
 	             project.setDescription(doc.getString("description"));
 	             project.setTags((ArrayList<String>)doc.get("tags"));
 	             project.setUsername(doc.getString("username"));
@@ -265,8 +266,9 @@ public class SearchBar {
         	     SearchBean project = new SearchBean();
                  project.setSource("region");
   	             project.setTitle(doc.getString("title"));
+  	             project.setId(doc.get("_id").toString());
   	             project.setDescription(doc.getString("description"));
-  	             project.setId((ObjectId) doc.get("_id"));
+  	             project.setId(doc.getString("_id"));
        	         project.setTags((ArrayList<String>)doc.get("tags"));
   	             project.setUrl(doc.getString("project_url"));
 //  	             Document innerd = (Document)doc.get("info");
@@ -301,8 +303,9 @@ public class SearchBar {
         	     SearchBean project = new SearchBean();
                  project.setSource("region");
   	             project.setTitle(doc.getString("title"));
+  	             project.setId(doc.get("_id").toString());
   	             project.setDescription(doc.getString("description"));
-  	             project.setId((ObjectId) doc.get("_id"));
+  	             project.setId(doc.getString("_id"));
        	         project.setTags((ArrayList<String>)doc.get("tags"));
   	             project.setUrl(doc.getString("project_url"));
   	           
@@ -338,7 +341,7 @@ public class SearchBar {
         		  SearchBean ques = new SearchBean();
         	  	  ques.setSource("question");
         	  	  ques.setTitle(doc.getString("question"));
-        	      ques.setId((ObjectId) doc.get("_id"));
+        	      ques.setId(doc.get("_id").toString());
         	  	  ques.setDescription(doc.getString("description"));
         	  	  ques.setUsername(doc.getString("username"));
         	  	  ques.setUpvotecount(doc.getLong("upvotecount"));
@@ -380,7 +383,7 @@ public class SearchBar {
         	    	 SearchBean ques = new SearchBean();
         	    	 ques.setSource("question");
         	    	 ques.setTitle(doc.getString("question"));
-        	    	 ques.setId((ObjectId) doc.get("_id"));
+        	    	 ques.setId(doc.get("_id").toString());
         	    	 ques.setDescription(doc.getString("description"));
         	    	 ques.setUsername(doc.getString("username"));
         	    	 ques.setUpvotecount(doc.getLong("upvotecount"));
@@ -421,7 +424,7 @@ public class SearchBar {
         ArrayList<SearchBean> finalList = new ArrayList<SearchBean>();
         //int flag = 0;
         for(int i=0;i<alsearch.size();i++){
-        	System.out.println("11");
+        	
         		if(i>0){
         			System.out.println("22"+alsearch.get(i).getUpvotecount());
         			if(alsearch.get(i).getMatchedcount() == alsearch.get(i-1).getMatchedcount()){
@@ -433,6 +436,7 @@ public class SearchBar {
         				System.out.println("never-------");
         				//flag = 1;
         				Collections.sort(tempList, SearchBean.upvoteSort);
+        				
         				//for(SearchBean sb : tempList)
         					finalList.addAll(tempList);
         					System.out.println("inside final" + finalList);
@@ -449,8 +453,45 @@ public class SearchBar {
         		
         }
         Collections.sort(tempList, SearchBean.upvoteSort);
+        //Collections.sort(tempList, SearchBean.downvoteSort);
         finalList.addAll(tempList);
         System.out.println("final = "+finalList);
-         return finalList;
+        
+        tempList = new ArrayList<SearchBean>();
+        ArrayList<SearchBean> returnList = new ArrayList<SearchBean>();
+        for(int i=0;i<finalList.size();i++){
+        	
+    		if(i>0){
+    			
+    			if(finalList.get(i).getUpvotecount() == finalList.get(i-1).getUpvotecount()){
+    				System.out.println("equal+++++");
+    				//flag = 0;
+    				tempList.add(finalList.get(i));
+    			}
+    			else{
+    				
+    				Collections.sort(tempList, SearchBean.downvoteSort);
+    				//for(SearchBean sb : tempList)
+    					returnList.addAll(tempList);
+    					System.out.println("inside final" + returnList);
+    				tempList = new ArrayList<SearchBean>();
+    				tempList.add(finalList.get(i));
+    			}
+    		}
+    		else{
+    			//flag = 2;
+    			tempList.add(finalList.get(i));
+    		}
+    		//if(flag==0)
+    			
+    		
+    }
+    Collections.sort(tempList, SearchBean.downvoteSort);
+    //Collections.sort(tempList, SearchBean.downvoteSort);
+    returnList.addAll(tempList);
+    System.out.println("final = "+returnList);
+
+        
+         return returnList;
 	}
 }
