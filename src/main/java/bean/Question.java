@@ -7,7 +7,13 @@ public class Question {
 
 	private String username,question,question_url,description;
 	private long date,last_updated;
-	
+	private String email_id;
+	public String getEmail_id() {
+		return email_id;
+	}
+	public void setEmail_id(String email) {
+		this.email_id = email;
+	}
 	private ArrayList<String> tags;
 	private long featured_points;
 	private ArrayList<String> upvotes,downvotes;

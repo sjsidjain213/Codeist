@@ -299,6 +299,7 @@ public class SearchBar {
         //search on basis of region in question
          fi = tcques.find(or(eq("region_state",Pattern.compile("(?i:.*"+s+".*)"))));	
         fi.forEach((Block<Document>) doc -> { 
+        		System.out.println("**"+doc);
         	     if(!hm.containsKey(doc.get("_id"))){
         	     SearchBean project = new SearchBean();
                  project.setSource("region");
@@ -308,9 +309,8 @@ public class SearchBar {
   	             project.setId(doc.get("_id").toString());
        	         project.setTags((ArrayList<String>)doc.get("tags"));
   	             project.setUrl(doc.getString("project_url"));
-  	           
-	            	 project.setUpvotecount(doc.getLong("upvotecount"));
-	            	 project.setDownvotecount(doc.getLong("downvotecount"));
+  	             project.setUpvotecount(doc.getLong("upvotecount"));
+	             project.setDownvotecount(doc.getLong("downvotecount"));
 	             project.setMatchedcount(1);
   	             boolean bool =(doc.getString("description").matches("(?i:"+s+")"))?project.setPriority("b"):project.setPriority("a");    
         	     alsearch.add(project);

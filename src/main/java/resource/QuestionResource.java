@@ -19,14 +19,15 @@ import bean.MultiUse;
 import bean.Notifications;
 import bean.Question;
 import dao.ProjectInsert;
-import dao.QADao;
+//import dao.QADao;
+import pdao.QADao;
 import service.GeneralServices;
 import service.SessionService;
 
 @Path("/questions")
 public class QuestionResource {
 	
-	@POST
+	/*@POST
 	@Path("/updatequestion")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -141,5 +142,14 @@ public class QuestionResource {
 	public Acknowledgement updateQuestion(@PathParam("id") String id,Question ques, @Context HttpServletRequest req)
 	{
 		 return new QADao().updateQuestion(req, ques,id);
+	}*/
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	//@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/asked/{username}")
+	public ArrayList<Question> getProblems_asked(@PathParam("username") String email)
+	{
+		 return new QADao().getProblem(email);
 	}
 }
