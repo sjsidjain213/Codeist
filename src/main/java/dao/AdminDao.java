@@ -33,7 +33,7 @@ public class AdminDao {
 				.append("tags", institute.getTags())
 				.append("project_id", new ArrayList<String>())
 				.append("question_id", new ArrayList<String>())
-				.append("question_answered", new ArrayList<String>());
+				.append("question_asked", new ArrayList<String>());
 			tc.insertOne(doc);	
 		return new GeneralServices().response(Notifications.PROJECTINSERTED);
 	}
@@ -57,7 +57,7 @@ public Acknowledgement updateinstitute(String id,Institute institute){
 				.append("tags", institute.getTags())
 				.append("project_id", (ArrayList<String>)document.get("project_id"))
 				.append("question_id",(ArrayList<String>)document.get("question_id"))
-				.append("question_answered",(ArrayList<String>)document.get("question_answered"));
+				.append("question_asked",(ArrayList<String>)document.get("question_asked"));
 		tc.updateOne(eq("_id",oid),new Document("$set",doc));
 		return new GeneralServices().response(Notifications.PROJECTINSERTED);
 	}
