@@ -25,22 +25,22 @@ public class UserDao {
 	
 	  MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("testuserdata");
 	
-	  public void signupUser(String name,String password,String emailid,Date date)
+	  public void signupUser(String username,String password,String emailid,Date date)
 	  {MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("unverifieduserdata");
-	   Document doc = new Document("name",name)
+	   Document doc = new Document("username",username)
 				  .append("password",password)
 				  .append("emailid",emailid)
 				  .append("date",date)
 				  .append("verified","n");
 		           tc.insertOne(doc);
 	  }
-	  public String userVerifier(String name,String email,Date date,HttpServletResponse response)
+	  public String userVerifier(String username,String emailid,Date date,HttpServletResponse response)
 	  {MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("unverifieduserdata");
-	  System.out.println(date+"<< data");System.out.println(email);System.out.println(name);
-	  Document doc= tc.find(and(eq("name",name),eq("emailid",email),eq("date",date))).first();
+	  System.out.println(date+"<< data");System.out.println(emailid);System.out.println(username);
+	  Document doc= tc.find(and(eq("username",username),eq("emailid",emailid),eq("date",date))).first();
 		 if(doc!=null)
-		 {   String password = tc.find(and(eq("name",name),eq("emailid",email),eq("date",date))).first().getString("password");
-		    	new UserDao().insertNewUser(name,email,date,password,doc);
+		 {   String password = tc.find(and(eq("username",username),eq("emailid",emailid),eq("date",date))).first().getString("password");
+		    	new UserDao().insertNewUser(username,emailid,date,password,doc);
 		   // 	response.sendRedirect("localhost");
 			 return "verified";
 		 }
@@ -48,10 +48,16 @@ public class UserDao {
 			 return "unverified";
 		 }
 	  }
-	  public void insertNewUser(String name,String email,Date date,String password,Document unverified){
+	  public void insertNewUser(String username,String emailid,Date date,String password,Document unverified){
 
+		  Document unverify  = new Document("username",username)
+				  .append("emailid", emailid)
+				  .append("verified","n")
+				  .append("date", date)
+				  .append(password, password);
+		  
 		  Document contact_information = new Document("phone_no","")
-				  .append("email_id","")
+				  .append("email_id",emailid)
 				  .append("country", "")
 				  .append("state","")
 				  .append("city","")
@@ -62,9 +68,9 @@ public class UserDao {
 				              .append("project_view",new ArrayList<String>())
 				              .append("user_view",new ArrayList<String>());
 
-		  Document doc = new Document("username","")
+		  Document doc = new Document("name","")
 					  .append("password",password)
-					  .append("name",name)
+					  .append("username",username)
 					  .append("bio","")
 					  .append("date",date.getTime())
 					  .append("profile_url","")
@@ -89,7 +95,7 @@ public class UserDao {
 					  .append("favourite_tag",new ArrayList<String>()); 
                   		  tc.insertOne(doc);
       MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("unverifieduserdata");
-	  tc.deleteOne(doc);
+	  tc.deleteOne(unverify);
 	  }
 	  
 	  public Acknowledgement updateUser(User user)
@@ -262,4 +268,19 @@ tc.updateOne(eq("username",user.getUsername()),new Document("$set",new Document(
         }
     	 return alluser;
     	}
+ 
+          public String check(String username,String emailid){
+    		           UserDao obj1=new UserDao();
+    		           ArrayList<MultiUse> obj=obj1.getAllUser();
+    		           for(MultiUse a:obj){
+    		               if(username.equals(a.getUsername())){
+    		                   return "username present";
+    		               }else if(emailid.equals(a.getEmailid()))
+    		               {
+    		            	   return "emailid present";
+    		               }
+    		               
+    		           }
+    		           return "success";
+    		       }
 }

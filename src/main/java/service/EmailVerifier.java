@@ -16,13 +16,13 @@ public String test(String hash1,String hash2,HttpServletResponse response)
 {
 System.out.println(hash1);
 System.out.println(hash2);
-String name = GeneralServices.linkDecrypter(Base64.decodeBase64(hash1));
-String email = GeneralServices.linkDecrypter(Base64.decodeBase64(hash2));
-System.out.println(name);
-name = name.substring(0,name.indexOf("|"));
-String dat = email.substring((email.indexOf("|")+1),email.length());
+String username = GeneralServices.linkDecrypter(Base64.decodeBase64(hash1));
+String emailid = GeneralServices.linkDecrypter(Base64.decodeBase64(hash2));
+System.out.println(username);
+username = username.substring(0,username.indexOf("|"));
+String dat = emailid.substring((emailid.indexOf("|")+1),emailid.length());
 System.out.println(dat);
-email = email.substring(0,email.indexOf("|"));
+emailid = emailid.substring(0,emailid.indexOf("|"));
 long date= Long.valueOf(dat);
 Date dateone =null;
 Date datetwo = new Date(date);
@@ -36,7 +36,7 @@ try {
 	// TODO Auto-generated catch block
 	e.printStackTrace();
 }
-String s = new UserDao().userVerifier(name,email,dateone,response);
+String s = new UserDao().userVerifier(username,emailid,dateone,response);
 return s;
 }
 

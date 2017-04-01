@@ -33,9 +33,16 @@ public class UserResource implements ContainerResponseFilter {
 	@POST
 	@Path("/signup")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void signup(Signup signup)
+	public String signup(Signup signup)
 	{//@PathParam("date") String date
-		new GeneralServices().signup(signup);
+	   String status = new UserDao().check(signup.getUsername(), signup.getEmailid());
+	if(status.equals("success"))
+	{
+	   return new GeneralServices().signup(signup);
+	}
+	else{
+		return status;
+	}
 	}
 	@GET
 	@Path("/verifier/{hash1}/{hash2}")

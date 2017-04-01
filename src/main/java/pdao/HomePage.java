@@ -1,0 +1,96 @@
+package pdao;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+
+import org.bson.Document;
+import org.bson.types.ObjectId;
+
+import static com.mongodb.client.model.Filters.*;
+
+import com.mongodb.Block;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
+
+import bean.Question;
+import bean.Tile;
+import bean.User;
+import service.DatabaseServices;
+import service.GeneralServices;
+
+public class HomePage {
+	public void getProblems(ArrayList<Tile> question, String username)
+	{
+		 MongoCollection<Document> tc =new DatabaseServices().getDb().getCollection("userdata");
+		 Document doc = tc.find(eq("username",username)).first();
+		 ArrayList<String> alfavtags = (ArrayList<String>) doc.get("favourite_tag");
+		
+		 tc =new DatabaseServices().getDb().getCollection("qa");
+	     FindIterable <Document> quesfavtags =  tc.find(in("tags",alfavtags));
+	       
+		
+	}
+	public ArrayList<Tile> getInterestQuestion(ArrayList<Tile> question, String username)
+ 	{
+ 		 MongoCollection<Document> tc =new DatabaseServices().getDb().getCollection("userdata");
+ 		   
+ 		   Document doc = tc.find(eq("username",username)).first();
+ 		   ArrayList<String> alquesbookmark = (ArrayList<String>) doc.get("question_bookmark");
+ 		   ArrayList<String> alquesask = (ArrayList<String>) doc.get("question_ask");
+ 		   ArrayList<String> alquesanswer = (ArrayList<String>) doc.get("question_answer");
+ 		   ArrayList<String> alfollowing = (ArrayList<String>) doc.get("following");
+ 		   
+ 	         // in tags
+ 		   doc = (Document) doc.get("history");
+ 	       ArrayList<String> alviewedtags = (ArrayList<String>) doc.get("tag_view");
+ 	       ArrayList<String> alvieweduser = (ArrayList<String>) doc.get("user_view");
+ 	       
+ 	      tc =new DatabaseServices().getDb().getCollection("qa");
+ 	       FindIterable <Document> quesfavtags =  tc.find(in("tags",alfavtags));
+ 	       FindIterable <Document> quesviewedtags =  tc.find(in("tags",alviewedtags));
+ 	       FindIterable <Document> quesvieweduser =  tc.find(in("username",alvieweduser));
+ 	       FindIterable <Document> quesfollowing =  tc.find(in("username",alfollowing));
+ 	       FindIterable <Document> quesbookmark = null;
+ 	       for(String s : alquesbookmark){
+ 	    	   ObjectId id = new ObjectId(s);
+ 	    	   quesbookmark = tc.find(in("_id",id));
+ 	       }
+ 	       
+ 	       FindIterable <Document> quesask = null;
+ 	       for(String s : alquesask){
+ 	    	   System.out.println(s+"###############################################################");
+ 	    	   ObjectId id = new ObjectId(s);
+ 	    	   quesask = tc.find(in("_id",id));
+ 	       }
+ 	       FindIterable <Document> quesanswer = null;
+ 	       for(String s : alquesanswer){
+ 	    	   ObjectId id = new ObjectId(s);
+ 	    	   quesanswer = tc.find(in("_id",id));
+ 	       }
+ 	       
+ 	      if(quesfavtags != null)
+ 	    	  getHistory(question,quesfavtags,"interesting","question");
+ 	      if(quesviewedtags != null)
+ 	    	  getHistory(question,quesviewedtags,"interesting","question");
+ 	      if(quesvieweduser != null)
+ 	    	  getHistory(question,quesvieweduser,"interesting","question");
+ 	      if(quesfollowing != null)
+ 	    	  getHistory(question,quesfollowing,"interesting","question");
+ 	      if(quesbookmark != null)
+ 	    	  getHistory(question,quesbookmark,"interesting","question");
+ 	      if(quesask != null)
+ 	    	  getHistory(question,quesask,"interesting","question");
+ 	      if(quesanswer != null)
+ 	      getHistory(question,quesanswer,"interesting","question");
+ 	      
+ 	      if(question != null)
+ 	    	  Collections.sort(question, Tile.homesort);
+ 	      System.out.println("alsearch"+question);
+ 	         return question;   
+ 	       
+ 	}
+ 	
+	
+}

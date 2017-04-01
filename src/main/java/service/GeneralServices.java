@@ -250,24 +250,25 @@ public void update(String base)
 		e.printStackTrace();
 
 	}}
-public void signup(Signup signup)
+public String signup(Signup signup)
 {
-	String name = signup.getName();
-	String email = signup.getEmailid();
+	String username = signup.getUsername();
+	String emailid = signup.getEmailid();
 	String password = signup.getPassword();
 	System.out.println("password"+"::"+password);
-	password = GeneralServices.get_SHA_256_SecurePassword(name,password);
+	password = GeneralServices.get_SHA_256_SecurePassword(username,password);
 	Date date = GeneralServices.getCurrentDate();
 		
 	   long dateepoch = date.getTime();
-	    String hashed1 = linkEncryptCreator(name,String.valueOf(dateepoch));
-	    String hashed2 = linkEncryptCreator(email,String.valueOf(dateepoch));
+	    String hashed1 = linkEncryptCreator(username,String.valueOf(dateepoch));
+	    String hashed2 = linkEncryptCreator(emailid,String.valueOf(dateepoch));
         //enter for verification
-	    new UserDao().signupUser(name, password, email, date);
+	    new UserDao().signupUser(username, password, emailid, date);
      try{
-	    SendEmail.SendSimple(email,hashed1, hashed2);
+	    SendEmail.SendSimple(emailid,hashed1, hashed2);
      }catch(Exception e){System.out.println("mail send");}
-     }
+     return "success";
+}
 
 public static Long datetoepoch(Date date){
 	return date.getTime();
