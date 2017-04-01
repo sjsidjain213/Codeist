@@ -79,8 +79,8 @@ public class QADao {
 	
 	@SuppressWarnings("unchecked")
 	public Question getQuestion(String id)
-	{
-		ObjectId id1=new ObjectId(id.toString());
+	{System.out.println(id+"this is id");
+		ObjectId id1=new ObjectId(id);
 		Document doc = tc.find(eq("_id",id1)).first();
 		ArrayList<Answer> alansw = new ArrayList<Answer>();
 	if(doc!=null)
