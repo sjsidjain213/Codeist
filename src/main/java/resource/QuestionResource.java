@@ -45,22 +45,21 @@ public class QuestionResource {
 	public Acknowledgement insertQuestion(Question question,@Context HttpServletRequest req)
 	{
 		return (new SessionService().sessionVerifier(req))?new QADao().insertQuestion(question,req):new GeneralServices().response(null);
-	}*/
-	
-	//implement this api to get related project to an question
-	
-	@POST
-	@Path("/forum/{username}/{question_id}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<Tile> getQuestion(@PathParam("username")String username,@PathParam("question_id") String question_id,Question ques)
-	{
-	ArrayList<String> altags = ques.getTags();	
-	//get questions tags from database
-	return new HomePage().getRelatedProject(username,question_id,altags);
-		//return new HomePage().getQuestions(username);
-      //return new HomePage().getQuestions(req.getSession().getAttribute("username").toString());
 	}
 	
+	//implement this api to get related project to an question
+	/*
+	@GET
+	@Path("/forum/{username}/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ArrayList<Tile> getQuestion(@PathParam("username")String username,@PathParam("question_id") String question_id)
+	{
+	get questions tags from database
+	return new HomePage().getRelatedProject(username,question_id,altags)
+		//return new HomePage().getQuestions(username);
+      //return new HomePage().getQuestions(req.getSession().getAttribute("username").toString());
+	}*/
+	/*
 	@POST
 	@Path("/{id}/answer")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -68,7 +67,7 @@ public class QuestionResource {
 	public Acknowledgement insertAnswer(@PathParam("id") String id,Answer answer,@Context HttpServletRequest req)
 	{
 		return (new SessionService().sessionVerifier(req))?new QADao().insertAnswer(id,answer,req):new GeneralServices().response(null);
-	}
+	}*/
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -76,7 +75,22 @@ public class QuestionResource {
 	public Question getQuestion(@PathParam("id")String question)
 	{
 		return new QADao().getQuestion(question);
-	}/*
+	}
+	
+	@POST
+	@Path("/forum/{username}/{question_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public ArrayList<Tile> getQuestion(@PathParam("username")String username,@PathParam("question_id") String question_id,Question ques)
+	{
+	ArrayList<String> altags = ques.getTags();	
+	//get questions tags from database
+	return new HomePage().getRelatedProject(username,question_id,altags);
+		//return new HomePage().getQuestions(username);
+      //return new HomePage().getQuestions(req.getSession().getAttribute("username").toString());
+
+	}
+	/*
 	@PUT
 	@Path("/{id}/upvote")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -161,10 +175,11 @@ public class QuestionResource {
 	/*
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/asked/{username}")
 	//@Consumes(MediaType.APPLICATION_JSON)
 	public ArrayList<Question> getProblems_asked(@PathParam("username") String email)
 	{
 		 return new QADao().getProblem(email);
 	}*/
-	//@Path("/asked/{username}")
+	
 }

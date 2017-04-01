@@ -25,11 +25,20 @@ public class QADao {
 	MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("qa");
 	MongoCollection<Document> tcuser = new DatabaseServices().getDb().getCollection("testuserdata");
 
-	public Acknowledgement insertQuestion(Question question, HttpServletRequest req)
+	public Acknowledgement insertQuestion(Question question, HttpServletRequest req,String username)
 	{   //String userfromsession ="hsharma";// req.getSession().getAttribute("username").toString();
 		try{
-	    Document doc2 = tc.find(and(eq("username",req.getSession().getAttribute("username").toString()),eq("question",question.getQuestion()))).first();
-		if(doc2==null)
+	   // Document doc2 = tc.find(and(eq("username",req.getSession().getAttribute("username").toString()),eq("question",question.getQuestion()))).first();
+	   	if(tc.find(eq("question",question.getQuestion()))!=null)
+			{Acknowledgement acknow = new Acknowledgement();
+			acknow.setMessage("question already exsist");
+			Document doc = tc.find(eq("question",question.getQuestion())).first();
+            String q_id = doc.get("_id").toString();
+		    acknow.setUpsertedId(q_id);
+            return acknow;
+			}
+			Document doc2 = tc.find(and(eq("username",username))).first();
+			if(doc2==null)
 		{
 			Document info=new Document().append("upvotes",new ArrayList<String>()).append("downvotes",new ArrayList<String>());
 			Document doc = new Document("username",req.getSession().getAttribute("username"))
@@ -43,17 +52,16 @@ public class QADao {
 	    		.append("answers",new ArrayList<Answer>());
 	       tc.insertOne(doc);
 	    
-	    String id = tc.find(and(eq("username",req.getSession().getAttribute("username").toString()),eq("question",question.getQuestion()))).first().get("_id").toString();
+	//    String id = tc.find(and(eq("username",req.getSession().getAttribute("username").toString()),eq("question",question.getQuestion()))).first().get("_id").toString();
 
 	    // for userdata 
-	    new UserDao().moduleIDAdder(Notifications.QUESTIONMODULE,req.getSession().getAttribute("username").toString(), id);
+//	    new UserDao().moduleIDAdder(Notifications.QUESTIONMODULE,req.getSession().getAttribute("username").toString(), id);
 	    
 	    // for url
-	    String url = GeneralServices.urlGenerator(Notifications.QUESTIONMODULE, id, question.getQuestion());
+//	    String url = GeneralServices.urlGenerator(Notifications.QUESTIONMODULE, id, question.getQuestion());
 	    String s=tc.find(and(eq("username",req.getSession().getAttribute("username").toString()),eq("question",question.getQuestion()))).first().get("_id").toString();
 	   
 	    Acknowledgement acknow = new Acknowledgement();
-	    acknow.setUpsertedId(s);
 	    acknow.setMessage(GeneralServices.spaceRemover(question.getQuestion()));
 		return acknow;
 		}
@@ -83,6 +91,8 @@ public class QADao {
 	//quest.setLast_updated(doc.getLong("last_updated"));
 	quest.setTags((ArrayList<String>)doc.get("tags"));
 	quest.setQuestion_url(doc.getString("url"));
+	quest.setCity(doc.getString("city"));
+	quest.setState(doc.getString("state"));
 	Document document=(Document) doc.get("info");
 	quest.setDownvotes((ArrayList<String>)document.get("downvotes"));
 	quest.setUpvotes((ArrayList<String>)document.get("upvotes"));

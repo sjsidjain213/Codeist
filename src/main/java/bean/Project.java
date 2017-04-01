@@ -4,18 +4,25 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Project extends Super{
-	private String username,title,description,readme,license,project_url,_private,id,url_title,region_state,region_city,department;
-    public String getRegion_state() {
-		return region_state;
+	private String username,title,description,readme,license,project_url,_private,id,url_title,state,city,department;
+   
+	public String getState() {
+		return state;
 	}
-	public void setRegion_state(String region_state) {
-		this.region_state = region_state;
+	public void setState(String state) {
+		this.state = state;
 	}
-	public String getRegion_city() {
-		return region_city;
+	public String getCity() {
+		return city;
 	}
-	public void setRegion_city(String region_city) {
-		this.region_city = region_city;
+	public void setCity(String city) {
+		this.city = city;
+	}
+	public String getDepartment() {
+		return department;
+	}
+	public void setDepartment(String department) {
+		this.department = department;
 	}
 	//private long downvotes, viewcount,upvotes;
    	private ArrayList<String> images,video_url,zip_file,contributors,tags,downvotes,viewby,project_link;

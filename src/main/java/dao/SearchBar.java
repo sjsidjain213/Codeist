@@ -260,7 +260,7 @@ public class SearchBar {
         //search on basis of region in tags
        // search bean project or question is same
         
-        fi = tcques.find(or(eq("region_city",Pattern.compile("(?i:.*"+s+".*)"))));	
+        fi = tcques.find(or(eq("city",Pattern.compile("(?i:.*"+s+".*)"))));	
         fi.forEach((Block<Document>) doc -> { 
         	     if(!hm.containsKey(doc.get("_id"))){
         	     SearchBean project = new SearchBean();
@@ -297,7 +297,7 @@ public class SearchBar {
         
 
         //search on basis of region in question
-         fi = tcques.find(or(eq("region_state",Pattern.compile("(?i:.*"+s+".*)"))));	
+         fi = tcques.find(or(eq("state",Pattern.compile("(?i:.*"+s+".*)"))));	
         fi.forEach((Block<Document>) doc -> { 
         		System.out.println("**"+doc);
         	     if(!hm.containsKey(doc.get("_id"))){
@@ -415,7 +415,47 @@ public class SearchBar {
         	         }	    	 
         	     }
         });
-
+        
+        //search on basis of description
+        fi = tcques.find(or(eq("description",Pattern.compile("(?i:.*"+s+".*)"))));	
+        fi.forEach((Block<Document>) doc -> { 
+        	    if(!hm.containsKey(doc.get("_id"))){
+        	    	 System.out.println("inside if");
+        	    	 SearchBean ques = new SearchBean();
+        	    	 ques.setSource("question");
+        	    	 ques.setTitle(doc.getString("question"));
+        	    	 ques.setId(doc.get("_id").toString());
+        	    	 ques.setDescription(doc.getString("description"));
+        	    	 ques.setUsername(doc.getString("username"));
+        	    	 ques.setUpvotecount(doc.getLong("upvotecount"));
+        	    	 ques.setDownvotecount(doc.getLong("downvotecount"));
+        	    	 ques.setMatchedcount(1);
+        	    	 boolean bool =(doc.getString("question").matches("(?i:"+s+")"))?ques.setPriority("z"):ques.setPriority("b");
+        	    	 System.out.println(bool);
+        	    	 alsearch.add(ques);
+        	    	 hm.put(doc.get("_id"),ques);
+        	     }
+        	    else if(doc.getString("description").matches("(?i:.*"+s+".*)")){
+                    SearchBean sb=hm.get(doc.get("_id"));
+                    System.out.println("else");
+                   if(sb!=null)
+        	         { 
+             	    if(doc.getString("question").matches("(?:"+s+")"))
+             	    {
+             	    	if(sb.getPriority().equals("b") || sb.getPriority().equals("a"))
+             	    	{
+             	    		sb.setPriority("z");
+             	    	}
+             	    }
+                  long count = sb.getMatchedcount()+1;	
+        	         //System.out.println("else id"+doc.get("_id")+st+"::"+count);
+        	         sb.setMatchedcount((count));
+        	            String source = sb.getSource();
+        	            sb.setSource(source);
+        	         	hm.put(doc.get("_id"),sb);
+        	         }	    	 
+        	     }
+        });
         });
              
         Collections.sort(alsearch, SearchBean.searchsort);

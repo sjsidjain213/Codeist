@@ -87,11 +87,11 @@ public class UserResource implements ContainerResponseFilter {
 	@Path("/profile/{username}")
 	public User getUserDetails(@Context HttpServletRequest req,@PathParam("username") String username,@HeaderParam("auth_token") String auth_token,@Context HttpServletResponse response)
 	{System.out.println(auth_token+"ihiwdhni");
-		if(new SessionService().tokenVerifier(auth_token,req,response)){
+//		if(new SessionService().tokenVerifier(auth_token,req,response)){
 			return new UserDao().getUserDetails(username);
-		}else{
-            return new User();			
-		}
+//		}else{
+//            return new User();			
+		//}
 	}
 	
 	@PUT

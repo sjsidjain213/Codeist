@@ -1,0 +1,66 @@
+package dao;
+
+import static com.mongodb.client.model.Filters.eq;
+
+import java.util.ArrayList;
+
+import org.bson.Document;
+import org.bson.types.ObjectId;
+
+import com.mongodb.client.MongoCollection;
+
+import bean.Acknowledgement;
+import bean.Institute;
+import bean.Notifications;
+import service.DatabaseServices;
+import service.GeneralServices;
+
+public class AdminDao {
+	MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("institute");
+	public Acknowledgement insertinstitute(Institute institute){
+	
+		
+		Document doc=new Document().append("loginid", institute.getLoginid())
+				.append("password", institute.getPassword())
+				.append("university_name", institute.getUniversity_name())
+				.append("college_name", institute.getCollege_name())
+				.append("state", institute.getState())
+				.append("city", institute.getCity())
+				.append("email_id",institute.getEmail_id())
+				.append("phone_no", institute.getPhone_no())
+				.append("address", institute.getAddress())
+				.append("departments",institute.getDepartments())
+				.append("tags", institute.getTags())
+				.append("project_id", new ArrayList<String>())
+				.append("question_id", new ArrayList<String>())
+				.append("question_answered", new ArrayList<String>());
+			tc.insertOne(doc);	
+		return new GeneralServices().response(Notifications.PROJECTINSERTED);
+	}
+	
+@SuppressWarnings("unchecked")
+public Acknowledgement updateinstitute(String id,Institute institute){
+	 ObjectId oid = new ObjectId(id.toString());
+	 Document document = tc.find(eq("_id",oid)).first();
+	 
+	 
+		Document doc=new Document().append("loginid", institute.getLoginid())
+				.append("password", document.getString("password"))
+				.append("university_name", institute.getUniversity_name())
+				.append("college_name", institute.getCollege_name())
+				.append("state", institute.getState())
+				.append("city", institute.getCity())
+				.append("email_id",institute.getEmail_id())
+				.append("phone_no", institute.getPhone_no())
+				.append("address", institute.getAddress())
+				.append("departments",institute.getDepartments())
+				.append("tags", institute.getTags())
+				.append("project_id", (ArrayList<String>)document.get("project_id"))
+				.append("question_id",(ArrayList<String>)document.get("question_id"))
+				.append("question_answered",(ArrayList<String>)document.get("question_answered"));
+		tc.updateOne(eq("_id",oid),new Document("$set",doc));
+		return new GeneralServices().response(Notifications.PROJECTINSERTED);
+	}
+
+	
+}
