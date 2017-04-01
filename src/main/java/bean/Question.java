@@ -6,6 +6,13 @@ import java.util.Date;
 public class Question {
 
 	private String username,question,question_url,description,state,city,university_name,college_name;
+	private ArrayList<String> department;
+	public ArrayList<String> getDepartment() {
+		return department;
+	}
+	public void setDepartment(ArrayList<String> department) {
+		this.department = department;
+	}
 	public String getState() {
 		return state;
 	}
