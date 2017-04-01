@@ -19,7 +19,7 @@ import static com.mongodb.client.model.Filters.*;
 import java.io.IOException;
 import java.util.ArrayList;
 public class SessionService {
-MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("userdata");
+MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("testuserdata");
 
 	/**
 	 * @param req
