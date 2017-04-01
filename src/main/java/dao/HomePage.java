@@ -15,6 +15,7 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 
 import bean.Question;
+import bean.SearchBean;
 import bean.Tile;
 import bean.User;
 import service.DatabaseServices;
@@ -35,6 +36,7 @@ public class HomePage {
  	{
  		// username of loggedin, question_id of new inserted question, altags of question 
  		ArrayList<Tile> project = new ArrayList<Tile>();
+ 		System.out.println(altags);
  		project = getInterestRelatedProject(project,username,altags,question_id);
  		return project;
  	}
@@ -104,21 +106,35 @@ public class HomePage {
  	}
  	// interest
  	//one more thing is required is question id which is inserted
- 	public ArrayList<Tile> getInterestRelatedProject(ArrayList<Tile> project, String username,ArrayList<String> altags,String question_id)
+ 	@SuppressWarnings("unchecked")
+	public ArrayList<Tile> getInterestRelatedProject(ArrayList<Tile> project, String username,ArrayList<String> altags,String question_id)
  	{
+ 		ObjectId oid=new ObjectId(question_id.toString());
+ 		System.out.println("in*****"+altags);
+ 		HashMap<Object,Tile> hm = new HashMap<Object,Tile>();
  		MongoCollection<Document> tc =new DatabaseServices().getDb().getCollection("project");
-	//tags matched in project
- 		FindIterable <Document> quesfavtags =  tc.find(in("tags",altags));
+ 		MongoCollection<Document> tcqa =new DatabaseServices().getDb().getCollection("qa");
+ 		Document dd = tcqa.find(eq("_id",oid)).first();
+ 		ArrayList<Tile> tempList = new ArrayList<Tile>();
+ 		ArrayList<Tile> finalList = new ArrayList<Tile>();
+ 		FindIterable <Document> quesfavtags =  (FindIterable<Document>)tc.find(in("tags",altags));
+ 		for(Document d : quesfavtags)
+ 		System.out.println("***"+d);
+ 		tc =new DatabaseServices().getDb().getCollection("institute");
+        FindIterable <Document> institute =  tc.find(in("tags",altags));
+        new GeneralServices().addProblem(institute,question_id);    
     //project is the arraylist in which we want to add feed
     //public void getHistory(ArrayList<Tile> altl, FindIterable<Document> fi,String source, String subject)
     //sorted according to matched count, region and owner (if owner is institute then high priority)
- 		if(quesfavtags != null)
-	    	   getHistory(project,quesfavtags,"matched","project");
-   //question id is added in institute
-               tc =new DatabaseServices().getDb().getCollection("institute");
-               FindIterable <Document> institute =  tc.find(in("tags",altags));
-               new GeneralServices().addProblem(institute,question_id);       
- 		return project;       
+ 		if(quesfavtags != null) {		
+	    	 tempList.addAll(getHistory(project,quesfavtags,"matched","p",oid));
+ 		finalList.addAll(getHistory(tempList,institute,"matched","p",oid));
+ 		}
+ 		System.out.println("final**"+finalList);
+               Collections.sort(finalList,Tile.matchsort);
+               Collections.sort(finalList,Tile.statussort);
+               System.out.println("final++++"+finalList);
+ 		return finalList;      
  	}
  	public ArrayList<Tile> getInterestQuestion(ArrayList<Tile> question, String username)
  	{
@@ -181,6 +197,99 @@ public class HomePage {
  	       
  	}
  	
+	public ArrayList<Tile> getHistory(ArrayList<Tile> altl, FindIterable<Document> fi,String source, String subject,ObjectId oid)
+	{//subject is either question or answer and source is interesting and trending
+		MongoCollection<Document> tcqa =new DatabaseServices().getDb().getCollection("qa");
+ 		Document dd = tcqa.find(eq("_id",oid)).first();
+ 		HashMap<Object,Tile> hm1 = new HashMap<Object,Tile>();
+ 		for(Document d : fi)
+ 			System.out.println("8888888"+d);
+		for(Document doc:fi)
+	      {	if(!hm1.containsKey(doc.get("_id")))
+		      	{   
+	    	  		Tile tl = new GeneralServices().returnTile(doc,source,subject);
+	    	  		
+	    	                //Tile tile = new Tile();
+	    	            	   
+	    	            	    //tile.setUsername(doc.getString("username"));
+	    	            	    //tile.setId(doc.get("_id").toString());
+	    	            	    System.out.println("##"+doc.getString("state")+"    "+dd.getString("state")+"    "+doc);
+	    	            	    System.out.println("000 "+(dd.getString("state").equals(doc.getString("state")) && dd.getString("city").equals(doc.getString("city"))));
+	    	            	    //tile.setMatchedcount(1);
+	    	            	    if((dd.getString("state").equals(doc.getString("state"))) && dd.getString("city").equals(doc.getString("city"))){
+	    	            	    	tl.setStatus(2);
+	    	            	    	System.out.println("here");
+	    	            	    }
+	    	            	    else if(dd.getString("state").equals(doc.getString("state"))){
+	    	            	    	tl.setStatus(1);
+	    	            	    	System.out.println("also");
+	    	            	    }
+	    	            	    else {
+	    	            	    	tl.setStatus(0);
+	    	            	    	System.out.println("toooo");
+	    	            	    }
+	    	            	    System.out.println(tl);
+	    	            	   // boolean bool =(doc.getString("username").equals(s)||doc.getString("name").equals(s))?user.setPriority("z"):user.setPriority("b");    
+	    	           	        altl.add(tl); 
+	    	           	        System.out.println(altl);
+	    	                    hm1.put(doc.get("_id"),tl);
+	    	                    System.out.println("project"+altl);
+	    	            }else{
+	    	            Tile sb=hm1.get(doc.get("_id"));
+	    	            if(sb!=null)
+	    	            {
+	    	            	sb.setMatchedcount((sb.getMatchedcount()+1));
+	    	            	System.out.println("sb     "+sb);
+	    	              hm1.put(doc.get("_id"),sb);
+	    	            }
+	    	            }
+	    	        }
+	    	   //question id is added in institute
+	    	               
+	    	               /*for(Document doc : institute)
+	    	               {
+	    	            	   if(!hm.containsKey(doc.get("_id"))){
+	    	                       //Tile tile = new Tile();
+	    	                   	   
+	    	                   	    //tile.setUsername(doc.getString("username"));
+	    	                   	    //tile.setId(doc.get("_id").toString());
+	    	                   	    System.out.println("##"+doc.getString("state")+"    "+dd.getString("state"));
+	    	                   	    System.out.println("$$ "+dd.getString("state").equals(doc.getString("state")));
+	    	                   	    tile.setMatchedcount(1);
+	    	                   	    if((dd.getString("state").equals(doc.getString("state"))) && dd.getString("city").equals(doc.getString("city")))
+	    	                   	    	tile.setStatus(2);
+	    	                   	    else if(dd.getString("state").equals(doc.getString("state")))
+	    	                   	    	tile.setStatus(1);
+	    	                   	    else 
+	    	                   	    	tile.setStatus(0);
+	    	                   	   // boolean bool =(doc.getString("username").equals(s)||doc.getString("name").equals(s))?user.setPriority("z"):user.setPriority("b");    
+	    	                  	        project.add(tile);   
+	    	                           hm.put(doc.get("_id"),tile);
+	    	                   }else{
+	    	                   Tile sb=hm.get(doc.get("_id"));
+	    	                   if(sb!=null)
+	    	                   {
+	    	                   	sb.setMatchedcount((sb.getMatchedcount()+1));
+	    	                     hm.put(doc.get("_id"),sb);
+	    	                   }
+	    	                   }
+	    	               }}
+		      	    hm.put(d.get("_id"),tl);
+		      		altl.add(tl);
+		      	}
+		      	else{
+	        	 Tile tl =    hm.get(d.get("_id"));
+	        	 int i = tl.getPositioncount()+1;
+	        	 ArrayList <String> al = tl.getSource();
+	        	 //al.add(source);
+	        	 tl.setSource(al);
+	 	      	tl.setPositioncount(i);
+	 	      	hm.put(d.get("_id"),tl);
+	         	}
+	      }*/
+		return altl;
+	}
+	
 	public void getHistory(ArrayList<Tile> altl, FindIterable<Document> fi,String source, String subject)
 	{//subject is either question or answer and source is interesting and trending
 		for(Document d:fi)

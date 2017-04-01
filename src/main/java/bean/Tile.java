@@ -8,7 +8,45 @@ public class Tile extends Super{
 //url for project/question url use of url is mandatory
 //title for project/question title
 //description for project/question description 	
-private String username,title,description,url,subject,url_title;
+private String username,title,description,url,subject,url_title,university_name,college_name,state,city;
+private int matchedcount,status;
+public int getStatus() {
+	return status;
+}
+public void setStatus(int status) {
+	this.status = status;
+}
+public int getMatchedcount() {
+	return matchedcount;
+}
+public void setMatchedcount(int matchedCount) {
+	this.matchedcount = matchedCount;
+}
+public String getState() {
+	return state;
+}
+public void setState(String state) {
+	this.state = state;
+}
+public String getCity() {
+	return city;
+}
+public void setCity(String city) {
+	this.city = city;
+}
+public String getUniversity_name() {
+	return university_name;
+}
+public void setUniversity_name(String university_name) {
+	this.university_name = university_name;
+}
+public String getCollege_name() {
+	return college_name;
+}
+public void setCollege_name(String college_name) {
+	this.college_name = college_name;
+}
+
 private int positioncount;
 private String id;
 
@@ -25,11 +63,11 @@ public String toString() {
 			+ ", subject=" + subject + ", url_title=" + url_title + ", positioncount=" + positioncount + ", id=" + id
 			+ ", date=" + date + ", source=" + source + ", upvotes=" + upvotes + ", downvotes=" + downvotes
 			+ ", upvotecount=" + upvotecount + ", downvotecount=" + downvotecount + ", viewcount=" + viewcount
-			+ ", tags=" + tags + "]";
+			+ ", tags=" + tags + ", status" + status + "]";
 }
 public Tile(String username, String title, String description, String url, String subject, String url_title,
 		int positioncount, String id, Date date, ArrayList<String> source, ArrayList<String> upvotes,
-		ArrayList<String> downvotes, long upvotecount, long downvotecount, long viewcount, ArrayList<String> tags) {
+		ArrayList<String> downvotes, long upvotecount, long downvotecount, long viewcount, ArrayList<String> tags, Integer status) {
 	super();
 	this.username = username;
 	this.title = title;
@@ -47,6 +85,7 @@ public Tile(String username, String title, String description, String url, Strin
 	this.downvotecount = downvotecount;
 	this.viewcount = viewcount;
 	this.tags = tags;
+	this.status = status;
 }
 public String getUsername() {
 	return username;
@@ -164,4 +203,24 @@ public static Comparator<Tile> homesort = new Comparator<Tile>() {
 
 	   return upvote2-upvote1;
   }};
+  
+  public static Comparator<Tile> matchsort = new Comparator<Tile>() {
+
+		public int compare(Tile s1,Tile s2) {
+
+		   int match1 = (int)s1.getPositioncount();
+		   int match2 = (int)s2.getPositioncount();
+
+		   return match2-match1;
+	  }};
+	  
+	  public static Comparator<Tile> statussort = new Comparator<Tile>() {
+
+			public int compare(Tile s1,Tile s2) {
+
+			   int status1 = (int)s1.getStatus();
+			   int status2 = (int)s2.getStatus();
+
+			   return status2-status1;
+		  }};
 }
