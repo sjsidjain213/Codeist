@@ -163,7 +163,7 @@ profile_url = (user.getGender().equals("m")&&user.getProfile_url()=="")?"https:/
     	      user.setContributing((ArrayList<String>)d.get("contributing"));
     	      user.setFollower((ArrayList<String>)d.get("followers"));
     	      user.setFollowing((ArrayList<String>)d.get("following"));
-    	      user.setFavourite_tag((ArrayList<String>)d.get("favourite_tags"));
+    	      user.setFavourite_tag((ArrayList<String>)d.get("favourite_tag"));
               Document innerdoc = (Document) d.get("contact_information");
               user.setCity(innerdoc.getString("city"));
               user.setCountry(innerdoc.getString("country"));

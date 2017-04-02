@@ -278,11 +278,11 @@ public class QADao {
 		MultiUse obj=new MultiUse();
 		String owner="i";
 		String username=d.getString("username");
-		if(d.getString("owner").equals("i")){
+		if(new UserDao().getAllUseri().contains(username)){
 			tcuser=new DatabaseServices().getDb().getCollection("testuserdata");
 			owner="i";
 		}
-		else if(d.getString("owner").equals("c")){
+		else if(new InstituteDao().getAllUserc().contains(username)){
 			tcuser=new DatabaseServices().getDb().getCollection("institute");
 		}
 		//Document d = tc.find(and(eq("username",username),eq("question",question.getQuestion()))).first();
