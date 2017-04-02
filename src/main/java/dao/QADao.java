@@ -3,6 +3,7 @@ package dao;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 
 import bean.Acknowledgement;
@@ -50,6 +51,8 @@ public class QADao {
 			Document doc = new Document("username",username)
 	    		.append("question",question.getQuestion())
 	    		.append("description",question.getDescription())
+	    		.append("state", question.getState())
+	    		.append("city", question.getCity())
 	    		.append("tags",(List<String>)question.getTags())
 	    		.append("owner", question.getOwner())
 	    		.append("date",GeneralServices.getCurrentDate().getTime())
@@ -86,6 +89,22 @@ public class QADao {
 		catch(Exception e){
 			return new GeneralServices().response(Notifications.ERROR);
 		}
+	}
+	
+	public ArrayList<Question> getAllQuestions(String username)
+	{
+	FindIterable <Document> fi = tc.find(eq("username",username));
+	ArrayList<Question> alq = new ArrayList<Question>();
+	for(Document d:fi)
+	{
+		Question question = new Question();
+		question.setQuestion(d.getString("question"));
+		question.setDescription(d.getString("description"));
+		question.setUpvotecount(d.getLong("upvotecount"));
+		question.setDownvotecount(d.getLong("downvotecount"));
+		alq.add(question);
+	}
+	return alq;
 	}
 	
 	@SuppressWarnings("unchecked")
