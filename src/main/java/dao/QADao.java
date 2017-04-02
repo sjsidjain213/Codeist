@@ -343,7 +343,9 @@ public class QADao {
 		MultiUse obj=new MultiUse();
 		String owner="i";
 		Document d = tc.find(eq("_id",id1)).first();
-		
+		if(user.equals(d.getString(username))){
+			
+		}
 		if(new UserDao().getAllUseri().contains(username)){
 			tcuser=new DatabaseServices().getDb().getCollection("testuserdata");
 			owner="i";

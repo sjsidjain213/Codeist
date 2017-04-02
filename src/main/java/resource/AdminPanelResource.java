@@ -38,6 +38,7 @@ public class AdminPanelResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public ArrayList<Institute> getName(){
+		System.out.println("-----------------------------------------------------");
 		return new AdminDao().getName();
 	}
 
