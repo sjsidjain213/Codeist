@@ -294,7 +294,6 @@ Long score  = 2*(pupvote+qupvote);
 score = score - pdownvote;
 score = score -qdownvote;
 return score;
-	
 }
 
 }
