@@ -7,13 +7,20 @@ public class Institute {
 	private String username,password,university_name,college_name,state,city,email_id,phone_no,address;
 	private ArrayList<ArrayList<String>> departments;
 	private ArrayList<String> depart;
+	
 	public ArrayList<String> getDepart() {
 		return depart;
 	}
 	public void setDepart(ArrayList<String> depart) {
 		this.depart = depart;
 	}
-	private ArrayList<String> tags,project_id,question_id,question_asked;
+	private ArrayList<String> tags,project_id,question_id,question_asked,question_solved;
+	public ArrayList<String> getQuestion_solved() {
+		return question_solved;
+	}
+	public void setQuestion_solved(ArrayList<String> question_solved) {
+		this.question_solved = question_solved;
+	}
 	private Long project_upvote,project_downvote,qa_upvote,qa_downvote,rating;
 	
 	public Long getRating() {

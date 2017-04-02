@@ -294,7 +294,6 @@ Long score  = 2*(pupvote+qupvote);
 score = score - pdownvote;
 score = score -qdownvote;
 tc.updateOne(eq("username",username),new Document("$set",new Document("rating",new Long(score))));
-	
 }
 
 public void setUserRating(String username)

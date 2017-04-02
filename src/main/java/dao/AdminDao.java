@@ -1,6 +1,5 @@
 package dao;
 
-import static com.mongodb.client.model.Filters.eq;
 
 import java.util.ArrayList;
 import static com.mongodb.client.model.Filters.*;
@@ -83,6 +82,7 @@ in.setCollege_name(name);
 in.setRating(doc.getLong("rating"));
 in.setUniversity_name(doc.getString("university_name"));
 in.setDepart((ArrayList<String>)doc.get("departments"));
+in.setQuestion_solved((ArrayList<String>)doc.get("question_solved"));
 return in;
 }
 	
