@@ -66,11 +66,12 @@ public class QADao {
 //	    new UserDao().moduleIDAdder(Notifications.QUESTIONMODULE,req.getSession().getAttribute("username").toString(), id);
 	    
 	    // for url
-//	    String url = GeneralServices.urlGenerator(Notifications.QUESTIONMODULE, id, question.getQuestion());
+   String q_id=tc.find(and(eq("username",username),eq("question",question.getQuestion()))).first().get("_id").toString();
+     String url = GeneralServices.urlGenerator(Notifications.QUESTIONMODULE, q_id, question.getQuestion());
 
-	    String q_id=tc.find(and(eq("username",username),eq("question",question.getQuestion()))).first().get("_id").toString();
-	   
-	    Acknowledgement acknow = new Acknowledgement();
+     tc.find(and(eq("username",username),eq("question",question.getQuestion()))).first();	   
+	   tc.updateOne(and(eq("username",username),eq("question",question.getQuestion())),new Document("$set",new Document("question_url",url)));
+     Acknowledgement acknow = new Acknowledgement();
 	    acknow.setMessage(GeneralServices.spaceRemover(question.getQuestion()));
 		acknow.setUpsertedId(q_id);
 	    return acknow;

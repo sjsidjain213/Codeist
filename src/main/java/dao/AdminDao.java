@@ -71,6 +71,11 @@ for(Document doc: d)
 Institute in = new Institute();
 in.setCollege_name(	doc.getString("college_name"));
 in.setUniversity_name(doc.getString("university_name"));
+in.setRating(doc.getLong("rating"));
+ArrayList<String> question_s;
+question_s = (ArrayList<String>) doc.get("question_solved");
+int size = question_s.size();
+in.setQuestion_s(size);
 al.add(in);
 }
 return al;
