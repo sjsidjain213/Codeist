@@ -25,7 +25,7 @@ public class QADao {
 	MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("qa");
 	MongoCollection<Document> tcuser = new DatabaseServices().getDb().getCollection("testuserdata");
 
-	public Acknowledgement insertQuestion(Question question, HttpServletRequest req,String username)
+	public Acknowledgement insertQuestion(Question question,String username,HttpServletRequest req)
 	{   //String userfromsession ="hsharma";// req.getSession().getAttribute("username").toString();
 		try{
 	   // Document doc2 = tc.find(and(eq("username",req.getSession().getAttribute("username").toString()),eq("question",question.getQuestion()))).first();
@@ -47,7 +47,7 @@ public class QADao {
 					   question.setOwner("c");
 				   }
 			Document info=new Document().append("upvotes",new ArrayList<String>()).append("downvotes",new ArrayList<String>());
-			Document doc = new Document("username",req.getSession().getAttribute("username"))
+			Document doc = new Document("username",username)
 	    		.append("question",question.getQuestion())
 	    		.append("description",question.getDescription())
 	    		.append("tags",(List<String>)question.getTags())
@@ -58,7 +58,8 @@ public class QADao {
 	    		.append("featured_points", question.getFeatured_points())
 	    		.append("answers",new ArrayList<Answer>());
 	       tc.insertOne(doc);
-	    
+	       String projectid= tc.find(and(eq("username",question.getUsername()),eq("title",question.getQuestion()))).first().get("_id").toString();
+  		 
 	//    String id = tc.find(and(eq("username",req.getSession().getAttribute("username").toString()),eq("question",question.getQuestion()))).first().get("_id").toString();
 
 	    // for userdata 
@@ -66,11 +67,13 @@ public class QADao {
 	    
 	    // for url
 //	    String url = GeneralServices.urlGenerator(Notifications.QUESTIONMODULE, id, question.getQuestion());
-	    String s=tc.find(and(eq("username",req.getSession().getAttribute("username").toString()),eq("question",question.getQuestion()))).first().get("_id").toString();
+
+	    String q_id=tc.find(and(eq("username",username),eq("question",question.getQuestion()))).first().get("_id").toString();
 	   
 	    Acknowledgement acknow = new Acknowledgement();
 	    acknow.setMessage(GeneralServices.spaceRemover(question.getQuestion()));
-		return acknow;
+		acknow.setUpsertedId(q_id);
+	    return acknow;
 		}
 	    else{
 			Acknowledgement acknow = new Acknowledgement();
@@ -130,7 +133,7 @@ public class QADao {
 	}
 	}
 	
-	public Acknowledgement insertAnswer(String id,Answer answer,HttpServletRequest req)
+	public Acknowledgement insertAnswer(String id,Answer answer,String username,HttpServletRequest req)
 	{   Document info=new Document().append("upvotes",new ArrayList<String>()).append("downvotes",new ArrayList<String>());	
     	//String userfromsession ="pulkit"; //req.getSession().getAttribute("username").toString();
 	 ObjectId oid = new ObjectId(id.toString());
@@ -143,7 +146,7 @@ public class QADao {
 			   answer.setOwner("c");
 		   }
 	    //String q_id = tc.find(and(eq("username",d.getString("username")),eq("question",answer.getQuestion()))).first().get("_id").toString();
-	    Document doc = new Document("username",req.getSession().getAttribute("username").toString())
+	    Document doc = new Document("username",username)
 	    		.append("answer",answer.getAnswer())
 	    		.append("date",GeneralServices.getCurrentDate().getTime())
 	    		.append("owner", answer.getOwner())
@@ -153,7 +156,7 @@ public class QADao {
         String acknow =tc.updateOne(eq("_id",oid),new Document("$push",new Document("answers",doc))).toString();
         Acknowledgement acknowledge = new GeneralServices().response(Notifications.SUCCESSFULLYINSERTED);
         //answer.getUsername is owner of question
-        new NotificationService().answerNotification(d.getString("username"),d.getString("question"),id,req.getSession().getAttribute("username").toString(),answer.getAnswer(),Notifications.QUESTIONSOLVED);
+      ///  new NotificationService().answerNotification(d.getString("username"),d.getString("question"),id,req.getSession().getAttribute("username").toString(),answer.getAnswer(),Notifications.QUESTIONSOLVED);
         return acknowledge;
 	}
 	/*public void updateQuestion(HttpServletRequest req,Question question,String id)

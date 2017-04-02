@@ -29,7 +29,7 @@ import service.SessionService;
 @Path("/questions")
 public class QuestionResource {
 	
-	/*@POST
+	@POST
 	@Path("/updatequestion")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -39,12 +39,13 @@ public class QuestionResource {
 		//return (new SessionService().sessionVerifier(req))?new QADao().insertQuestion(question,req):new GeneralServices().response(null);
 	}
 	@POST
-	@Path("/insert")
+	@Path("/insert/{username}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Acknowledgement insertQuestion(Question question,@Context HttpServletRequest req)
+	public Acknowledgement insertQuestion(Question question,@Context HttpServletRequest req,@PathParam("username") String username)
 	{
-		return (new SessionService().sessionVerifier(req))?new QADao().insertQuestion(question,req):new GeneralServices().response(null);
+	return new QADao().insertQuestion(question,username,req);	
+	//	return (new SessionService().sessionVerifier(req))?:new GeneralServices().response(null);
 	}
 	
 	//implement this api to get related project to an question
@@ -59,15 +60,15 @@ public class QuestionResource {
 		//return new HomePage().getQuestions(username);
       //return new HomePage().getQuestions(req.getSession().getAttribute("username").toString());
 	}*/
-	/*
+	
 	@POST
-	@Path("/{id}/answer")
+	@Path("/{id}/answer/{username}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Acknowledgement insertAnswer(@PathParam("id") String id,Answer answer,@Context HttpServletRequest req)
-	{
-		return (new SessionService().sessionVerifier(req))?new QADao().insertAnswer(id,answer,req):new GeneralServices().response(null);
-	}*/
+	public Acknowledgement insertAnswer(@PathParam("id") String id,@PathParam("username") String username,Answer answer,@Context HttpServletRequest req)
+	{return new QADao().insertAnswer(id,answer,username,req);
+	//	return (new SessionService().sessionVerifier(req))?new QADao().insertAnswer(id,answer,req):new GeneralServices().response(null);
+	}
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
