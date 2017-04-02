@@ -104,7 +104,7 @@ public class QADao {
 	quest.setDate(doc.getLong("date"));
 	//quest.setLast_updated(doc.getLong("last_updated"));
 	quest.setTags((ArrayList<String>)doc.get("tags"));
-	quest.setQuestion_url(doc.getString("url"));
+	quest.setQuestion_url(doc.getString("question_url"));
 	quest.setCity(doc.getString("city"));
 	quest.setState(doc.getString("state"));
 	Document document=(Document) doc.get("info");
