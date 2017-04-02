@@ -91,49 +91,53 @@ public class QuestionResource {
       //return new HomePage().getQuestions(req.getSession().getAttribute("username").toString());
 
 	}
-	/*
+	
 	@PUT
-	@Path("/{id}/upvote")
+	@Path("/{id}/upvote/{username}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public MultiUse upquestion(@PathParam("id")String id,@Context HttpServletRequest req)
+	public MultiUse upquestion(@PathParam("id")String id,@Context HttpServletRequest req,@PathParam("username") String username)
 	{
-		MultiUse obj= new MultiUse();
-		obj.setMessage(Notifications.SESSIONDONOTEXSIT.getMsg());
-	return (new SessionService().sessionVerifier(req))?new QADao().upQuestion(id,req.getSession().getAttribute("username").toString()):obj;
+		return new QADao().upQuestion(id,username);
+//		MultiUse obj= new MultiUse();
+//		obj.setMessage(Notifications.SESSIONDONOTEXSIT.getMsg());
+//	return (new SessionService().sessionVerifier(req))?new QADao().upQuestion(id,req.getSession().getAttribute("username").toString()):obj;
 	//return (new SessionService().sessionVerifier(req))?new QADao().upQuestion(id,req.getSession().getAttribute("username").toString()):new ArrayList<String>();
 	}
 	@PUT
-	@Path("/{id}/downvote")
+	@Path("/{id}/downvote/{username}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public MultiUse downquestion(@PathParam("id")String id,@Context HttpServletRequest req)
+	public MultiUse downquestion(@PathParam("id")String id,@Context HttpServletRequest req,@PathParam("username") String username)
 	{
-		MultiUse obj= new MultiUse();
-		obj.setMessage(Notifications.SESSIONDONOTEXSIT.getMsg());
-	return (new SessionService().sessionVerifier(req))?new QADao().downQuestion(id,req.getSession().getAttribute("username").toString()):obj;
-	//return (new SessionService().sessionVerifier(req))?new QADao().downQuestion(id,req.getSession().getAttribute("username").toString()):new ArrayList<String>();
+		return new QADao().downQuestion(id,username);
+//		MultiUse obj= new MultiUse();
+//		obj.setMessage(Notifications.SESSIONDONOTEXSIT.getMsg());
+//	return (new SessionService().sessionVerifier(req))?new QADao().downQuestion(id,req.getSession().getAttribute("username").toString()):obj;
+//	//return (new SessionService().sessionVerifier(req))?new QADao().downQuestion(id,req.getSession().getAttribute("username").toString()):new ArrayList<String>();
 }
 	@PUT
-	@Path("/{id}/{username}/upvote")
+	@Path("/{id}/{username}/{user}/upvote")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public MultiUse upanswer(@PathParam("id")String id,@PathParam("username")String username,@Context HttpServletRequest req)
-	{
-		MultiUse obj= new MultiUse();
-		obj.setMessage(Notifications.SESSIONDONOTEXSIT.getMsg());
-	return (new SessionService().sessionVerifier(req))?new QADao().upanswer(id,username,req.getSession().getAttribute("username").toString()):obj;
+	public MultiUse upanswer(@PathParam("id")String id,@PathParam("username")String username,@Context HttpServletRequest req,@PathParam("user")String user)
+	{//username:whose answer user: who is upvoting
+		return new QADao().upanswer(id,username,user);
+//		MultiUse obj= new MultiUse();
+//		obj.setMessage(Notifications.SESSIONDONOTEXSIT.getMsg());
+//	return (new SessionService().sessionVerifier(req))?new QADao().upanswer(id,username,req.getSession().getAttribute("username").toString()):obj;
 	//return (new SessionService().sessionVerifier(req))?new QADao().upanswer(id,username,req.getSession().getAttribute("username").toString()):new ArrayList<String>();
 	}
 	@PUT
-	@Path("/{id}/{username}/downvote")
+	@Path("/{id}/{username}/{user}/downvote")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public MultiUse downanswer(@PathParam("id")String id,@PathParam("username")String username,@Context HttpServletRequest req)
+	public MultiUse downanswer(@PathParam("id")String id,@PathParam("username")String username,@Context HttpServletRequest req,@PathParam("user")String user)
 	{
-		MultiUse obj= new MultiUse();
-		obj.setMessage(Notifications.SESSIONDONOTEXSIT.getMsg());
-	return (new SessionService().sessionVerifier(req))?new QADao().downanswer(id,username,req.getSession().getAttribute("username").toString()):obj;
+		return new QADao().downanswer(id,username,user);
+//		MultiUse obj= new MultiUse();
+//		obj.setMessage(Notifications.SESSIONDONOTEXSIT.getMsg());
+//	return (new SessionService().sessionVerifier(req))?new QADao().downanswer(id,username,req.getSession().getAttribute("username").toString()):obj;
 	//return (new SessionService().sessionVerifier(req))?new QADao().downanswer(id,username,req.getSession().getAttribute("username").toString()):new ArrayList<String>();
 	}
 	
@@ -183,4 +187,4 @@ public class QuestionResource {
 		 return new QADao().getProblem(email);
 	}*/
 	
-}
+}}
