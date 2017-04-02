@@ -5,11 +5,28 @@ import java.util.Date;
 
 public class Question {
 
-	private String username,question,question_url,description,state,city,university_name,college_name,owner;
+	private String username,question,question_url,description,state,city,university_name,college_name,owner,title,id;
 	private ArrayList<String> department;
 	public String getOwner() {
 		return owner;
 	}
+	
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
 	public void setOwner(String owner) {
 		this.owner = owner;
 	}

@@ -95,8 +95,10 @@ public class QADao {
 		ArrayList<Answer> alansw = new ArrayList<Answer>();
 	if(doc!=null)
 	{Question quest = new Question();
+	quest.setId(id);
 	quest.setUsername(doc.getString("username"));
 	quest.setQuestion(doc.getString("question"));
+	quest.setTitle(doc.getString("question"));
 	quest.setDescription(doc.getString("description"));
 	quest.setDate(doc.getLong("date"));
 	//quest.setLast_updated(doc.getLong("last_updated"));
