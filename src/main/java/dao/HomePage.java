@@ -31,7 +31,8 @@ public class HomePage {
  		  project = getInterestProject(project, username);
      	return project;
  	}
- 	
+
+// 	
  	public ArrayList<Tile> getRelatedProject(String username,String question_id,ArrayList<String> altags)
  	{
  		// username of loggedin, question_id of new inserted question, altags of question 
@@ -127,7 +128,7 @@ public class HomePage {
     //public void getHistory(ArrayList<Tile> altl, FindIterable<Document> fi,String source, String subject)
     //sorted according to matched count, region and owner (if owner is institute then high priority)
  		if(quesfavtags != null) {		
-	    	 tempList.addAll(getHistory(project,quesfavtags,"matched","p",oid));
+    	 tempList.addAll(getHistory(project,quesfavtags,"matched","p",oid));
  		finalList.addAll(getHistory(tempList,institute,"matched","p",oid));
  		}
  		System.out.println("final**"+finalList);
@@ -197,6 +198,7 @@ public class HomePage {
  	       
  	}
  	
+ 	// for matching region
 	public ArrayList<Tile> getHistory(ArrayList<Tile> altl, FindIterable<Document> fi,String source, String subject,ObjectId oid)
 	{//subject is either question or answer and source is interesting and trending
 		MongoCollection<Document> tcqa =new DatabaseServices().getDb().getCollection("qa");
