@@ -33,15 +33,17 @@ public Acknowledgement insertProject(Project project,String username)
 { try{
 	String userfromsession = username;
 	//String userfromsession = req.getSession().getAttribute("username").toString();
-	Document docexsit = tc.find(and(eq("username",project.getUsername()),eq("title",project.getTitle()))).first();
+	Document docexsit = tc.find(and(eq("username",username),eq("title",project.getTitle()))).first();
    ArrayList<String> a=new ArrayList<String>();
    if(new UserDao().getAllUseri().contains(username)){
 	   project.setOwner("i");
+	   tcuser=new DatabaseServices().getDb().getCollection("testuserdata");
    }
    else if(new InstituteDao().getAllUserc().contains(username)){
 	   project.setOwner("c");
+	   tcuser=new DatabaseServices().getDb().getCollection("institute");
    }
-   a.add(project.getUsername());
+   a.add(username);
    project.setContributors(a);
    Acknowledgement ack=new Acknowledgement();
    if(docexsit==null)
@@ -69,12 +71,14 @@ public Acknowledgement insertProject(Project project,String username)
 	    		 .append("upvotecount", new Long(0))
 	    		 .append("downvotecount", new Long(0));
 	    		  tc.insertOne(doc);
-	    		  String projectid= tc.find(and(eq("username",project.getUsername()),eq("title",project.getTitle()))).first().get("_id").toString();
+	    		  String projectid= tc.find(and(eq("username",username),eq("title",project.getTitle()))).first().get("_id").toString();
 	    		  String url = GeneralServices.urlGenerator(Notifications.PROJECTMODULE, projectid, project.getTitle());
-	    		  new UserDao().moduleIDAdder(Notifications.PROJECTMODULE,project.getUsername(), projectid);
+	    		  new UserDao().moduleIDAdder(Notifications.PROJECTMODULE,username, projectid);
 	    		  UpdateResult rs=tc.updateOne(and(eq("username",userfromsession),eq("title",project.getTitle())),new Document("$set",new Document("project_url",url)));		    		 
 	    		  ack.setUpsertedId(projectid);
 	    		  ack.setMessage(GeneralServices.spaceRemover(project.getTitle()));
+	    		    
+	    		  tcuser.updateOne(eq("username",username),new Document("$push",new Document("project_id",projectid)));
 	    		  return ack;
 	    			}else{
 	                    ack.setMessage("exist");
