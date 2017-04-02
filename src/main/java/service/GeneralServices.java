@@ -65,12 +65,12 @@ public Tile returnTile(Document d,String source,String subject)
 			tl.setDescription(d.getString("description"));
 			tl.setTags((ArrayList<String>)d.get("tags"));
 	    	Document doc = (Document) d.get("info");
-	    	if((ArrayList<String>)doc.get("upvotes") != null){
+//	    	if((ArrayList<String>)doc.get("upvotes") != null){
 	    		tl.setUpvotes((ArrayList<String>) doc.get("upvotes"));
-	    	}
-	    	if(doc.get("downvotes") != null){
+	//    	}
+//	    	if(doc.get("downvotes") != null){
 	    		tl.setDownvotes((ArrayList<String>) doc.get("downvotes"));
-	    	}
+//	    	}
 	    
 	    }
 	    else{
