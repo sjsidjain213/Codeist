@@ -199,11 +199,12 @@ public class QADao {
 		Document d = tc.find(eq("_id",id1)).first();
 		MultiUse obj=new MultiUse();
 		String username=d.getString("username");
-		if(d.getString("owner").equals("i")){
+		
+		if(new UserDao().getAllUseri().contains(username)){
 			tcuser=new DatabaseServices().getDb().getCollection("testuserdata");
 			owner="i";
 		}
-		else if(d.getString("owner").equals("c")){
+		else if(new InstituteDao().getAllUserc().contains(username)){
 			tcuser=new DatabaseServices().getDb().getCollection("institute");
 			owner="c";
 		}
@@ -599,7 +600,7 @@ public class QADao {
                     }
                 }
             }
-         return new GeneralServices().response(null);
+         return new GeneralServices().response(Notifications.ERROR);
     }
 
 	

@@ -156,9 +156,9 @@ public class QuestionResource {
 	@Path("/{id}/{username}/deleteans")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Acknowledgement deleteanswer(@PathParam("id") String id,Answer ans, @Context HttpServletRequest req)
+	public Acknowledgement deleteanswer(@PathParam("id") String id,Answer ans, @Context HttpServletRequest req,@PathParam("username")String username)
 	{
-		 return new QADao().deleteanswer(req, ans.getUsername(),id);
+		 return new QADao().deleteanswer(req, username,id);
 	}
 	
 	@POST

@@ -291,6 +291,7 @@ tc.updateOne(eq("username",user.getUsername()),new Document("$set",new Document(
           	 for(Document doc : fi)
             {		
             alluser.add(doc.getString("username"));
+            System.out.println(doc.getString("username"));
             }
           	 return alluser;
           	}

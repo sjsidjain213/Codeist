@@ -290,9 +290,9 @@ Long pdownvote = doc.getLong("project_downvote");
 Long qupvote = doc.getLong("qa_upvote");
 Long qdownvote = doc.getLong("qa_downvote");
 
-Long score  = 2*(pupvote+qupvote);
-score = score - pdownvote;
-score = score -qdownvote;
+Long score  = 10*(pupvote+qupvote);
+score = score - 5*pdownvote;
+score = score - 5*qdownvote;
 tc.updateOne(eq("username",username),new Document("$set",new Document("rating",new Long(score))));
 }
 
@@ -305,14 +305,15 @@ Long pdownvote = doc.getLong("project_downvote");
 Long qupvote = doc.getLong("qa_upvote");
 Long qdownvote = doc.getLong("qa_downvote");
 
-Long score  = 2*(pupvote+qupvote);
-score = score - pdownvote;
-score = score -qdownvote;
+Long score  = 10*(pupvote+qupvote);
+score = score - 5*pdownvote;
+score = score - 5*qdownvote;
 tc.updateOne(eq("username",username),new Document("$set",new Document("rating",new Long(score))));
 	
 }
 
 public void ratingupdate(String i,String username){
+	
 	if(i.equals("i")){
 		new GeneralServices().setUserRating(username);
 	}
