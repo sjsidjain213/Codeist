@@ -96,6 +96,7 @@ public class QADao {
 	if(doc!=null)
 	{Question quest = new Question();
 	quest.setUsername(doc.getString("username"));
+	quest.setQuestion(doc.getString("question"));
 	quest.setDescription(doc.getString("description"));
 	quest.setDate(doc.getLong("date"));
 	//quest.setLast_updated(doc.getLong("last_updated"));
