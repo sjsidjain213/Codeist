@@ -7,7 +7,13 @@ public class Institute {
 	private String username,password,university_name,college_name,state,city,email_id,phone_no,address;
 	private ArrayList<ArrayList<String>> departments;
 	private ArrayList<String> depart;
-	
+	private int question_s;
+	public int getQuestion_s() {
+		return question_s;
+	}
+	public void setQuestion_s(int question_s) {
+		this.question_s = question_s;
+	}
 	public ArrayList<String> getDepart() {
 		return depart;
 	}
