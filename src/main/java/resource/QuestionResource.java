@@ -65,7 +65,7 @@ public class QuestionResource {
 	@Path("/{id}/answer/{username}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Acknowledgement insertAnswer(@PathParam("id") String id,@PathParam("username") String username,Answer answer,@Context HttpServletRequest req)
+	public Answer insertAnswer(@PathParam("id") String id,@PathParam("username") String username,Answer answer,@Context HttpServletRequest req)
 	{return new QADao().insertAnswer(id,answer,username,req);
 	//	return (new SessionService().sessionVerifier(req))?new QADao().insertAnswer(id,answer,req):new GeneralServices().response(null);
 	}

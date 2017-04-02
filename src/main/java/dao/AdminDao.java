@@ -71,6 +71,7 @@ for(Document doc: d)
 Institute in = new Institute();
 in.setCollege_name(	doc.getString("college_name"));
 in.setUniversity_name(doc.getString("university_name"));
+al.add(in);
 }
 return al;
 }
