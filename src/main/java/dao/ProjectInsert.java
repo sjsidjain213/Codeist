@@ -278,12 +278,15 @@ public MultiUse  up(String id,String user){
 	ObjectId id1=new ObjectId(id.toString());
 	Document d = tc.find(eq("_id",id1)).first();
 	MultiUse obj=new MultiUse();
+	String owner="i";
 	String username=d.getString("username");
 	if(d.getString("owner").equals("i")){
 		tcuser=new DatabaseServices().getDb().getCollection("testuserdata");
+		owner="i";
 	}
 	else if(d.getString("owner").equals("c")){
 		tcuser=new DatabaseServices().getDb().getCollection("institute");
+		owner="c";
 	}
 	// access in this pattern in QADao vote method also
 	Document infodetails=(Document)d.get("info");
@@ -297,11 +300,13 @@ public MultiUse  up(String id,String user){
 					 String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.downvotes",down))).toString();
 					tc.updateOne(eq("_id",id1),new Document("$set",new Document("downvotecount",new Long(down.size()))));
 					 tcuser.updateOne(eq("username",username),new Document("$inc",new Document("project_downvote",-1)));
+					 new GeneralServices().ratingupdate(owner, username);
 				}
 			up.add(user);
 			String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.upvotes",up))).toString();	
 			tc.updateOne(eq("_id",id1),new Document("$set",new Document("upvotecount",new Long(up.size()))));
 			tcuser.updateOne(eq("username",username),new Document("$inc",new Document("project_upvote",1)));
+			new GeneralServices().ratingupdate(owner, username);
 			//changes make in other too
 			//new NotificationService().voteNotification(username,title,p_id,user,Notifications.UPVOTESQUESTION);
 			//new NotificationService().projectUpvoteNotification(project.getUsername(), req.getSession().getAttribute("username").toString(),id,project.getTitle());
@@ -313,6 +318,7 @@ public MultiUse  up(String id,String user){
 				String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.upvotes",up))).toString();	 	 
 				tc.updateOne(eq("_id",id1),new Document("$set",new Document("upvotecount",new Long(up.size()))));
 				tcuser.updateOne(eq("username",username),new Document("$inc",new Document("project_upvote",-1)));
+				new GeneralServices().ratingupdate(owner, username);
 			}
 			//new NotificationService().projectUpvoteNotification(project.getUsername(), req.getSession().getAttribute("username").toString(),id,project.getTitle());
 			obj.setUpvotes(up);
@@ -325,12 +331,14 @@ public MultiUse  up(String id,String user){
 				 String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.downvotes",down))).toString();
 				 tc.updateOne(eq("_id",id1),new Document("$set",new Document("downvotecount",new Long(down.size()))));
 				 tcuser.updateOne(eq("username",username),new Document("$inc",new Document("project_downvote",-1)));
+				 new GeneralServices().ratingupdate(owner, username);
 			}
 			up=new ArrayList<String>();
 			up.add(user);
 			 String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.upvotes",up))).toString();
 			 tc.updateOne(eq("_id",id1),new Document("$set",new Document("upvotecount",new Long(up.size()))));
 			 tcuser.updateOne(eq("username",username),new Document("$inc",new Document("project_upvote",1)));
+			 new GeneralServices().ratingupdate(owner, username);
 		//make chnages here
 			 //	 new NotificationService().voteNotification(username,title,Notifications.UPVOTESPROJECT);
 			 //new NotificationService().projectUpvoteNotification(project.getUsername(), req.getSession().getAttribute("username").toString(),id,project.getTitle());
@@ -345,12 +353,15 @@ public MultiUse  up(String id,String user){
 public MultiUse down(String id,String user){
 	ObjectId id1=new ObjectId(id.toString());
 	Document d = tc.find(eq("_id",id1)).first();
+	String owner="i";
 	String username=d.getString("username");
 	if(d.getString("owner").equals("i")){
 		tcuser=new DatabaseServices().getDb().getCollection("testuserdata");
+		owner="i";
 	}
 	else if(d.getString("owner").equals("c")){
 		tcuser=new DatabaseServices().getDb().getCollection("institute");
+		owner="c";
 	}
 	MultiUse obj=new MultiUse();
 	Document infodetails=(Document)d.get("info");
@@ -364,11 +375,13 @@ public MultiUse down(String id,String user){
 					 String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.upvotes",up))).toString();	 
 					 tc.updateOne(eq("_id",id1),new Document("$set",new Document("upvotecount",new Long(up.size()))));
 					 tcuser.updateOne(eq("username",username),new Document("$inc",new Document("project_upvote",-1)));
+					 new GeneralServices().ratingupdate(owner, username);
 				}
 			down.add(user);
 			String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.downvotes",down))).toString();	 
 			tc.updateOne(eq("_id",id1),new Document("$set",new Document("downvotecount",new Long(down.size()))));
 			tcuser.updateOne(eq("username",username),new Document("$inc",new Document("project_downvote",1)));
+			new GeneralServices().ratingupdate(owner, username);
 			//make changes here
 			// new NotificationService().voteNotification(username,title,Notifications.DOWNVOTESPROJECT);
 			//new NotificationService().projectDownvoteNotification(project.getUsername(), req.getSession().getAttribute("username").toString(),id,project.getTitle());
@@ -380,6 +393,7 @@ public MultiUse down(String id,String user){
 				String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.downvotes",down))).toString();	 
 				tc.updateOne(eq("_id",id1),new Document("$set",new Document("downvotecount",new Long(down.size()))));
 				tcuser.updateOne(eq("username",username),new Document("$inc",new Document("project_downvote",-1)));
+				new GeneralServices().ratingupdate(owner, username);
 			}
 			//new NotificationService().projectDownvoteNotification(project.getUsername(), req.getSession().getAttribute("username").toString(),id,project.getTitle());
 			 obj.setUpvotes(up);
@@ -392,12 +406,14 @@ public MultiUse down(String id,String user){
 				 String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.upvotes",up))).toString();	
 				 tc.updateOne(eq("_id",id1),new Document("$set",new Document("upvotecount",new Long(up.size()))));
 				 tcuser.updateOne(eq("username",username),new Document("$inc",new Document("project_upvote",-1)));
+				 new GeneralServices().ratingupdate(owner, username);
 			}
 			down=new ArrayList<String>();
 			down.add(user);
 			 String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document("info.downvotes",down))).toString();	
 			tc.updateOne(eq("_id",id1),new Document("$set",new Document("downvotecount",new Long(down.size()))));
 			 tcuser.updateOne(eq("username",username),new Document("$inc",new Document("project_downvote",1)));
+			 new GeneralServices().ratingupdate(owner, username);
 			//make changes here
 			 // new NotificationService().voteNotification(username,title,Notifications.DOWNVOTESPROJECT);
 			// new NotificationService().projectDownvoteNotification(project.getUsername(), req.getSession().getAttribute("username").toString(),id,project.getTitle());

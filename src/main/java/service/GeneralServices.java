@@ -281,7 +281,7 @@ public Tile returnTile(Document d,String source,String subject)
 		}
 	}
 
-public Long setRating(String username)
+public void setRating(String username)
 {
 	MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("institute");
 	Document doc = tc.find(eq("username",username)).first();
@@ -293,8 +293,34 @@ Long qdownvote = doc.getLong("qa_downvote");
 Long score  = 2*(pupvote+qupvote);
 score = score - pdownvote;
 score = score -qdownvote;
-return score;
+tc.updateOne(eq("username",username),new Document("$set",new Document("rating",new Long(score))));
 	
 }
+
+public void setUserRating(String username)
+{
+	MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("testuserdata");
+	Document doc = tc.find(eq("username",username)).first();
+Long pupvote = doc.getLong("project_upvote");
+Long pdownvote = doc.getLong("project_downvote");
+Long qupvote = doc.getLong("qa_upvote");
+Long qdownvote = doc.getLong("qa_downvote");
+
+Long score  = 2*(pupvote+qupvote);
+score = score - pdownvote;
+score = score -qdownvote;
+tc.updateOne(eq("username",username),new Document("$set",new Document("rating",new Long(score))));
+	
+}
+
+public void ratingupdate(String i,String username){
+	if(i.equals("i")){
+		new GeneralServices().setUserRating(username);
+	}
+	else if(i.equals("c")){
+		new GeneralServices().setRating(username);
+	}
+}
+
 
 }
