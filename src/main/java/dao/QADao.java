@@ -29,15 +29,15 @@ public class QADao {
 	{   //String userfromsession ="hsharma";// req.getSession().getAttribute("username").toString();
 		try{
 	   // Document doc2 = tc.find(and(eq("username",req.getSession().getAttribute("username").toString()),eq("question",question.getQuestion()))).first();
-	   	if(tc.find(eq("question",question.getQuestion()))!=null)
-			{Acknowledgement acknow = new Acknowledgement();
-			acknow.setMessage("question already exsist");
-			Document doc = tc.find(eq("question",question.getQuestion())).first();
-            String q_id = doc.get("_id").toString();
-		    acknow.setUpsertedId(q_id);
-            return acknow;
-			}
-			Document doc2 = tc.find(and(eq("username",username))).first();
+//	   	if(tc.find(eq("question",question.getQuestion()))!=null)
+//			{Acknowledgement acknow = new Acknowledgement();
+//			acknow.setMessage("question already exsist");
+//			Document doc = tc.find(eq("question",question.getQuestion())).first();
+//            String q_id = doc.get("_id").toString();
+//		    acknow.setUpsertedId(q_id);
+//            return acknow;
+//			}
+			Document doc2 = tc.find(and(eq("username",question.getUsername()),eq("question",question.getQuestion()))).first();
 			if(doc2==null)
 		{
 				 if(new UserDao().getAllUseri().contains(username)){
@@ -55,10 +55,10 @@ public class QADao {
 	    		.append("date",GeneralServices.getCurrentDate().getTime())
 	    		.append("last_updated",GeneralServices.getCurrentDate().getTime())
 	    		.append("info",info)
-	    		.append("featured_points", question.getFeatured_points())
+	    		//.append("featured_points", question.getFeatured_points())
 	    		.append("answers",new ArrayList<Answer>());
 	       tc.insertOne(doc);
-	       String projectid= tc.find(and(eq("username",question.getUsername()),eq("title",question.getQuestion()))).first().get("_id").toString();
+	       //String projectid= tc.find(and(eq("username",question.getUsername()),eq("question",question.getQuestion()))).first().get("_id").toString();
   		 
 	//    String id = tc.find(and(eq("username",req.getSession().getAttribute("username").toString()),eq("question",question.getQuestion()))).first().get("_id").toString();
 
@@ -84,6 +84,7 @@ public class QADao {
 	    }
 		}
 		catch(Exception e){
+			e.printStackTrace();
 			return new GeneralServices().response(Notifications.ERROR);
 		}
 	}
@@ -104,7 +105,7 @@ public class QADao {
 	quest.setDate(doc.getLong("date"));
 	//quest.setLast_updated(doc.getLong("last_updated"));
 	quest.setTags((ArrayList<String>)doc.get("tags"));
-	quest.setQuestion_url(doc.getString("question_url"));
+	quest.setQuestion_url(GeneralServices.spaceRemover(doc.getString("question")));
 	quest.setCity(doc.getString("city"));
 	quest.setState(doc.getString("state"));
 	Document document=(Document) doc.get("info");
