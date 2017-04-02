@@ -32,10 +32,15 @@ public class HomePage {
      	return project;
  	}
  	
- 	public ArrayList<Tile> getRelatedProject(String username,String question_id,ArrayList<String> altags)
+ 	public ArrayList<Tile> getRelatedProject(String question_id)
  	{
  		// username of loggedin, question_id of new inserted question, altags of question 
  		ArrayList<Tile> project = new ArrayList<Tile>();
+ 		ObjectId oid=new ObjectId(question_id.toString());
+ 		MongoCollection<Document> tc =new DatabaseServices().getDb().getCollection("qa");
+ 		Document doc = tc.find(eq("_id",oid)).first();
+ 		ArrayList<String> altags = (ArrayList<String>)doc.get("tags");
+ 		String username = doc.getString("username");
  		System.out.println(altags);
  		project = getInterestRelatedProject(project,username,altags,question_id);
  		return project;
@@ -127,8 +132,8 @@ public class HomePage {
     //public void getHistory(ArrayList<Tile> altl, FindIterable<Document> fi,String source, String subject)
     //sorted according to matched count, region and owner (if owner is institute then high priority)
  		if(quesfavtags != null) {		
-	    	 tempList.addAll(getHistory(project,quesfavtags,"matched","p",oid));
- 		finalList.addAll(getHistory(tempList,institute,"matched","p",oid));
+	    	 finalList.addAll(getHistory(project,quesfavtags,"matched","p",oid));
+ 		
  		}
  		System.out.println("final**"+finalList);
                Collections.sort(finalList,Tile.matchsort);
