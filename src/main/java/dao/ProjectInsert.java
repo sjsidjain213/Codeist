@@ -35,6 +35,12 @@ public Acknowledgement insertProject(Project project,String username)
 	//String userfromsession = req.getSession().getAttribute("username").toString();
 	Document docexsit = tc.find(and(eq("username",project.getUsername()),eq("title",project.getTitle()))).first();
    ArrayList<String> a=new ArrayList<String>();
+   if(new UserDao().getAllUseri().contains(username)){
+	   project.setOwner("i");
+   }
+   else if(new InstituteDao().getAllUserc().contains(username)){
+	   project.setOwner("c");
+   }
    a.add(project.getUsername());
    project.setContributors(a);
    Acknowledgement ack=new Acknowledgement();
@@ -47,6 +53,7 @@ public Acknowledgement insertProject(Project project,String username)
 	    		 .append("title",project.getTitle())	
 	    		 .append("date",GeneralServices.getCurrentDate().getTime()) //
 	    		 .append("last_updated",GeneralServices.getCurrentDate())
+	    		 .append("owner", project.getOwner())
 	    		 .append("description",project.getDescription())
 	    		 .append("tags",(List<String>)project.getTags())
 	    		 .append("comments",new ArrayList<Comment>())
@@ -414,4 +421,6 @@ public Acknowledgement view(String username,String title,String user){
 {
 	tc.
 }*/
+
+
 }

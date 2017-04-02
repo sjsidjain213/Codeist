@@ -1,12 +1,22 @@
 package dao;
 
 import org.bson.Document;
+
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.result.UpdateResult;
+
+import bean.Acknowledgement;
+import bean.Comment;
+import bean.Notifications;
 import bean.Project;
 import bean.Question;
 import static com.mongodb.client.model.Filters.*;
 import java.util.ArrayList;
+import java.util.List;
+
 import service.DatabaseServices;
+import service.GeneralServices;
 
 public class InstituteDao {
 	MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("institute");
@@ -77,5 +87,15 @@ ArrayList<String> aldepartment = new ArrayList<String>();
      }
      return alq;
 	}
+	public ArrayList<String> getAllUserc()
+	{
+		 FindIterable <Document> fi =  tc.find();
+	  ArrayList <String> alluser =  new ArrayList<String>();
+		 for(Document doc : fi)
+	  {		
+	  alluser.add(doc.getString("username"));
+	  }
+		 return alluser;
+		}
 	
 }

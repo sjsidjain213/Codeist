@@ -283,4 +283,15 @@ tc.updateOne(eq("username",user.getUsername()),new Document("$set",new Document(
     		           }
     		           return "success";
     		       }
+          
+          public ArrayList<String> getAllUseri()
+          {
+          	 FindIterable <Document> fi =  tc.find();
+            ArrayList <String> alluser =  new ArrayList<String>();
+          	 for(Document doc : fi)
+            {		
+            alluser.add(doc.getString("username"));
+            }
+          	 return alluser;
+          	}
 }

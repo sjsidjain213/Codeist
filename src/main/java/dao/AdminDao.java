@@ -20,7 +20,7 @@ public class AdminDao {
 	public Acknowledgement insertinstitute(Institute institute){
 	
 		
-		Document doc=new Document().append("loginid", institute.getLoginid())
+		Document doc=new Document().append("username", institute.getUsername())
 				.append("password", institute.getPassword())
 				.append("university_name", institute.getUniversity_name())
 				.append("college_name", institute.getCollege_name())
@@ -44,7 +44,7 @@ public Acknowledgement updateinstitute(String id,Institute institute){
 	 Document document = tc.find(eq("_id",oid)).first();
 	 
 	 
-		Document doc=new Document().append("loginid", institute.getLoginid())
+		Document doc=new Document().append("username", institute.getUsername())
 				.append("password", document.getString("password"))
 				.append("university_name", institute.getUniversity_name())
 				.append("college_name", institute.getCollege_name())

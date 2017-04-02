@@ -5,8 +5,14 @@ import java.util.Date;
 
 public class Question {
 
-	private String username,question,question_url,description,state,city,university_name,college_name;
+	private String username,question,question_url,description,state,city,university_name,college_name,owner;
 	private ArrayList<String> department;
+	public String getOwner() {
+		return owner;
+	}
+	public void setOwner(String owner) {
+		this.owner = owner;
+	}
 	public ArrayList<String> getDepartment() {
 		return department;
 	}

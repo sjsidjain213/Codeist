@@ -4,8 +4,13 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Project extends Super{
-	private String username,title,description,readme,license,project_url,_private,id,url_title,state,city,department;
-   
+	private String username,title,description,readme,license,project_url,_private,id,url_title,state,city,department,owner;
+	public String getOwner() {
+		return owner;
+	}
+	public void setOwner(String owner) {
+		this.owner = owner;
+	}
 	public String getState() {
 		return state;
 	}

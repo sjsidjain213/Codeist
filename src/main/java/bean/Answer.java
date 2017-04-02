@@ -4,8 +4,15 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Answer {
-private String username,answer,question;
+private String username,answer,question,owner;
 private long upvotecount,downvotecount;
+
+public String getOwner() {
+	return owner;
+}
+public void setOwner(String owner) {
+	this.owner = owner;
+}
 public long getUpvotecount() {
 	return upvotecount;
 }

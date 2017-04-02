@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Institute {
-	private String loginid,password,university_name,college_name,state,city,email_id,phone_no,address;
+	private String username,password,university_name,college_name,state,city,email_id,phone_no,address;
 	private ArrayList<ArrayList<String>> departments;
 	private ArrayList<String> tags,project_id,question_id,question_asked;
 	public ArrayList<String> getProject_id() {
@@ -25,12 +25,13 @@ public class Institute {
 	public void setQuestion_asked(ArrayList<String> question_asked) {
 		this.question_asked = question_asked;
 	}
-	private Date date;
-	public String getLoginid() {
-		return loginid;
+	private Long date;
+	
+	public String getUsername() {
+		return username;
 	}
-	public void setLoginid(String loginid) {
-		this.loginid = loginid;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 	public String getPassword() {
 		return password;
@@ -86,11 +87,11 @@ public class Institute {
 	public void setDepartments(ArrayList<ArrayList<String>> departments) {
 		this.departments = departments;
 	}
-	public Institute(String loginid, String password, String university_name, String college_name, String state,
+	public Institute(String username, String password, String university_name, String college_name, String state,
 			String city, String email_id, String phone_no, String address, ArrayList<ArrayList<String>> departments,
-			ArrayList<String> tags, Date date) {
+			ArrayList<String> tags, Long date) {
 		super();
-		this.loginid = loginid;
+		this.username = username;
 		this.password = password;
 		this.university_name = university_name;
 		this.college_name = college_name;
@@ -109,7 +110,7 @@ public class Institute {
 	}
 	@Override
 	public String toString() {
-		return "Institute [loginid=" + loginid + ", password=" + password + ", university_name=" + university_name
+		return "Institute [username=" + username + ", password=" + password + ", university_name=" + university_name
 				+ ", college_name=" + college_name + ", state=" + state + ", city=" + city + ", email_id=" + email_id
 				+ ", phone_no=" + phone_no + ", address=" + address + ", departments=" + departments + ", tags=" + tags
 				+ ", date=" + date + "]";
@@ -120,10 +121,10 @@ public class Institute {
 	public void setTags(ArrayList<String> tags) {
 		this.tags = tags;
 	}
-	public Date getDate() {
+	public Long getDate() {
 		return date;
 	}
-	public void setDate(Date date) {
+	public void setDate(Long date) {
 		this.date = date;
 	}
 	
