@@ -61,6 +61,16 @@ public class QuestionResource {
       //return new HomePage().getQuestions(req.getSession().getAttribute("username").toString());
 	}*/
 	
+	@GET
+	@Path("/allquestions/{username}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public ArrayList<Question> getAllQuestion(@PathParam("username")String username)
+	{
+		return new QADao().getAllQuestions(username);
+	}
+	
+	
 	@POST
 	@Path("/{id}/answer/{username}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -187,4 +197,6 @@ public class QuestionResource {
 		 return new QADao().getProblem(email);
 	}*/
 	
-}}
+}
+	
+}
