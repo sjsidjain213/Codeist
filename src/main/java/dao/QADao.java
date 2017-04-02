@@ -40,11 +40,18 @@ public class QADao {
 			Document doc2 = tc.find(and(eq("username",username))).first();
 			if(doc2==null)
 		{
+				 if(new UserDao().getAllUseri().contains(username)){
+					   question.setOwner("i");
+				   }
+				   else if(new InstituteDao().getAllUserc().contains(username)){
+					   question.setOwner("c");
+				   }
 			Document info=new Document().append("upvotes",new ArrayList<String>()).append("downvotes",new ArrayList<String>());
 			Document doc = new Document("username",req.getSession().getAttribute("username"))
 	    		.append("question",question.getQuestion())
 	    		.append("description",question.getDescription())
 	    		.append("tags",(List<String>)question.getTags())
+	    		.append("owner", question.getOwner())
 	    		.append("date",GeneralServices.getCurrentDate().getTime())
 	    		.append("last_updated",GeneralServices.getCurrentDate().getTime())
 	    		.append("info",info)
@@ -104,6 +111,7 @@ public class QADao {
 		answer.setUsername(d.getString("username"));
 		answer.setAnswer(d.getString("answer"));
 		answer.setDate(d.getLong("date"));
+		answer.setOwner(d.getString("owner"));
 		answer.setLast_updated(d.getLong("last_updated"));
 		Document in=(Document) d.get("info");
 		answer.setDownvotes((ArrayList<String>)in.get("downvotes"));
@@ -128,10 +136,17 @@ public class QADao {
 	 ObjectId oid = new ObjectId(id.toString());
 		Document d = tc.find(eq("_id",oid)).first();
 		System.out.println("****"+d);
+		 if(new UserDao().getAllUseri().contains(answer.getUsername())){
+			   answer.setOwner("i");
+		   }
+		   else if(new InstituteDao().getAllUserc().contains(answer.getUsername())){
+			   answer.setOwner("c");
+		   }
 	    //String q_id = tc.find(and(eq("username",d.getString("username")),eq("question",answer.getQuestion()))).first().get("_id").toString();
 	    Document doc = new Document("username",req.getSession().getAttribute("username").toString())
 	    		.append("answer",answer.getAnswer())
 	    		.append("date",GeneralServices.getCurrentDate().getTime())
+	    		.append("owner", answer.getOwner())
 	    		.append("last_updated",GeneralServices.getCurrentDate().getTime())
 	    		.append("info",info);
 	    		//.append("featured_points", answer.getFeatured_points());
