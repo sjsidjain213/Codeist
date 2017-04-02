@@ -160,13 +160,15 @@ public ArrayList<Project> getProjectBrief(String username)
 return project;
 }
 
-public ArrayList<String> getAllTitles(String username)
+public ArrayList<Project> getAllTitles(String username)
 {
-  ArrayList<String> project = new ArrayList<String>();
+  ArrayList<Project> project = new ArrayList<Project>();
   FindIterable <Document> fi = tc.find(eq("username",username));
   for(Document d: fi)
   {
-    	project.add(d.getString("title")); 
+	  Project pro = new Project();
+	  pro.setTitle(d.getString("title"));
+    	project.add(pro); 
   }
 return project;
 }

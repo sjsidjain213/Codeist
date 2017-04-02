@@ -13,7 +13,6 @@ import javax.ws.rs.core.MediaType;
 import bean.Acknowledgement;
 import bean.Institute;
 import dao.AdminDao;
-import service.GeneralServices;
 
 @Path("/adminpanel")
 public class AdminPanelResource {
