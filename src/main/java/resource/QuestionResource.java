@@ -78,14 +78,14 @@ public class QuestionResource {
 	}
 	
 	@POST
-	@Path("/forum/{username}/{question_id}")
+	@Path("/forum/{question_id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public ArrayList<Tile> getQuestion(@PathParam("username")String username,@PathParam("question_id") String question_id,Question ques)
+	public ArrayList<Tile> getQuestions(@PathParam("question_id") String question_id)
 	{
-	ArrayList<String> altags = ques.getTags();	
+	
 	//get questions tags from database
-	return new HomePage().getRelatedProject(username,question_id,altags);
+	return new HomePage().getRelatedProject(question_id);
 		//return new HomePage().getQuestions(username);
       //return new HomePage().getQuestions(req.getSession().getAttribute("username").toString());
 
