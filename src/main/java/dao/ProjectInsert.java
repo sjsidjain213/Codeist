@@ -103,7 +103,8 @@ catch(Exception e){
 		  String url = ""+document.getString("id")+"/"+title;
 	    Document doc = new Document()
    		 .append("username", document.getString("username"))
-   		 .append("title",project.getTitle())	
+   		 .append("title",project.getTitle())
+   		 .append("owner", document.getString("owner"))
    		 .append("last_updated",new GeneralServices().getCurrentDate().getTime())
    		 .append("description",project.getDescription())
    		 .append("project_url",url)
@@ -178,6 +179,7 @@ public Project getSelectedProject(String id)
 			project.setId(d.get("_id").toString());
 			project.setUsername(d.getString("username"));
 		   	project.setTitle(d.getString("title"));
+		   	project.setOwner(d.getString("owner"));
 		   	project.setUrl_title(GeneralServices.spaceRemover(d.getString("title")));
 	   		project.setDescription(d.getString("description"));
 	   		project.setDate(d.getLong("date"));
@@ -273,7 +275,12 @@ public MultiUse  up(String id,String user){
 	Document d = tc.find(eq("_id",id1)).first();
 	MultiUse obj=new MultiUse();
 	String username=d.getString("username");
-	
+	if(d.getString("owner").equals("i")){
+		tcuser=new DatabaseServices().getDb().getCollection("testuserdata");
+	}
+	else if(d.getString("owner").equals("c")){
+		tcuser=new DatabaseServices().getDb().getCollection("institute");
+	}
 	// access in this pattern in QADao vote method also
 	Document infodetails=(Document)d.get("info");
 		ArrayList<String> up=(ArrayList<String>)infodetails.get("upvotes");
@@ -335,6 +342,12 @@ public MultiUse down(String id,String user){
 	ObjectId id1=new ObjectId(id.toString());
 	Document d = tc.find(eq("_id",id1)).first();
 	String username=d.getString("username");
+	if(d.getString("owner").equals("i")){
+		tcuser=new DatabaseServices().getDb().getCollection("testuserdata");
+	}
+	else if(d.getString("owner").equals("c")){
+		tcuser=new DatabaseServices().getDb().getCollection("institute");
+	}
 	MultiUse obj=new MultiUse();
 	Document infodetails=(Document)d.get("info");
 		ArrayList<String> up=(ArrayList<String>)infodetails.get("upvotes");

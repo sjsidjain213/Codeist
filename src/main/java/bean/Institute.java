@@ -7,6 +7,32 @@ public class Institute {
 	private String username,password,university_name,college_name,state,city,email_id,phone_no,address;
 	private ArrayList<ArrayList<String>> departments;
 	private ArrayList<String> tags,project_id,question_id,question_asked;
+	private Long project_upvote,project_downvote,qa_upvote,qa_downvote;
+	
+	public Long getProject_upvote() {
+		return project_upvote;
+	}
+	public void setProject_upvote(Long project_upvote) {
+		this.project_upvote = project_upvote;
+	}
+	public Long getProject_downvote() {
+		return project_downvote;
+	}
+	public void setProject_downvote(Long project_downvote) {
+		this.project_downvote = project_downvote;
+	}
+	public Long getQa_upvote() {
+		return qa_upvote;
+	}
+	public void setQa_upvote(Long qa_upvote) {
+		this.qa_upvote = qa_upvote;
+	}
+	public Long getQa_downvote() {
+		return qa_downvote;
+	}
+	public void setQa_downvote(Long qa_downvote) {
+		this.qa_downvote = qa_downvote;
+	}
 	public ArrayList<String> getProject_id() {
 		return project_id;
 	}

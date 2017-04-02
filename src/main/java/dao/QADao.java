@@ -183,6 +183,12 @@ public class QADao {
 		Document d = tc.find(eq("_id",id1)).first();
 		MultiUse obj=new MultiUse();
 		String username=d.getString("username");
+		if(d.getString("owner").equals("i")){
+			tcuser=new DatabaseServices().getDb().getCollection("testuserdata");
+		}
+		else if(d.getString("owner").equals("c")){
+			tcuser=new DatabaseServices().getDb().getCollection("institute");
+		}
 			
 		//username ques owner //user who votes
 		//d = tc.find(eq("_id",id1)).first();
@@ -247,6 +253,12 @@ public class QADao {
 		Document d = tc.find(eq("_id",id1)).first();
 		MultiUse obj=new MultiUse();
 		String username=d.getString("username");
+		if(d.getString("owner").equals("i")){
+			tcuser=new DatabaseServices().getDb().getCollection("testuserdata");
+		}
+		else if(d.getString("owner").equals("c")){
+			tcuser=new DatabaseServices().getDb().getCollection("institute");
+		}
 		//Document d = tc.find(and(eq("username",username),eq("question",question.getQuestion()))).first();
 		Document infodetails=(Document)d.get("info");
 			ArrayList<String> up=(ArrayList<String>)infodetails.get("upvotes");
@@ -309,6 +321,12 @@ public class QADao {
 		ObjectId id1=new ObjectId(id.toString());
 		MultiUse obj=new MultiUse();
 		Document d = tc.find(eq("_id",id1)).first();
+		if(d.getString("owner").equals("i")){
+			tcuser=new DatabaseServices().getDb().getCollection("testuserdata");
+		}
+		else if(d.getString("owner").equals("c")){
+			tcuser=new DatabaseServices().getDb().getCollection("institute");
+		}
 		ArrayList<String> up=null,down=null;
 		int i=0;
 		ArrayList<Document> aldo = (ArrayList<Document>) d.get("answers");
@@ -380,6 +398,12 @@ public class QADao {
 		ObjectId id1=new ObjectId(id.toString());
 		Document d = tc.find(eq("_id",id1)).first();
 		MultiUse obj=new MultiUse();
+		if(d.getString("owner").equals("i")){
+			tcuser=new DatabaseServices().getDb().getCollection("testuserdata");
+		}
+		else if(d.getString("owner").equals("c")){
+			tcuser=new DatabaseServices().getDb().getCollection("institute");
+		}
 		ArrayList<String> up=null,down=null;
 		int i=0;
 		ArrayList<Document> aldo = (ArrayList<Document>) d.get("answers");
