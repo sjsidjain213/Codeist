@@ -280,4 +280,21 @@ public Tile returnTile(Document d,String source,String subject)
 			tc.updateMany(eq("_id", oid), new Document("$addToSet", new Document("question_id", question_id)));
 		}
 	}
+
+public Long setRating(String username)
+{
+	MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("institute");
+	Document doc = tc.find(eq("username",username)).first();
+Long pupvote = doc.getLong("project_upvote");
+Long pdownvote = doc.getLong("project_downvote");
+Long qupvote = doc.getLong("qa_upvote");
+Long qdownvote = doc.getLong("qa_downvote");
+
+Long score  = 2*(pupvote+qupvote);
+score = score - pdownvote;
+score = score -qdownvote;
+return score;
+	
+}
+
 }

@@ -152,7 +152,7 @@ public class QADao {
 	    Document doc = new Document("username",username)
 	    		.append("answer",answer.getAnswer())
 	    		.append("date",GeneralServices.getCurrentDate().getTime())
-	    		.append("owner", answer.getOwner())
+	    		.append("owner", answer.getOwner())//
 	    		.append("last_updated",GeneralServices.getCurrentDate().getTime())
 	    		.append("info",info);
 	    		//.append("featured_points", answer.getFeatured_points());
