@@ -119,7 +119,7 @@ public class QADao {
 		Document in=(Document) d.get("info");
 		answer.setDownvotes((ArrayList<String>)in.get("downvotes"));
 		answer.setUpvotes((ArrayList<String>)in.get("upvotes"));
-		answer.setFeatured_points(d.getLong("featured_points"));
+		//answer.setFeatured_points(d.getLong("featured_points"));
 		alansw.add(answer);
 	}
 	quest.setAnswers(alansw);

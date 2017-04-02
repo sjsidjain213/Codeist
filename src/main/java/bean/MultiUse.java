@@ -32,7 +32,16 @@ public void setIs_valid(boolean is_valid) {
 	this.is_valid = is_valid;
 }
 
-private ArrayList<String> upvotes,downvotes;
+private ArrayList<String> upvotes,downvotes,departments;
+
+public ArrayList<String> getDepartments() {
+	return departments;
+}
+
+public void setDepartments(ArrayList<String> departments) {
+	this.departments = departments;
+}
+
 public ArrayList<String> getUpvotes() {
 	return upvotes;
 }

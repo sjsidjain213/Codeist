@@ -8,6 +8,7 @@ import com.mongodb.client.result.UpdateResult;
 
 import bean.Acknowledgement;
 import bean.Comment;
+import bean.MultiUse;
 import bean.Notifications;
 import bean.Project;
 import bean.Question;
@@ -97,5 +98,10 @@ ArrayList<String> aldepartment = new ArrayList<String>();
 	  }
 		 return alluser;
 		}
-	
+	public MultiUse getdepartments(String username){
+		MultiUse obj = new MultiUse();
+		Document doc=tc.find(eq("username",username)).first();
+		obj.setDepartments((ArrayList<String>) doc.get("departments"));
+		return obj;
+	}
 }

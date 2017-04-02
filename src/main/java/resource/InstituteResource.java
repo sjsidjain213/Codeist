@@ -9,6 +9,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import bean.MultiUse;
 import bean.Project;
 import bean.Question;
 import dao.InstituteDao;
@@ -44,4 +45,15 @@ public class InstituteResource {
 		return new InstituteDao().getAllOwnQuestions(username);	
 		//	return new QADao().getQuestion(username);
 	}
+	
+	@GET
+	@Path("/{username}/departments")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public MultiUse departments(@PathParam("username")String username)
+	{
+		return new InstituteDao().getdepartments(username);	
+		//	return new QADao().getQuestion(username);
+	}
+	
 }
