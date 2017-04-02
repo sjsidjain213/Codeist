@@ -296,17 +296,5 @@ score = score -qdownvote;
 return score;
 	
 }
-public Long getRating(String username)
-{
-	MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("institute");
-	Document doc = tc.find(eq("username",username)).first();
-Long pupvote = doc.getLong("project_upvote");
-Long pdownvote = doc.getLong("project_downvote");
-Long qupvote = doc.getLong("qa_upvote");
-Long qdownvote = doc.getLong("qa_downvote");
-Long score  = 2*(pupvote+qupvote);
-score = score - pdownvote;
-score = score -qdownvote;
-return score;
-}
+
 }

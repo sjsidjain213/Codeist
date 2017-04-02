@@ -1,5 +1,7 @@
 package resource;
 
+import java.util.ArrayList;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -24,10 +26,20 @@ public class AdminPanelResource {
 	}
 
 	@GET
-	@Path("/rating/{username}")
+	@Path("/{college}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Long getRating(Institute institute, @PathParam("username") String username){
-		return new GeneralServices().getRating(username);
+	public Institute getRating(@PathParam("college") String college){
+		return new AdminDao().getInstituteDetail(college);
 	}
+
+
+	@GET
+	@Path("/name")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public ArrayList<Institute> getName(){
+		return new AdminDao().getName();
+	}
+
 }

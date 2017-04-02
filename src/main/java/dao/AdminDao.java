@@ -63,11 +63,27 @@ public Acknowledgement updateinstitute(String id,Institute institute){
 		return new GeneralServices().response(Notifications.PROJECTINSERTED);
 	}
 
-public void getHighlyRated()
+public ArrayList<Institute> getName()
 {
-	
-FindIterable <Document> doc  = tc.find().sort(new Document("rating",-1));
-
+ArrayList<Institute> al = new ArrayList<Institute>();
+	FindIterable <Document> d = tc.find();
+for(Document doc: d)
+{
+Institute in = new Institute();
+in.setCollege_name(	doc.getString("college_name"));
+in.setUniversity_name(doc.getString("university_name"));
+}
+return al;
+}
+public Institute getInstituteDetail(String name)
+{
+Document doc = tc.find(eq("college_name",name)).first();
+Institute in = new Institute();
+in.setCollege_name(name);
+in.setRating(doc.getLong("rating"));
+in.setUniversity_name(doc.getString("university_name"));
+in.setDepart((ArrayList<String>)doc.get("departments"));
+return in;
 }
 	
 }

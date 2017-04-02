@@ -6,9 +6,22 @@ import java.util.Date;
 public class Institute {
 	private String username,password,university_name,college_name,state,city,email_id,phone_no,address;
 	private ArrayList<ArrayList<String>> departments;
+	private ArrayList<String> depart;
+	public ArrayList<String> getDepart() {
+		return depart;
+	}
+	public void setDepart(ArrayList<String> depart) {
+		this.depart = depart;
+	}
 	private ArrayList<String> tags,project_id,question_id,question_asked;
-	private Long project_upvote,project_downvote,qa_upvote,qa_downvote;
+	private Long project_upvote,project_downvote,qa_upvote,qa_downvote,rating;
 	
+	public Long getRating() {
+		return rating;
+	}
+	public void setRating(Long rating) {
+		this.rating = rating;
+	}
 	public Long getProject_upvote() {
 		return project_upvote;
 	}
