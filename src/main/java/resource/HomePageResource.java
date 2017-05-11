@@ -17,7 +17,7 @@ import bean.Tile;
 import bean.User;
 import bean.test;
 import dao.HomePage;
-import service.objectupload;
+//import service.objectupload;
 
 @Path("/homepage")
 public class HomePageResource {
@@ -68,16 +68,16 @@ public class HomePageResource {
 	{
     	return new HomePage().topUsers();
 	}
-	@POST
-	@Path("/img")
-	@Produces(MediaType.APPLICATION_JSON)
-	public void img(test test)
-	{
-    	try {
-			new objectupload().upload(test.getImg());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+//	@POST
+//	@Path("/img")
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public void img(test test)
+//	{
+//    	try {
+//			new objectupload().upload(test.getImg());
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	}
 }
