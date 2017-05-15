@@ -32,7 +32,7 @@ MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("tes
 	{    System.out.println(username);
 		Document doc = tc.find(eq("username",username)).first();
 	MultiUse user = new MultiUse();
-	System.out.println(GeneralServices.get_SHA_256_SecurePassword(username, password)+"::"+req.getSession().getAttribute("username")+"::"+doc.getString("session_id"));
+	//System.out.println(GeneralServices.get_SHA_256_SecurePassword(username, password)+"::"+req.getSession().getAttribute("username")+"::"+doc.getString("session_id"));
 	if (tc.find(eq("username",username)).first()!=null&&GeneralServices.get_SHA_256_SecurePassword(username, password).equals(doc.getString("password")))
 	{ System.out.println("user exsit and password match");
 		if(req.getSession().getAttribute("username")==null&&doc.getString("session _id")==null)

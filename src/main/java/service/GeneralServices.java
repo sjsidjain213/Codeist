@@ -74,12 +74,20 @@ public Tile returnTile(Document d,String source,String subject)
 	    
 	    }
 	    else{
-	    	tl.setTitle(d.getString("question"));
+	    	tl.setQuestion(d.getString("question"));
 	        tl.setDescription(d.getString("description"));
 	   tl.setTags((ArrayList<String>)d.get("tags"));
 	   //"/questions/{id}"
 	   // 	tl.setUpvotecount(d.getLong("upvotecount"));
 	   // 	tl.setDownvotecount(d.getLong("downvotecount"));
+	   Document doc = (Document) d.get("info");
+//   	if((ArrayList<String>)doc.get("upvotes") != null){
+   		tl.setUpvotes((ArrayList<String>) doc.get("upvotes"));
+//    	}
+//   	if(doc.get("downvotes") != null){
+   		tl.setDownvotes((ArrayList<String>) doc.get("downvotes"));
+//   	}
+   
 	    }
 		tl.setViewcount(1);
 		return tl;

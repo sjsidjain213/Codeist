@@ -48,7 +48,15 @@ public class UserResource implements ContainerResponseFilter {
 	@Path("/verifier/{hash1}/{hash2}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public String signupverifier2(@PathParam("hash1") String hash1,@PathParam("hash2") String hash2,@Context HttpServletResponse response)
-	{	return new EmailVerifier().test(hash1,hash2,response);
+	{	String s=new EmailVerifier().test(hash1,hash2,response);
+		try {
+		if(s=="verified")
+		response.sendRedirect("http://www.google.com");
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+		return s;
 	}
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)

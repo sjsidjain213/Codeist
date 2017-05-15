@@ -8,8 +8,15 @@ public class Tile extends Super{
 //url for project/question url use of url is mandatory
 //title for project/question title
 //description for project/question description 	
-private String username,title,description,url,subject,url_title,university_name,college_name,state,city;
+private String username,question,title,description,url,subject,url_title,university_name,college_name,state,city;
 private int matchedcount,status;
+
+public String getQuestion() {
+	return question;
+}
+public void setQuestion(String question) {
+	this.question = question;
+}
 public int getStatus() {
 	return status;
 }
@@ -65,10 +72,11 @@ public String toString() {
 			+ ", upvotecount=" + upvotecount + ", downvotecount=" + downvotecount + ", viewcount=" + viewcount
 			+ ", tags=" + tags + ", status" + status + "]";
 }
-public Tile(String username, String title, String description, String url, String subject, String url_title,
+public Tile(String username,String question, String title, String description, String url, String subject, String url_title,
 		int positioncount, String id, Date date, ArrayList<String> source, ArrayList<String> upvotes,
 		ArrayList<String> downvotes, long upvotecount, long downvotecount, long viewcount, ArrayList<String> tags, Integer status) {
 	super();
+	this.question = question;
 	this.username = username;
 	this.title = title;
 	this.description = description;
@@ -87,6 +95,7 @@ public Tile(String username, String title, String description, String url, Strin
 	this.tags = tags;
 	this.status = status;
 }
+
 public String getUsername() {
 	return username;
 }

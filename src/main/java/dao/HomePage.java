@@ -143,7 +143,7 @@ public class HomePage {
  	}
  	public ArrayList<Tile> getInterestQuestion(ArrayList<Tile> question, String username)
  	{
- 		 MongoCollection<Document> tc =new DatabaseServices().getDb().getCollection("userdata");
+ 		 MongoCollection<Document> tc =new DatabaseServices().getDb().getCollection("testuserdata");
  		   
  		   Document doc = tc.find(eq("username",username)).first();
  		   ArrayList<String> alquesbookmark = (ArrayList<String>) doc.get("question_bookmark");
@@ -326,7 +326,7 @@ public class HomePage {
 		for(Document d:fi)
 		{Tile doc = new Tile();
 		        doc.setUsername(d.getString("username"));
-		        doc.setTitle(d.getString("question"));
+		        doc.setQuestion(d.getString("question"));
 		        doc.setUpvotecount(d.getLong("upvotecount"));
 		        doc.setDownvotecount(d.getLong("downvotecount"));
 		        // description might throw error check database 

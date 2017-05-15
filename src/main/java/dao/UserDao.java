@@ -95,7 +95,7 @@ public class UserDao {
 					  .append("favourite_tag",new ArrayList<String>()); 
                   		  tc.insertOne(doc);
       MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("unverifieduserdata");
-	  tc.deleteOne(unverify);
+	  tc.deleteOne(eq("username",username));
 	  }
 	  
 	  public Acknowledgement updateUser(User user)

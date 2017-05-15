@@ -52,6 +52,8 @@ public class QADao {
 	    		.append("question",question.getQuestion())
 	    		.append("description",question.getDescription())
 	    		.append("state", question.getState())
+	    		.append("upvotecount",new Long(0))
+	    		.append("downvotecount",new Long(0))
 	    		.append("city", question.getCity())
 	    		.append("tags",(List<String>)question.getTags())
 	    		.append("owner", question.getOwner())
@@ -455,12 +457,16 @@ public class QADao {
 				
 			}
 	}
+
 	@SuppressWarnings("unchecked")
 	public MultiUse downanswer(String id,String username,String user){
+		//username:whos answer
+		//user upvote user
 		ObjectId id1=new ObjectId(id.toString());
-		Document d = tc.find(eq("_id",id1)).first();
 		MultiUse obj=new MultiUse();
 		String owner="i";
+		Document d = tc.find(eq("_id",id1)).first();
+		
 		if(new UserDao().getAllUseri().contains(username)){
 			tcuser=new DatabaseServices().getDb().getCollection("testuserdata");
 			owner="i";
@@ -469,18 +475,20 @@ public class QADao {
 			tcuser=new DatabaseServices().getDb().getCollection("institute");
 			owner="c";
 		}
+		if(user.equals(d.getString("username")))
+		tcuser.updateOne(eq("_id",id1),new Document("$push",new Document("question_solved",id)));
 		ArrayList<String> up=null,down=null;
 		int i=0;
 		ArrayList<Document> aldo = (ArrayList<Document>) d.get("answers");
 		for(Document d1:aldo){
 			if(d1.get("username").equals(username)){
-				 Document infodetails=(Document)d1.get("info");
-			up=(ArrayList<String>)infodetails.get("upvotes");
-			 down=(ArrayList<String>)infodetails.get("downvotes");
-			break;
-						}
-				i++;
-			}
+			    Document infodetails=(Document)d1.get("info");
+				up=(ArrayList<String>)infodetails.get("upvotes");
+				down=(ArrayList<String>)infodetails.get("downvotes");
+				break;
+					}
+			i++;
+		}
 		
 		String ups="answers."+i+".info.upvotes";
 		String downs="answers."+i+".info.downvotes";
@@ -488,29 +496,31 @@ public class QADao {
 		String downc="answers."+i+".downvotecount";
 			if(down!=null){
 				if(!down.contains(user)){
-					if(up!=null && up.contains(user)){
+					if(up!=null &&up.contains(user)){
 						up.remove(user);
-						 String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document(ups,up))).toString();	 
+						 String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document(ups,up))).toString();
 						 tc.updateOne(eq("_id",id1),new Document("$set",new Document(upc,new Long(up.size()))));
 						 tcuser.updateOne(eq("username",username),new Document("$inc",new Document("qa_upvote",-1)));
 						 new GeneralServices().ratingupdate(owner, username);
 					}
 				down.add(user);
-				String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document(downs,down))).toString();	 
+				String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document(downs,down))).toString();
 				tc.updateOne(eq("_id",id1),new Document("$set",new Document(downc,new Long(down.size()))));
-				tcuser.updateOne(eq("username",username),new Document("$inc",new Document("qa_downvote",1)));
-				new GeneralServices().ratingupdate(owner, username);
-				 String q_id = tc.find(eq("_id",id1)).first().get("_id").toString();
-				 //new NotificationService().voteNotification(username,answer.getQuestion(),q_id,user,Notifications.DOWNVOTESQUESTION);
-				 obj.setUpvotes(up);
-		           	obj.setDownvotes(down);
-					return obj;}
+				 tcuser.updateOne(eq("username",username),new Document("$inc",new Document("qa_downvote",1)));
+				 new GeneralServices().ratingupdate(owner, username);
+		//public void voteNotification(String username,String pqname,String pqid,String commitername,Notifications notify)
+		String q_id = tc.find(eq("_id",id1)).first().get("_id").toString();
+				   
+				//new NotificationService().voteNotification(username,answer.getQuestion(),q_id,user,Notifications.UPVOTESANSWER);
+		obj.setUpvotes(up);
+       	obj.setDownvotes(down);
+		return obj;}
 				else{
 					down.remove(user);
 					String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document(downs,down))).toString();
 					tc.updateOne(eq("_id",id1),new Document("$set",new Document(downc,new Long(down.size()))));
-					tcuser.updateOne(eq("username",username),new Document("$inc",new Document("qa_downvote",-1)));
-					new GeneralServices().ratingupdate(owner, username);
+					 tcuser.updateOne(eq("username",username),new Document("$inc",new Document("qa_downvote",-1)));
+					 new GeneralServices().ratingupdate(owner, username);
 				}
 				obj.setUpvotes(up);
 	           	obj.setDownvotes(down);
@@ -526,12 +536,12 @@ public class QADao {
 				}
 				down=new ArrayList<String>();
 				down.add(user);
-				 String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document(downs,down))).toString();
+				 String acknow2 = tc.updateOne(eq("_id",id1),new Document("$set",new Document(downs,down))).toString();	 
 				 tc.updateOne(eq("_id",id1),new Document("$set",new Document(downc,new Long(down.size()))));
 				 tcuser.updateOne(eq("username",username),new Document("$inc",new Document("qa_downvote",1)));
 				 new GeneralServices().ratingupdate(owner, username);
 				 String q_id = tc.find(eq("_id",id1)).first().get("_id").toString();
-				 //new NotificationService().voteNotification(username,answer.getQuestion(),q_id,user,Notifications.DOWNVOTESQUESTION);
+				 //new NotificationService().voteNotification(username,answer.getQuestion(),q_id,user,Notifications.UPVOTESANSWER);
 				 obj.setUpvotes(up);
 		           	obj.setDownvotes(down);
 					return obj;
@@ -578,6 +588,7 @@ public class QADao {
                 .append("featured_points", question.getFeatured_points())
                 .append("answers",aldo);
         tc.updateOne(eq("_id",oid),new Document("$set",doc));
+      
         return new GeneralServices().response(Notifications.SUCCESSFULLYUPDATED);
     }
     
