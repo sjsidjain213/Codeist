@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -33,11 +34,12 @@ public class AdminPanelResource {
 	}
 
 
+	
 	@GET
-	@Path("/name")
+	@Path("/institutes")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public ArrayList<Institute> getName(){
+	public ArrayList<Institute> getName(@HeaderParam("sess")String s_id){
 		System.out.println("-----------------------------------------------------");
 		return new AdminDao().getName();
 	}

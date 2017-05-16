@@ -8,6 +8,16 @@ public class Institute {
 	private ArrayList<ArrayList<String>> departments;
 	private ArrayList<String> depart;
 	private int question_s;
+private Boolean loggedin;
+	
+	
+
+	public Boolean getLoggedin() {
+		return loggedin;
+	}
+	public void setLoggedin(Boolean loggedin) {
+		this.loggedin = loggedin;
+	}
 	public int getQuestion_s() {
 		return question_s;
 	}

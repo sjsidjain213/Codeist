@@ -75,6 +75,7 @@ public Tile returnTile(Document d,String source,String subject)
 	    }
 	    else{
 	    	tl.setQuestion(d.getString("question"));
+	    	tl.setUrl_title(GeneralServices.spaceRemover(d.getString("question")));
 	        tl.setDescription(d.getString("description"));
 	   tl.setTags((ArrayList<String>)d.get("tags"));
 	   //"/questions/{id}"

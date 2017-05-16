@@ -327,11 +327,13 @@ public class HomePage {
 		{Tile doc = new Tile();
 		        doc.setUsername(d.getString("username"));
 		        doc.setQuestion(d.getString("question"));
+		        doc.setId(d.get("_id").toString());
 		        doc.setUpvotecount(d.getLong("upvotecount"));
 		        doc.setDownvotecount(d.getLong("downvotecount"));
 		        // description might throw error check database 
 		        doc.setDescription(d.getString("description"));
 		        doc.setUrl(d.getString("question_url"));
+		        doc.setUrl_title(GeneralServices.spaceRemover(d.getString("question")));
 		        Document innerdoc = (Document)d.get("info");
 		   		if(innerdoc!=null){
 		   		doc.setUpvotes((ArrayList<String>)innerdoc.get("upvotes"));

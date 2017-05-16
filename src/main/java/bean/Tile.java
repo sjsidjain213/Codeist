@@ -10,7 +10,16 @@ public class Tile extends Super{
 //description for project/question description 	
 private String username,question,title,description,url,subject,url_title,university_name,college_name,state,city;
 private int matchedcount,status;
+private Boolean loggedin;
 
+
+
+public Boolean getLoggedin() {
+	return loggedin;
+}
+public void setLoggedin(Boolean loggedin) {
+	this.loggedin = loggedin;
+}
 public String getQuestion() {
 	return question;
 }

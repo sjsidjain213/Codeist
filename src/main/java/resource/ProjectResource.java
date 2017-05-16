@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -40,7 +41,7 @@ public class ProjectResource {
 @Path("/insert/{username}")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public Acknowledgement insertProject(Project project,@PathParam("username") String username)
+public Acknowledgement insertProject(Project project,@PathParam("username") String username,@HeaderParam("sess") String sess)
 {
 	
 //return new ProjectInsert().insertProject(project);
@@ -52,7 +53,7 @@ return	new ProjectInsert().insertProject(project,username);
 @Path("/{id}")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public Acknowledgement updateProject(Project project,@PathParam("id")String id)
+public Acknowledgement updateProject(Project project,@PathParam("id")String id,@HeaderParam("sess") String sess)
 {
 //return (new SessionService().sessionVerifier(req))?new ProjectInsert().updateproject(project,req,id):new GeneralServices().response(null);
 return new ProjectInsert().updateproject(project,id);
@@ -61,7 +62,7 @@ return new ProjectInsert().updateproject(project,id);
 @GET
 @Path("/user/{username}")   
 @Produces(MediaType.APPLICATION_JSON)
-public ArrayList<Project> getBriefProject(@Context HttpServletRequest req,@PathParam("username")String username)
+public ArrayList<Project> getBriefProject(@Context HttpServletRequest req,@PathParam("username")String username,@HeaderParam("sess") String sess)
 {
 //return new ProjectInsert().getProjectBrief(username);
 return new ProjectInsert().getProjectBrief(username);
@@ -83,7 +84,7 @@ return new ProjectInsert().getProjectBrief(username);
 @GET
 @Path("/{id}")
 @Produces(MediaType.APPLICATION_JSON)
-public Project getSelected(@PathParam("id")String id,@Context HttpServletRequest req)
+public Project getSelected(@PathParam("id")String id,@Context HttpServletRequest req,@HeaderParam("sess") String sess)
 {
 return new ProjectInsert().getSelectedProject(id);
 
@@ -94,7 +95,7 @@ return new ProjectInsert().getSelectedProject(id);
 @Path("/{id}/comment")	//username:project owner
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public Comment insertComment(@Context HttpServletRequest req,Comment comment,@PathParam("id")String id)
+public Comment insertComment(@Context HttpServletRequest req,Comment comment,@PathParam("id")String id,@HeaderParam("sess") String sess)
 {
 //return (new SessionService().sessionVerifier(req))?new ProjectInsert().insertComment(comment,id,req):new Comment();
 return new ProjectInsert().insertComment(comment,id);
@@ -103,7 +104,7 @@ return new ProjectInsert().insertComment(comment,id);
 @POST
 @Path("/{id}/comment/delete")
 @Produces(MediaType.APPLICATION_JSON)
-public Comment deleteComment(@PathParam("id")String id,Comment comment,@Context HttpServletRequest req){
+public Comment deleteComment(@PathParam("id")String id,Comment comment,@Context HttpServletRequest req,@HeaderParam("sess") String sess){
 	//return (new SessionService().sessionVerifier(req))?new ProjectInsert().deleteComment(id,comment):comm;
 	//comm.setComment(Notifications.SESSIONDONOTEXSIT.getMsg());
 	//Comment comm=new Comment();
@@ -114,7 +115,7 @@ public Comment deleteComment(@PathParam("id")String id,Comment comment,@Context 
 @Path("/{id}/upvote/{username}")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public MultiUse up(@PathParam("id")String id,@PathParam("username")String username,@Context HttpServletRequest req)
+public MultiUse up(@PathParam("id")String id,@PathParam("username")String username,@Context HttpServletRequest req,@HeaderParam("sess") String sess)
 {
 //return (new SessionService().sessionVerifier(req))?new ProjectInsert().up(id,req.getSession().getAttribute("username").toString()):obj;
 	//obj.setMessage(Notifications.SESSIONDONOTEXSIT.getMsg());
@@ -126,7 +127,7 @@ return new ProjectInsert().up(id,username);
 @Path("/{id}/downvote/{username}")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public MultiUse down(@PathParam("id")String id,@PathParam("username")String username,@Context HttpServletRequest req)
+public MultiUse down(@PathParam("id")String id,@PathParam("username")String username,@Context HttpServletRequest req,@HeaderParam("sess") String sess)
 {
 //return (new SessionService().sessionVerifier(req))?new ProjectInsert().down(id,req.getSession().getAttribute("username").toString()):obj;
 	//obj.setMessage(Notifications.SESSIONDONOTEXSIT.getMsg());

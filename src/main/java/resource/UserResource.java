@@ -72,9 +72,9 @@ public class UserResource implements ContainerResponseFilter {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/logout")
-	public Acknowledgement logout(@Context HttpServletRequest req)
+	public Acknowledgement logout(@Context HttpServletRequest req,@HeaderParam("sess") String sess)
 	{
-		return new SessionService().sessionDestroy(req);
+		return new SessionService().sessionDestroy(req,"",sess);
 	}
 	
 	@POST
@@ -93,8 +93,8 @@ public class UserResource implements ContainerResponseFilter {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/profile/{username}")
-	public User getUserDetails(@Context HttpServletRequest req,@PathParam("username") String username,@HeaderParam("auth_token") String auth_token,@Context HttpServletResponse response)
-	{System.out.println(auth_token+"ihiwdhni");
+	public User getUserDetails(@Context HttpServletRequest req,@PathParam("username") String username,@HeaderParam("sess") String sess,@Context HttpServletResponse response)
+	{System.out.println(sess+"ihiwdhni");
 //		if(new SessionService().tokenVerifier(auth_token,req,response)){
 			return new UserDao().getUserDetails(username);
 //		}else{
@@ -106,16 +106,16 @@ public class UserResource implements ContainerResponseFilter {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("profile/update")
-	public Acknowledgement upsertUserDetails(User user,@Context HttpServletRequest req)
+	public Acknowledgement upsertUserDetails(User user,@Context HttpServletRequest req,@HeaderParam("sess") String sess)
 	{
-    return (new SessionService().sessionVerifier(req))?new UserDao().updateUserDetails(user,req.getSession().getAttribute("username").toString()):new GeneralServices().response(null);
+    return (new SessionService().sessionVerifier(user.getUsername(),sess))?new UserDao().updateUserDetails(user,req.getSession().getAttribute("username").toString()):new GeneralServices().response(null);
 	}
 	//@Path("/highratinguser")
 	@Override
 	public void filter(ContainerRequestContext  requestContext, ContainerResponseContext cres) throws IOException {
 		// TODO Auto-generated method stub
 		cres.getHeaders().add("Access-Control-Allow-Origin", "*");
-	      cres.getHeaders().add("Access-Control-Allow-Headers", "origin, content-type, accept, authorization,auth_token");
+	      cres.getHeaders().add("Access-Control-Allow-Headers", "origin, content-type, accept, authorization,auth_token,sess");
 	      cres.getHeaders().add("Access-Control-Allow-Credentials", "true");
 	      cres.getHeaders().add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
 	      cres.getHeaders().add("Access-Control-Max-Age", "1209600");
@@ -139,8 +139,22 @@ public class UserResource implements ContainerResponseFilter {
 	@GET
 	@Path("/project/allTitle/{username}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public ArrayList<Project> getAllUserProjects(@Context HttpServletRequest req, @PathParam("username") String username)
+	public ArrayList<Project> getAllUserProjects(@Context HttpServletRequest req, @PathParam("username") String username,@HeaderParam("sess") String sess)
 	{	 return new ProjectInsert().getAllTitles(username);
+	}
+	
+	@GET 
+	@Path("/test")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void test(@Context HttpServletRequest req){
+		System.out.println(req.getRemoteAddr());
+		System.out.println(req.getRemoteHost());
+		System.out.println(req.getRemoteUser());
+		System.out.println(req.getSession());
+		System.out.println(req.getRequestedSessionId());
+		System.out.println(req.getLocalAddr());
+		System.out.println(req.getLocalName());
+		System.out.println("-------------------------");
 	}
 	/*
 	@GET

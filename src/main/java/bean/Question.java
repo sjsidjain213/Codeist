@@ -7,6 +7,16 @@ public class Question {
 
 	private String username,question,question_url,description,state,city,university_name,college_name,owner,title,id;
 	private ArrayList<String> department;
+    private Boolean loggedin;
+	
+	
+
+	public Boolean getLoggedin() {
+		return loggedin;
+	}
+	public void setLoggedin(Boolean loggedin) {
+		this.loggedin = loggedin;
+	}
 	public String getOwner() {
 		return owner;
 	}
