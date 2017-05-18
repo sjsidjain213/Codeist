@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -18,6 +19,9 @@ import bean.User;
 import bean.test;
 import dao.HomePage;
 //import service.objectupload;
+import dao.ProjectInsert;
+import service.GeneralServices;
+import service.SessionService;
 
 @Path("/homepage")
 public class HomePageResource {
@@ -39,26 +43,28 @@ public class HomePageResource {
 //	}
 	
 	@GET
-	@Path("/forum/{username}")
+	@Path("/forum")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<Tile> getQuestion(@Context HttpServletRequest req,@PathParam("username") String username)
+	public Super getQuestion(@Context HttpServletRequest req,@PathParam("username") String username,@HeaderParam("sess") String sess)
 	{
 		System.out.println("dfghjkl");
-		return new HomePage().getQuestions(username);
+		//return new HomePage().getQuestions(username);
       //return new HomePage().getQuestions(req.getSession().getAttribute("username").toString());
-	}
+		return (new SessionService().sessionVerifier(sess))?new HomePage().getQuestions(sess):new Super(false);
+}
 	
 	@GET
-	@Path("/projects-feed/{username}")
+	@Path("/projects-feed")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<Tile> getProject(@Context HttpServletRequest req,@PathParam("username") String username)
+	public Super getProject(@Context HttpServletRequest req,@PathParam("username") String username,@HeaderParam("sess") String sess)
 	{
-		Super s = new Super();
-		ArrayList<Tile> altile = new HomePage().getProjects(username);
-		s.setAlsuper(altile);
-		s.setLogged("logged");
-    	return altile; //req.getSession().getAttribute("username").toString());
-	}
+//		Super s = new Super();
+//		ArrayList<Tile> altile = new HomePage().getProjects(username);
+//		s.setData(altile);
+//		s.setLoggedin(true);
+//    	return s; //req.getSession().getAttribute("username").toString());
+    	return (new SessionService().sessionVerifier(sess))?new HomePage().getProjects(sess):new Super(false);
+}
 	
 	
 	@GET

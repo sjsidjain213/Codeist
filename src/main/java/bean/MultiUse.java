@@ -10,6 +10,19 @@ private Document region;
 public Document getRegion() {
 	return region;
 }
+private Boolean loggedin;
+
+public MultiUse(Boolean loggedin){
+  this.loggedin=loggedin;
+}
+
+public Boolean getLoggedin() {
+	return loggedin;
+}
+
+public void setLoggedin(Boolean loggedin) {
+	this.loggedin = loggedin;
+}
 
 public void setRegion(Document region) {
 	this.region = region;

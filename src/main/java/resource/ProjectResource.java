@@ -1,5 +1,7 @@
 package resource;
 
+import static com.mongodb.client.model.Filters.eq;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,6 +25,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.Provider;
 
+import org.bson.Document;
+
 import bean.Acknowledgement;
 import bean.Comment;
 import bean.MultiUse;
@@ -38,15 +42,15 @@ import bean.User;
 public class ProjectResource {
 
 @POST
-@Path("/insert/{username}")
+@Path("/insert")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public Acknowledgement insertProject(Project project,@PathParam("username") String username,@HeaderParam("sess") String sess)
+public Acknowledgement insertProject(Project project,@HeaderParam("sess") String sess)
 {
 	
 //return new ProjectInsert().insertProject(project);
-return	new ProjectInsert().insertProject(project,username);
-//return (new SessionService().sessionVerifier(req))?new ProjectInsert().insertProject(project,req):new GeneralServices().response(Notifications.SESSIONDONOTEXSIT);
+//return	new ProjectInsert().insertProject(project,username);
+return (new SessionService().sessionVerifier(sess))?new ProjectInsert().insertProject(project,sess):new GeneralServices().response(null);
 }
 //to update
 @PUT
@@ -56,7 +60,9 @@ return	new ProjectInsert().insertProject(project,username);
 public Acknowledgement updateProject(Project project,@PathParam("id")String id,@HeaderParam("sess") String sess)
 {
 //return (new SessionService().sessionVerifier(req))?new ProjectInsert().updateproject(project,req,id):new GeneralServices().response(null);
-return new ProjectInsert().updateproject(project,id);
+//return new ProjectInsert().updateproject(project,id);
+return (new SessionService().sessionVerifier(sess))?new ProjectInsert().updateproject(project,id,sess):new GeneralServices().response(null);
+
 }
 //all projects of a user
 @GET
@@ -98,7 +104,8 @@ return new ProjectInsert().getSelectedProject(id);
 public Comment insertComment(@Context HttpServletRequest req,Comment comment,@PathParam("id")String id,@HeaderParam("sess") String sess)
 {
 //return (new SessionService().sessionVerifier(req))?new ProjectInsert().insertComment(comment,id,req):new Comment();
-return new ProjectInsert().insertComment(comment,id);
+//return new ProjectInsert().insertComment(comment,id);
+return (new SessionService().sessionVerifier(sess))?new ProjectInsert().insertComment(comment,id,sess):new Comment(false);
 }
 
 @POST
@@ -108,11 +115,12 @@ public Comment deleteComment(@PathParam("id")String id,Comment comment,@Context 
 	//return (new SessionService().sessionVerifier(req))?new ProjectInsert().deleteComment(id,comment):comm;
 	//comm.setComment(Notifications.SESSIONDONOTEXSIT.getMsg());
 	//Comment comm=new Comment();
-	return new ProjectInsert().deleteComment(id,comment);
+	//return new ProjectInsert().deleteComment(id,comment);
+	return (new SessionService().sessionVerifier(sess))?new ProjectInsert().deleteComment(id,comment,sess):new Comment(false);
 }
 
 @PUT
-@Path("/{id}/upvote/{username}")
+@Path("/{id}/upvote")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public MultiUse up(@PathParam("id")String id,@PathParam("username")String username,@Context HttpServletRequest req,@HeaderParam("sess") String sess)
@@ -120,7 +128,8 @@ public MultiUse up(@PathParam("id")String id,@PathParam("username")String userna
 //return (new SessionService().sessionVerifier(req))?new ProjectInsert().up(id,req.getSession().getAttribute("username").toString()):obj;
 	//obj.setMessage(Notifications.SESSIONDONOTEXSIT.getMsg());
 	//MultiUse obj= new MultiUse();
-return new ProjectInsert().up(id,username);
+//return new ProjectInsert().up(id,username);
+return (new SessionService().sessionVerifier(sess))?new ProjectInsert().up(id,sess):new MultiUse(false);
 }
 
 @PUT
@@ -132,7 +141,8 @@ public MultiUse down(@PathParam("id")String id,@PathParam("username")String user
 //return (new SessionService().sessionVerifier(req))?new ProjectInsert().down(id,req.getSession().getAttribute("username").toString()):obj;
 	//obj.setMessage(Notifications.SESSIONDONOTEXSIT.getMsg());
 	//MultiUse obj= new MultiUse();
-return new ProjectInsert().down(id,username);
+//return new ProjectInsert().down(id,username);
+return (new SessionService().sessionVerifier(sess))?new ProjectInsert().down(id,sess):new MultiUse(false);
 }
 }
 

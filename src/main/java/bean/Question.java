@@ -11,6 +11,9 @@ public class Question {
 	
 	
 
+    public Question(Boolean loggedin){
+    	this.loggedin=loggedin;
+    }
 	public Boolean getLoggedin() {
 		return loggedin;
 	}

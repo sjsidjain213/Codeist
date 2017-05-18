@@ -105,9 +105,9 @@ MongoCollection<Document> tcsession=new DatabaseServices().getDb().getCollection
         }
 	}
 	
-	public boolean sessionVerifier(String username,String s_id)
+	public boolean sessionVerifier(String s_id)
 	{
-		Document sdoc=tcsession.find(eq("username",username)).first();
+		Document sdoc=tcsession.find(eq("session_id",s_id)).first();
 		if(sdoc.getString("session_id")==s_id && new Date().getTime()<sdoc.getLong("expiry")){
 			return true;
 		}
@@ -119,11 +119,13 @@ MongoCollection<Document> tcsession=new DatabaseServices().getDb().getCollection
 //	
 		}
     
-	public Acknowledgement sessionDestroy(HttpServletRequest req,String username,String s_id)
+	public Acknowledgement sessionDestroy(HttpServletRequest req,String s_id)
 	{
-		Document sdoc=tcsession.find(eq("username",username)).first();
+		Document sdoc=tcsession.find(eq("session_id",s_id)).first();
+		
 		Acknowledgement ack=new Acknowledgement();
 		if(sdoc!=null&&sdoc.getString("session_id")!=null){
+			String username=sdoc.getString("username");
 			tcsession.updateOne(eq("username",username),new Document("$set",new Document("session_id",null)));
 			ack.setMessage(Notifications.USERLOGGEDOUT.getMsg());
 		}

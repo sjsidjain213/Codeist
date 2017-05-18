@@ -74,17 +74,17 @@ public class UserResource implements ContainerResponseFilter {
 	@Path("/logout")
 	public Acknowledgement logout(@Context HttpServletRequest req,@HeaderParam("sess") String sess)
 	{
-		return new SessionService().sessionDestroy(req,"",sess);
+		return new SessionService().sessionDestroy(req,sess);
 	}
 	
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/insert")
-	public Acknowledgement insertUser(User users,@Context HttpServletRequest req)
+	public Acknowledgement insertUser(User users,@Context HttpServletRequest req,@HeaderParam("sess") String sess)
 	{
-	//return (new SessionService().sessionVerifier(req))?new UserDao().insertUser(users):new GeneralServices().response(null);
-	return new UserDao().updateUser(users);
+	return (new SessionService().sessionVerifier(sess))?new UserDao().updateUser(users,sess):new GeneralServices().response(null);
+	//return new UserDao().updateUser(users);
 	}
 	
 	// For Demo Purpose : : User here can access his/her profile ONLY after login 
@@ -96,10 +96,14 @@ public class UserResource implements ContainerResponseFilter {
 	public User getUserDetails(@Context HttpServletRequest req,@PathParam("username") String username,@HeaderParam("sess") String sess,@Context HttpServletResponse response)
 	{System.out.println(sess+"ihiwdhni");
 //		if(new SessionService().tokenVerifier(auth_token,req,response)){
-			return new UserDao().getUserDetails(username);
+			//return new UserDao().getUserDetails(username);
 //		}else{
 //            return new User();			
 		//}
+	User user=new User();
+	user.setLoggedin(false);
+			return (new SessionService().sessionVerifier(sess))?new UserDao().getUserDetails(username):user;
+			
 	}
 	
 	@PUT
@@ -108,7 +112,7 @@ public class UserResource implements ContainerResponseFilter {
 	@Path("profile/update")
 	public Acknowledgement upsertUserDetails(User user,@Context HttpServletRequest req,@HeaderParam("sess") String sess)
 	{
-    return (new SessionService().sessionVerifier(user.getUsername(),sess))?new UserDao().updateUserDetails(user,req.getSession().getAttribute("username").toString()):new GeneralServices().response(null);
+    return (new SessionService().sessionVerifier(sess))?new UserDao().updateUserDetails(user,sess):new GeneralServices().response(null);
 	}
 	//@Path("/highratinguser")
 	@Override
@@ -131,16 +135,23 @@ public class UserResource implements ContainerResponseFilter {
 	@GET
 	@Path("/alluser")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public ArrayList<MultiUse> getAllUser(@PathParam("hash1") String hash1,@Context HttpServletResponse response)
-	{	 return new UserDao().getAllUser();
+	public test getAllUser(@Context HttpServletResponse response,@HeaderParam("sess") String sess)
+	{	
+		test s=new test();
+		s.setLoggedin(false);
+		return (new SessionService().sessionVerifier(sess))?new UserDao().getAllUser():s;
+		//return new UserDao().getAllUser();
 	}
 	
 	//
 	@GET
 	@Path("/project/allTitle/{username}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public ArrayList<Project> getAllUserProjects(@Context HttpServletRequest req, @PathParam("username") String username,@HeaderParam("sess") String sess)
-	{	 return new ProjectInsert().getAllTitles(username);
+	public Super getAllUserProjects(@Context HttpServletRequest req, @PathParam("username") String username,@HeaderParam("sess") String sess)
+	{	 Super s=new Super();
+	s.setLoggedin(false);
+	return (new SessionService().sessionVerifier(sess))?new ProjectInsert().getAllTitles(username):s;
+	//return new ProjectInsert().getAllTitles(username);
 	}
 	
 	@GET 

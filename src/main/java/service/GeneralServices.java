@@ -97,6 +97,10 @@ public Tile returnTile(Document d,String source,String subject)
 	public Acknowledgement response(Notifications notify) {
 		Acknowledgement acknow = new Acknowledgement();
 		acknow.setMessage(notify.getMsg());
+		if(notify!=null)
+			acknow.setLoggedin(true);
+		else
+			acknow.setLoggedin(false);
 		// {
 		// if(s!=null&&s.equals("insert"))
 		// {

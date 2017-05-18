@@ -27,11 +27,13 @@ public class ProjectInsert
 {
 	MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("project"); 
 	MongoCollection <Document> tcuser=new DatabaseServices().getDb().getCollection("testuserdata");
+	MongoCollection <Document> tcsession = new DatabaseServices().getDb().getCollection("sessions");
 	
 //inserting a new project to database
-public Acknowledgement insertProject(Project project,String username)
+public Acknowledgement insertProject(Project project,String s_id)
 { try{
-	String userfromsession = username;
+	Document ss=tcsession.find(eq("session_id",s_id)).first();
+	String username = ss.getString("username");
 	//String userfromsession = req.getSession().getAttribute("username").toString();
 	Document docexsit = tc.find(and(eq("username",username),eq("title",project.getTitle()))).first();
    ArrayList<String> a=new ArrayList<String>();
@@ -76,14 +78,15 @@ public Acknowledgement insertProject(Project project,String username)
 	    		  String projectid= tc.find(and(eq("username",username),eq("title",project.getTitle()))).first().get("_id").toString();
 	    		  String url = GeneralServices.urlGenerator(Notifications.PROJECTMODULE, projectid, project.getTitle());
 	    		  new UserDao().moduleIDAdder(Notifications.PROJECTMODULE,username, projectid);
-	    		  UpdateResult rs=tc.updateOne(and(eq("username",userfromsession),eq("title",project.getTitle())),new Document("$set",new Document("project_url",url)));		    		 
+	    		  UpdateResult rs=tc.updateOne(and(eq("username",username),eq("title",project.getTitle())),new Document("$set",new Document("project_url",url)));		    		 
 	    		  ack.setUpsertedId(projectid);
 	    		  ack.setMessage(GeneralServices.spaceRemover(project.getTitle()));
-	    		    
+	    		    ack.setLoggedin(true);
 	    		  tcuser.updateOne(eq("username",username),new Document("$push",new Document("project_id",projectid)));
 	    		  return ack;
 	    			}else{
 	                    ack.setMessage("exist");
+	                    ack.setLoggedin(true);
 	                 	return ack;
                        }
 }
@@ -94,7 +97,9 @@ catch(Exception e){
 }
                     }
     @SuppressWarnings("unchecked")
-   public Acknowledgement updateproject(Project project,String id){
+   public Acknowledgement updateproject(Project project,String id,String s_id){
+    	Document ss=tcsession.find(eq("session_id",s_id)).first();
+    	String username = ss.getString("username");
     ObjectId oid = new ObjectId(id.toString());
     
     //Document doccheck = tc.find(and(or(eq("username",req.getSession().getAttribute("username").toString()),
@@ -103,7 +108,7 @@ catch(Exception e){
    // if(doccheck!=null){
  
     Document document = tc.find(eq("_id",oid)).first();
-      if(document!=null){
+      if(document!=null && document.getString("username").equals(username)){
 		Document info=(Document) document.get("info");
 		  String title =  new GeneralServices().spaceRemover(project.getTitle());
 		  String url = ""+document.getString("id")+"/"+title;
@@ -156,14 +161,15 @@ public ArrayList<Project> getProjectBrief(String username)
          pro.setImages((ArrayList<String>) d.get("images"));
          pro.setProject_url(d.getString("project_url"));
          pro.setComments(new ProjectInsert().getAllComments(d.getString("username"), d.getString("title")));
-         pro.setLogged("logged");  
+         pro.setLoggedin(true);  
          project.add(pro); 
   }
 return project;
 }
 
-public ArrayList<Project> getAllTitles(String username)
+public Super getAllTitles(String username)
 {
+	Super s=new Super();
   ArrayList<Project> project = new ArrayList<Project>();
   FindIterable <Document> fi = tc.find(eq("username",username));
   for(Document d: fi)
@@ -172,7 +178,9 @@ public ArrayList<Project> getAllTitles(String username)
 	  pro.setTitle(d.getString("title"));
     	project.add(pro); 
   }
-return project;
+  s.setLoggedin(true);
+  s.setProjects(project);
+return s;
 }
 
 
@@ -211,20 +219,23 @@ public Project getSelectedProject(String id)
 	   		//if(req.getSession().getAttribute("username")!=null)
 	   		//view(d.getString("username"),d.getString("title"), req.getSession().getAttribute("username").toString());
 	}
+	project.setLoggedin(true);
 	return project;
 }
 
-public Comment insertComment(Comment comment,String id)
+public Comment insertComment(Comment comment,String id,String s_id)
 {   ObjectId id1=new ObjectId(id.toString());
 	Document project = tc.find(eq("_id",id1)).first();
+	Document ss=tcsession.find(eq("session_id",s_id)).first();
+	String username = ss.getString("username");
 	System.out.println(project);
 	try{
 //Document doc = new Document("username",req.getSession().getAttribute("username").toString())
-		Document doc = new Document("username","pulkit")
+		Document doc = new Document("username",username)
                   .append("comment", comment.getComment())
                   .append("date",GeneralServices.getCurrentDate().getTime());
-	
-comment.setUsername("pulkit");//req.getSession().getAttribute("username").toString());
+comment.setLoggedin(true);	
+comment.setUsername(username);//req.getSession().getAttribute("username").toString());
 comment.setDate(doc.getLong("date"));
 String acknow= tc.updateOne(eq("_id",id1),new Document("$push",new Document("comments",doc))).toString();
 //new NotificationService().commentNotification(project.getString("username"),project.getString("title"),id,req.getSession().getAttribute("username").toString(),comment.getComment(),Notifications.COMMENT);
@@ -234,30 +245,39 @@ return comment;}
 	catch(Exception e){
 		e.printStackTrace();
 		Comment a=new Comment();
+		a.setLoggedin(true);
 		a.setComment("error");
 		return a;
 	}
 }
 
-public  Comment deleteComment(String project_id,Comment comment){
+public  Comment deleteComment(String project_id,Comment comment,String s_id){
 	
 	ObjectId id1=new ObjectId(project_id);
+	Document ss=tcsession.find(eq("session_id",s_id)).first();
+	String username = ss.getString("username");
+	Document d= tc.find(eq("_id",id1)).first();
     long dateLong	= Long.valueOf(comment.getDate());
-	Comment comment1=new Comment();
+	
 //	ArrayList<String> con=(ArrayList<String>) project.get("contributors");
+    if(username.equals(comment.getUsername()) || d.getString("username").equals(comment.getUsername())){
     try{
 	Document doc = new Document("username",comment.getUsername())
       .append("comment", comment.getComment())
       .append("date", dateLong);
 System.out.println(doc);
 	tc.updateOne(eq("_id",id1), new Document("$pull",new Document("comments",doc)));
+	comment.setLoggedin(true);
 return comment;}
     catch(Exception e){
     	e.printStackTrace();
     	Comment a=new Comment();
+    	a.setLoggedin(true);
 		a.setComment("error");
     	return a;
     }
+    }
+    return new Comment(true,"invalid");
 }
 
 @SuppressWarnings("unchecked")
@@ -278,10 +298,13 @@ public ArrayList<Comment> getAllComments(String username,String projectname)
 }
 
 @SuppressWarnings("unchecked")
-public MultiUse  up(String id,String user){
+public MultiUse  up(String id,String s_id){
+	Document ss=tcsession.find(eq("session_id",s_id)).first();
+	String user = ss.getString("username");
 	ObjectId id1=new ObjectId(id.toString());
 	Document d = tc.find(eq("_id",id1)).first();
 	MultiUse obj=new MultiUse();
+	obj.setLoggedin(true);
 	String owner="i";
 	String username=d.getString("username");
 	if(d.getString("owner").equals("i")){
@@ -354,7 +377,9 @@ public MultiUse  up(String id,String user){
 }
 
 @SuppressWarnings("unchecked")
-public MultiUse down(String id,String user){
+public MultiUse down(String id,String s_id){
+	Document ss=tcsession.find(eq("session_id",s_id)).first();
+	String user = ss.getString("username");
 	ObjectId id1=new ObjectId(id.toString());
 	Document d = tc.find(eq("_id",id1)).first();
 	String owner="i";
@@ -368,6 +393,7 @@ public MultiUse down(String id,String user){
 		owner="c";
 	}
 	MultiUse obj=new MultiUse();
+	obj.setLoggedin(true);
 	Document infodetails=(Document)d.get("info");
 		ArrayList<String> up=(ArrayList<String>)infodetails.get("upvotes");
 		ArrayList<String> down=(ArrayList<String>)infodetails.get("downvotes");

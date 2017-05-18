@@ -3,36 +3,51 @@ package bean;
 import java.util.ArrayList;
 
 public class Super {
-	private String logged;
-public ArrayList<Tile> getAlsuper() {
-		return alsuper;
+	private Boolean loggedin;
+public ArrayList<Tile> getData() {
+		return data;
 	}
 
-	public void setAlsuper(ArrayList<Tile> alsuper) {
-		this.alsuper = alsuper;
+	public void setData(ArrayList<Tile> data) {
+		this.data = data;
 	}
 
-private ArrayList<Tile> alsuper;
+private ArrayList<Tile> data;
+
+private ArrayList<Project> projects;
+
+	public ArrayList<Project> getProjects() {
+	return projects;
+}
+
+public void setProjects(ArrayList<Project> projects) {
+	this.projects = projects;
+}
+
+
+
 	public Super() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public Super(String logged) {
+	public Super(Boolean loggedin) {
 		super();
-		this.logged = logged;
+		this.loggedin = loggedin;
 	}
 
 	@Override
 	public String toString() {
-		return "Super [logged=" + logged + "]";
+		return "Super [logged=" + loggedin + "]";
 	}
 
-	public String getLogged() {
-		return logged;
+	public Boolean getLoggedin() {
+		return loggedin;
 	}
 
-	public void setLogged(String logged) {
-		this.logged = logged;
-	} 
+	public void setLoggedin(Boolean loggedin) {
+		this.loggedin = loggedin;
+	}
+
+	 
 }

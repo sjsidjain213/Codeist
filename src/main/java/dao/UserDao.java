@@ -6,8 +6,10 @@ import org.bson.Document;
 import bean.Acknowledgement;
 import bean.MultiUse;
 import bean.Notifications;
+import bean.Super;
 import bean.Tag;
 import bean.User;
+import bean.test;
 import service.DatabaseServices;
 import service.GeneralServices;
 
@@ -24,6 +26,7 @@ public class UserDao {
 	
 	
 	  MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("testuserdata");
+	  MongoCollection <Document> tcsession = new DatabaseServices().getDb().getCollection("sessions");
 	
 	  public void signupUser(String username,String password,String emailid,Date date)
 	  {MongoCollection <Document> tc = new DatabaseServices().getDb().getCollection("unverifieduserdata");
@@ -98,8 +101,9 @@ public class UserDao {
 	  tc.deleteOne(eq("username",username));
 	  }
 	  
-	  public Acknowledgement updateUser(User user)
-	  { Document test = tc.find(eq("username",user.getUsername())).first();
+	  public Acknowledgement updateUser(User user,String s_id)
+	  {   Document ss=tcsession.find(eq("session_id",s_id)).first();
+		  Document test = tc.find(eq("username",ss.getString("username"))).first();
 		  if(test==null)
 		  { 
 			  Document contact_information = new Document("phone_no",user.getPhone_no())
@@ -117,7 +121,7 @@ String profile_url="";
 if(user.getProfile_url()!=""){profile_url=user.getProfile_url();}
 profile_url = (user.getGender().equals("m")&&user.getProfile_url()=="")?"https://s3-us-west-2.amazonaws.com/codeist/male_user.png":"https://s3-us-west-2.amazonaws.com/codeist/female_user.png"; 	  
 		    	  
-                  Document doc = new Document("username",user.getUsername())
+                  Document doc = new Document("username",ss.getString("username"))
 				  .append("password",GeneralServices.get_SHA_256_SecurePassword(user.getUsername(),user.getPassword()))
 				  .append("name",user.getName())
 				  .append("bio",user.getBio())
@@ -171,6 +175,7 @@ profile_url = (user.getGender().equals("m")&&user.getProfile_url()=="")?"https:/
     	      user.setEmail_id(innerdoc.getString("email_id"));
     	      user.setPhone_no(innerdoc.getString("phone_no"));
     	      user.setZipcode(innerdoc.getLong("zipcode"));
+    	      user.setLoggedin(true);
     	      innerdoc = (Document) d.get("history");
               try{
               user.setTags_view((ArrayList<String>)innerdoc.get("tags_viewed"));
@@ -185,8 +190,9 @@ profile_url = (user.getGender().equals("m")&&user.getProfile_url()=="")?"https:/
     	  return user;
       }
       
-      public Acknowledgement updateUserDetails(User user,String username)
+      public Acknowledgement updateUserDetails(User user,String s_id)
       {   System.out.println(user.getBio()+"this is bip");
+      Document ss=tcsession.find(eq("session_id",s_id)).first();
     	  Document outdoc = new Document("name",user.getName())
     			  .append("gender", user.getGender())
     			  .append("category",user.getCategory())
@@ -197,14 +203,14 @@ profile_url = (user.getGender().equals("m")&&user.getProfile_url()=="")?"https:/
         		  
         		  .append("contributing",user.getContributing())
         		  .append("bio",user.getBio());
-                   tc.updateOne(eq("username", user.getUsername()),new Document("$set",outdoc));   	
+                   tc.updateOne(eq("username",ss.getString("username")),new Document("$set",outdoc));   	
           Document doc=new Document("phone_no",user.getPhone_no())
         		  .append("email_id",user.getEmail_id())
     	          .append("country",user.getCountry())
     	          .append("city",user.getCity())
     	          .append("zipcode",Long.valueOf(user.getZipcode()))
     	          .append("state",user.getState());
-tc.updateOne(eq("username",user.getUsername()),new Document("$set",new Document("contact_information",doc)));
+tc.updateOne(eq("username",ss.getString("username")),new Document("$set",new Document("contact_information",doc)));
            return 	new GeneralServices().response(Notifications.SUCCESSFULLYINSERTED);
       }
       
@@ -256,7 +262,7 @@ tc.updateOne(eq("username",user.getUsername()),new Document("$set",new Document(
 		return l;
       }
       
-      public ArrayList<MultiUse> getAllUser()
+      public test getAllUser()
       {
     	 FindIterable <Document> fi =  tc.find();
         ArrayList <MultiUse> alluser =  new ArrayList<MultiUse>();
@@ -266,12 +272,16 @@ tc.updateOne(eq("username",user.getUsername()),new Document("$set",new Document(
              use.setEmailid(doc.getString("email_id"));  	
         alluser.add(use);
         }
-    	 return alluser;
+    	 
+    	 test s=new test();
+    	 s.setData(alluser);
+    	 s.setLoggedin(true);
+    	 return s;
     	}
  
           public String check(String username,String emailid){
     		           UserDao obj1=new UserDao();
-    		           ArrayList<MultiUse> obj=obj1.getAllUser();
+    		           ArrayList<MultiUse> obj=obj1.getAllUser().getData();
     		           for(MultiUse a:obj){
     		               if(username.equals(a.getUsername())){
     		                   return "username present";

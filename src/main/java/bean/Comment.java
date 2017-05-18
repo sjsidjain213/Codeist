@@ -5,7 +5,21 @@ import java.util.Date;
 public class Comment {
 private String username,comment,project_id;
 private long date;
+private Boolean loggedin;
 
+public Comment(Boolean loggedin){
+	this.loggedin=loggedin;
+}
+public Comment(Boolean loggedin,String comment){
+	this.loggedin=loggedin;
+	this.comment=comment;
+}
+public Boolean getLoggedin() {
+	return loggedin;
+}
+public void setLoggedin(Boolean loggedin) {
+	this.loggedin = loggedin;
+}
 public String getProject_id() {
 	return project_id;
 }
