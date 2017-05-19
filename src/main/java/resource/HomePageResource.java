@@ -63,6 +63,7 @@ public class HomePageResource {
 //		s.setData(altile);
 //		s.setLoggedin(true);
 //    	return s; //req.getSession().getAttribute("username").toString());
+		System.out.println(sess);
     	return (new SessionService().sessionVerifier(sess))?new HomePage().getProjects(sess):new Super(false);
 }
 	
