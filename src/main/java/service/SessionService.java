@@ -108,6 +108,7 @@ MongoCollection<Document> tcsession=new DatabaseServices().getDb().getCollection
 	public boolean sessionVerifier(String s_id)
 	{
 		Document sdoc=tcsession.find(eq("session_id",s_id)).first();
+		if(sdoc!=null){
 		System.out.println(sdoc.getString("session_id"));
 		System.out.println(s_id);
 		System.out.println(new Date().getTime());
@@ -115,6 +116,7 @@ MongoCollection<Document> tcsession=new DatabaseServices().getDb().getCollection
 		if(sdoc.getString("session_id").equals(s_id) && new Date().getTime()<sdoc.getLong("expiry")){
 			System.out.println("inside");
 			return true;
+		}
 		}
 		System.out.print("outside");
 		return false;

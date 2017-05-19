@@ -42,7 +42,7 @@ public class QuestionResource {
 		return (new SessionService().sessionVerifier(sess))?new QADao().updateQuestion(sess, question,id):new GeneralServices().response(null);
 }
 	@POST
-	@Path("/insert/{username}")
+	@Path("/insert")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Acknowledgement insertQuestion(Question question,@Context HttpServletRequest req,@PathParam("username") String username,@HeaderParam("sess") String sess)
@@ -131,7 +131,7 @@ public class QuestionResource {
 	//return (new SessionService().sessionVerifier(req))?new QADao().upQuestion(id,req.getSession().getAttribute("username").toString()):new ArrayList<String>();
 	}
 	@PUT
-	@Path("/{id}/downvote/{username}")
+	@Path("/{id}/downvote")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public MultiUse downquestion(@PathParam("id")String id,@Context HttpServletRequest req,@PathParam("username") String username,@HeaderParam("sess") String sess)

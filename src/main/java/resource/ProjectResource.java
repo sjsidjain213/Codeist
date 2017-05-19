@@ -129,11 +129,12 @@ public MultiUse up(@PathParam("id")String id,@PathParam("username")String userna
 	//obj.setMessage(Notifications.SESSIONDONOTEXSIT.getMsg());
 	//MultiUse obj= new MultiUse();
 //return new ProjectInsert().up(id,username);
+	System.out.println(sess);
 return (new SessionService().sessionVerifier(sess))?new ProjectInsert().up(id,sess):new MultiUse(false);
 }
 
 @PUT
-@Path("/{id}/downvote/{username}")
+@Path("/{id}/downvote")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public MultiUse down(@PathParam("id")String id,@PathParam("username")String username,@Context HttpServletRequest req,@HeaderParam("sess") String sess)

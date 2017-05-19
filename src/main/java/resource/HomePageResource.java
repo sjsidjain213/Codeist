@@ -56,14 +56,14 @@ public class HomePageResource {
 	@GET
 	@Path("/projects-feed")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Super getProject(@Context HttpServletRequest req,@PathParam("username") String username,@HeaderParam("sess") String sess)
+	public Super getProject(@Context HttpServletRequest req,@PathParam("username") String username,@HeaderParam("sess") String sess,@HeaderParam("content-type")String test)
 	{
 //		Super s = new Super();
 //		ArrayList<Tile> altile = new HomePage().getProjects(username);
 //		s.setData(altile);
 //		s.setLoggedin(true);
 //    	return s; //req.getSession().getAttribute("username").toString());
-		System.out.println(sess);
+		System.out.println(sess+"::::::"+test+":::::::"+req.getHeader("sess"));
     	return (new SessionService().sessionVerifier(sess))?new HomePage().getProjects(sess):new Super(false);
 }
 	

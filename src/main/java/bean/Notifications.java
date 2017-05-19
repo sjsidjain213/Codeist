@@ -34,7 +34,8 @@ EDITWRITTENISNOTAVAILABLE("Edit write is not available"),
 SUCCESSFULLYINSERTED("success"),
 SUCCESSFULLYDELETED("success"),
 SUCCESSFULLYUPDATED("success"),
-USERLOGGEDOUT("user is succesfully logged out");	
+USERLOGGEDOUT("success"),
+ACCESSDENIED("permission_denied");
 	private final String msg;
 
 	public String getMsg() {
