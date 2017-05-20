@@ -75,6 +75,7 @@ public Tile returnTile(Document d,String source,String subject)
 	    }
 	    else{
 	    	tl.setQuestion(d.getString("question"));
+	    	tl.setUrl_title(GeneralServices.spaceRemover(d.getString("question")));
 	        tl.setDescription(d.getString("description"));
 	   tl.setTags((ArrayList<String>)d.get("tags"));
 	   //"/questions/{id}"
@@ -95,7 +96,13 @@ public Tile returnTile(Document d,String source,String subject)
 
 	public Acknowledgement response(Notifications notify) {
 		Acknowledgement acknow = new Acknowledgement();
-		acknow.setMessage(notify.getMsg());
+		//acknow.setMessage(notify.getMsg());
+		if(notify!=null){
+			acknow.setMessage(notify.getMsg());
+			acknow.setLoggedin(true);
+		}
+		else
+			acknow.setLoggedin(false);
 		// {
 		// if(s!=null&&s.equals("insert"))
 		// {

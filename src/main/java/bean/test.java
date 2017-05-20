@@ -1,7 +1,27 @@
 package bean;
 
+import java.util.ArrayList;
+
 public class test {
 private String img;
+private Boolean loggedin;
+private ArrayList<MultiUse> data;
+
+public Boolean getLoggedin() {
+	return loggedin;
+}
+
+public void setLoggedin(Boolean loggedin) {
+	this.loggedin = loggedin;
+}
+
+public ArrayList<MultiUse> getData() {
+	return data;
+}
+
+public void setData(ArrayList<MultiUse> data) {
+	this.data = data;
+}
 
 public test(String img) {
 	super();

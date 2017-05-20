@@ -25,10 +25,14 @@ public class QADao {
 	
 	MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("qa");
 	MongoCollection<Document> tcuser = new DatabaseServices().getDb().getCollection("testuserdata");
+	MongoCollection <Document> tcsession = new DatabaseServices().getDb().getCollection("sessions");
+	
 
-	public Acknowledgement insertQuestion(Question question,String username,HttpServletRequest req)
+	public Acknowledgement insertQuestion(Question question,String s_id,HttpServletRequest req)
 	{   //String userfromsession ="hsharma";// req.getSession().getAttribute("username").toString();
 		try{
+			Document ss=tcsession.find(eq("session_id",s_id)).first();
+			String username = ss.getString("username");
 	   // Document doc2 = tc.find(and(eq("username",req.getSession().getAttribute("username").toString()),eq("question",question.getQuestion()))).first();
 //	   	if(tc.find(eq("question",question.getQuestion()))!=null)
 //			{Acknowledgement acknow = new Acknowledgement();
@@ -79,12 +83,13 @@ public class QADao {
      Acknowledgement acknow = new Acknowledgement();
 	    acknow.setMessage(GeneralServices.spaceRemover(question.getQuestion()));
 		acknow.setUpsertedId(q_id);
+		acknow.setLoggedin(true);
 	    return acknow;
 		}
 	    else{
 			Acknowledgement acknow = new Acknowledgement();
 		     acknow.setMessage("exist");
-		    
+		    acknow.setLoggedin(true);
 	    	return acknow;
 	    }
 		}
@@ -150,17 +155,21 @@ public class QADao {
 	}
 	quest.setAnswers(alansw);
     }
+    quest.setLoggedin(true);
 	return quest;
 	}
 	else{
 		Question question = new Question();
 		question.setDescription("Question Id do not exsit");
+		question.setLoggedin(true);
 		return question;
 	}
 	}
 	
-	public Answer insertAnswer(String id,Answer answer,String username,HttpServletRequest req)
-	{   Document info=new Document().append("upvotes",new ArrayList<String>()).append("downvotes",new ArrayList<String>());	
+	public Answer insertAnswer(String id,Answer answer,String s_id)
+	{  Document ss=tcsession.find(eq("session_id",s_id)).first();
+	String username = ss.getString("username");
+		Document info=new Document().append("upvotes",new ArrayList<String>()).append("downvotes",new ArrayList<String>());	
     	//String userfromsession ="pulkit"; //req.getSession().getAttribute("username").toString();
 	 ObjectId oid = new ObjectId(id.toString());
 		Document d = tc.find(eq("_id",oid)).first();
@@ -189,6 +198,7 @@ public class QADao {
 	    answer.setOwner(doc.getString("owner"));
         String acknow =tc.updateOne(eq("_id",oid),new Document("$push",new Document("answers",doc))).toString();
         Acknowledgement acknowledge = new GeneralServices().response(Notifications.SUCCESSFULLYINSERTED);
+        answer.setLoggedin(true);
         //answer.getUsername is owner of question
       ///  new NotificationService().answerNotification(d.getString("username"),d.getString("question"),id,req.getSession().getAttribute("username").toString(),answer.getAnswer(),Notifications.QUESTIONSOLVED);
         return answer;
@@ -213,13 +223,16 @@ public class QADao {
 	
 
 	@SuppressWarnings("unchecked")
-	public MultiUse upQuestion(String id,String user){
+	public MultiUse upQuestion(String id,String s_id){
+		Document ss=tcsession.find(eq("session_id",s_id)).first();
+		String user = ss.getString("username");
 	//public void questionUpvoteNotification(String receiver,String commiter,String question_id, String question_name)
     //username from database,commitername from session, question id from front end, question name from database 
 		ObjectId id1=new ObjectId(id.toString());
 		String owner="i";
 		Document d = tc.find(eq("_id",id1)).first();
 		MultiUse obj=new MultiUse();
+		obj.setLoggedin(true);
 		String username=d.getString("username");
 		
 		if(new UserDao().getAllUseri().contains(username)){
@@ -294,10 +307,13 @@ public class QADao {
 			}
 	}
 	@SuppressWarnings("unchecked")
-	public MultiUse downQuestion(String id,String user){
+	public MultiUse downQuestion(String id,String s_id){
+		Document ss=tcsession.find(eq("session_id",s_id)).first();
+		String user = ss.getString("username");
 		ObjectId id1=new ObjectId(id.toString());
 		Document d = tc.find(eq("_id",id1)).first();
 		MultiUse obj=new MultiUse();
+		obj.setLoggedin(true);
 		String owner="i";
 		String username=d.getString("username");
 		if(new UserDao().getAllUseri().contains(username)){
@@ -368,11 +384,14 @@ public class QADao {
 
 
 	@SuppressWarnings("unchecked")
-	public MultiUse upanswer(String id,String username,String user){
+	public MultiUse upanswer(String id,String username,String s_id){
+		Document ss=tcsession.find(eq("session_id",s_id)).first();
+		String user = ss.getString("username");
 		//username:whos answer
 		//user upvote user
 		ObjectId id1=new ObjectId(id.toString());
 		MultiUse obj=new MultiUse();
+		obj.setLoggedin(true);
 		String owner="i";
 		Document d = tc.find(eq("_id",id1)).first();
 		
@@ -459,11 +478,14 @@ public class QADao {
 	}
 
 	@SuppressWarnings("unchecked")
-	public MultiUse downanswer(String id,String username,String user){
+	public MultiUse downanswer(String id,String username,String s_id){
+		Document ss=tcsession.find(eq("session_id",s_id)).first();
+		String user = ss.getString("username");
 		//username:whos answer
 		//user upvote user
 		ObjectId id1=new ObjectId(id.toString());
 		MultiUse obj=new MultiUse();
+		obj.setLoggedin(true);
 		String owner="i";
 		Document d = tc.find(eq("_id",id1)).first();
 		
@@ -549,22 +571,26 @@ public class QADao {
 			}
 	}
 	
-	public Acknowledgement deleteQuestion(HttpServletRequest req,String id){
+	public Acknowledgement deleteQuestion(String s_id,String id){
+		Document ss=tcsession.find(eq("session_id",s_id)).first();
+		String user = ss.getString("username");
 	    ObjectId oid = new ObjectId(id.toString());
 	    Document document = tc.find(eq("_id",oid)).first();
-	      if(document!=null){
-			Document info=(Document) document.get("info");
+	      if(document!=null && document.getString("username").equals(user)){
+//			Document info=(Document) document.get("info");
+//			  
+//			  Document doc = new Document("username",user)
+//		    		.append("question",document.getString("question"))
+//		    		.append("description",document.getString("description"))
+//		    		.append("tags",document.get("tags"))
+//		    		.append("date",GeneralServices.getCurrentDate().getTime())
+//		    		.append("featured_points", document.getLong("featured_points"))
+//			  		.append("info",info)
+//			  		.append("url",document.getString("url"))
+//			  		.append("answers",document.get("answers"));
 			  
-			  Document doc = new Document("username",req.getSession().getAttribute("username"))
-		    		.append("question",document.getString("question"))
-		    		.append("description",document.getString("description"))
-		    		.append("tags",document.get("tags"))
-		    		.append("date",GeneralServices.getCurrentDate().getTime())
-		    		.append("featured_points", document.getLong("featured_points"))
-			  		.append("info",info)
-			  		.append("url",document.getString("url"))
-			  		.append("answers",document.get("answers"));
-			  tc.deleteOne(document);
+			  
+			  tc.deleteOne(eq("_id",oid));
 			  System.out.println("deleted");
 	      }
 		return new GeneralServices().response(Notifications.SUCCESSFULLYDELETED);
@@ -572,14 +598,18 @@ public class QADao {
 	    
 	}
 	
-	public Acknowledgement updateQuestion(HttpServletRequest req,Question question,String id)
+	public Acknowledgement updateQuestion(String s_id,Question question,String id)
     {  //MongoCollection<Document> tc = new DatabaseServices().getDb().getCollection("testqa");
-       
+		Document ss=tcsession.find(eq("session_id",s_id)).first();
+		String username = ss.getString("username");
+
        ObjectId oid = new ObjectId(id.toString());
        //Document doc2 = tc.find(and(eq("username",req.getSession().getAttribute("username").toString()),eq("question",question.getQuestion()))).first();
        Document document = tc.find(eq("_id",oid)).first();
+       if(document.getString("username").equals(username)){
        ArrayList<Document> aldo = (ArrayList<Document>) document.get("answers");
-        Document doc = new Document("username",req.getSession().getAttribute("username"))
+      
+        Document doc = new Document("username",username)
                 .append("question",question.getQuestion())
                 .append("description",question.getDescription())
                 .append("tags",(List<String>)question.getTags())
@@ -588,15 +618,17 @@ public class QADao {
                 .append("featured_points", question.getFeatured_points())
                 .append("answers",aldo);
         tc.updateOne(eq("_id",oid),new Document("$set",doc));
-      
+       }
         return new GeneralServices().response(Notifications.SUCCESSFULLYUPDATED);
     }
     
-    public Acknowledgement updateanswer(HttpServletRequest req,Answer answer,String id){
+    public Acknowledgement updateanswer(String s_id,Answer answer,String id){
+    	Document ss=tcsession.find(eq("session_id",s_id)).first();
+		String username = ss.getString("username");
          ObjectId oid = new ObjectId(id.toString());
          Document document = tc.find(eq("_id",oid)).first();
          ArrayList<Document> aldo = (ArrayList<Document>) document.get("answers");
-         if(aldo != null){
+         if(aldo != null&&answer.getUsername().equals(username)){
                 for(Document d:aldo)
                 {   
                 	System.out.println(d);
@@ -608,7 +640,7 @@ public class QADao {
                 }
             }
          Document info=new Document().append("upvotes",answer.getUpvotes()).append("downvotes",answer.getDownvotes());  
-         Document doc = new Document("username",req.getSession().getAttribute("username").toString())
+         Document doc = new Document("username",username)
                     .append("answer",answer.getAnswer())
                     .append("date",GeneralServices.getCurrentDate().getTime())
                     .append("last_updated",GeneralServices.getCurrentDate().getTime())
@@ -617,11 +649,13 @@ public class QADao {
          return new GeneralServices().response(Notifications.SUCCESSFULLYUPDATED);
     }
 	
-    public Acknowledgement deleteanswer(HttpServletRequest req,String username,String id){
+    public Acknowledgement deleteanswer(String s_id,String username,String id){
+    	Document ss=tcsession.find(eq("session_id",s_id)).first();
+		String user = ss.getString("username");
          ObjectId oid = new ObjectId(id.toString());
          Document document = tc.find(eq("_id",oid)).first();
          ArrayList<Document> aldo = (ArrayList<Document>) document.get("answers");
-         if(aldo != null){
+         if(aldo != null&&(document.getString("username").equals(user) || user.equals(username))){
                 for(Document d:aldo)
                 {   
                     if(d.getString("username").equals(username)){

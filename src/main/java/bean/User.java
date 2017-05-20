@@ -13,8 +13,16 @@ public class User {
 	private ArrayList<String> favourite_tag,following,follower,contributing,project_id,project_bookmark,question_bookmark;
 	private ArrayList<String> tag_view, user_view, problem_category_view, project_view,question_ask,question_answer;
 	private long rating,zipcode,project_upvote,project_downvote,qa_upvote,qa_downvote,date,last_updated;
-	//private Date date = new Date();
+	private Boolean loggedin;
+	
+	
 
+	public Boolean getLoggedin() {
+		return loggedin;
+	}
+	public void setLoggedin(Boolean loggedin) {
+		this.loggedin = loggedin;
+	}
 	public long getLast_updated() {
 		return last_updated;
 	}

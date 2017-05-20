@@ -1,7 +1,16 @@
 package bean;
 
+import org.eclipse.persistence.internal.jpa.parsing.BooleanLiteralNode;
+
 public class Acknowledgement {
 private String matchedCount,modifiedCount,upsertedId,message;
+private Boolean loggedin;
+public Boolean getLoggedin() {
+	return loggedin;
+}
+public void setLoggedin(Boolean loggedin) {
+	this.loggedin = loggedin;
+}
 
 public String getMatchedCount() {
 	return matchedCount;

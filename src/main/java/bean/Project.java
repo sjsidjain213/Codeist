@@ -5,6 +5,16 @@ import java.util.Date;
 
 public class Project extends Super{
 	private String username,title,description,readme,license,project_url,_private,id,url_title,state,city,department,owner;
+    private Boolean loggedin;
+	
+	
+
+	public Boolean getLoggedin() {
+		return loggedin;
+	}
+	public void setLoggedin(Boolean loggedin) {
+		this.loggedin = loggedin;
+	}
 	public String getOwner() {
 		return owner;
 	}

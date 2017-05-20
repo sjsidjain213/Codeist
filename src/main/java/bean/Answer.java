@@ -6,7 +6,16 @@ import java.util.Date;
 public class Answer {
 private String username,answer,question,owner;
 private long upvotecount,downvotecount;
-
+private Boolean loggedin;
+public Answer(Boolean loggedin){
+	this.loggedin=loggedin;
+}
+public Boolean getLoggedin() {
+	return loggedin;
+}
+public void setLoggedin(Boolean loggedin) {
+	this.loggedin = loggedin;
+}
 public String getOwner() {
 	return owner;
 }

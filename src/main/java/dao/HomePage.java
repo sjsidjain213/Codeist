@@ -16,20 +16,28 @@ import com.mongodb.client.MongoCollection;
 
 import bean.Question;
 import bean.SearchBean;
+import bean.Super;
 import bean.Tile;
 import bean.User;
 import service.DatabaseServices;
 import service.GeneralServices;
 
 public class HomePage {
+	MongoCollection <Document> tcsession = new DatabaseServices().getDb().getCollection("sessions");
+	
     HashMap<Object,Tile> hm = new HashMap<Object,Tile>();
  	@SuppressWarnings("unchecked")
- 	public ArrayList<Tile> getProjects(String username)
+ 	public Super getProjects(String s_id)
  	{
+ 		Document ss=tcsession.find(eq("session_id",s_id)).first();
+ 		String username = ss.getString("username");
+ 		Super s=new Super();
  		ArrayList<Tile> project = new ArrayList<Tile>();
  	      project =  getTrendingProject(project);
  		  project = getInterestProject(project, username);
-     	return project;
+ 		  s.setData(project);
+ 		  s.setLoggedin(true);
+     	return s;
  	}
  	
  	public ArrayList<Tile> getRelatedProject(String question_id)
@@ -46,12 +54,17 @@ public class HomePage {
  		return project;
  	}
  	
- 	public ArrayList<Tile> getQuestions(String username)
+ 	public Super getQuestions(String s_id)
  	{
+ 		Document ss=tcsession.find(eq("session_id",s_id)).first();
+ 		String username = ss.getString("username");
+ 		Super s=new Super();
  		ArrayList<Tile> question = new ArrayList<Tile>();
  	      question =  trendingQuestion();
  		  question = getInterestQuestion(question, username);
- 		  return question;
+ 		  s.setData(question);
+ 		  s.setLoggedin(true);
+ 		  return s;
  	}
  	
  	public ArrayList<Tile> getInterestProject(ArrayList<Tile> project, String username)
@@ -327,11 +340,13 @@ public class HomePage {
 		{Tile doc = new Tile();
 		        doc.setUsername(d.getString("username"));
 		        doc.setQuestion(d.getString("question"));
+		        doc.setId(d.get("_id").toString());
 		        doc.setUpvotecount(d.getLong("upvotecount"));
 		        doc.setDownvotecount(d.getLong("downvotecount"));
 		        // description might throw error check database 
 		        doc.setDescription(d.getString("description"));
 		        doc.setUrl(d.getString("question_url"));
+		        doc.setUrl_title(GeneralServices.spaceRemover(d.getString("question")));
 		        Document innerdoc = (Document)d.get("info");
 		   		if(innerdoc!=null){
 		   		doc.setUpvotes((ArrayList<String>)innerdoc.get("upvotes"));
